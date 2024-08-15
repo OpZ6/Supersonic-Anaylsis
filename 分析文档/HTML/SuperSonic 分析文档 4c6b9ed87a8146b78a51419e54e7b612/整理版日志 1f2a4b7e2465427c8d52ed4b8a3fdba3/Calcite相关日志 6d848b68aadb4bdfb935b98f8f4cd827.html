@@ -1,0 +1,794 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Calcite相关日志</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="6d848b68-aadb-4bdf-b935-b98f8f4cd827" class="page sans"><header><h1 class="page-title">Calcite相关日志</h1><p class="page-description"></p></header><div class="page-body"><p id="24b3ab44-23f4-45e7-8d80-f4931f15e595" class="">
+</p><h3 id="5b6dbcdf-36fe-467d-b82b-f143044a6fa2" class="">1. <code>14:57:20 [http-nio-9080-exec-2] DEBUG org.apache.calcite.sql.parser 890 - Reduced DAYOFWEEK(</code>imp_date<code>) - 2</code></h3><ul id="6860cdda-bc6b-4bdd-94b7-9c4ead9509f0" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这行日志记录了SQL解析过程中对<code>DAYOFWEEK(imp_date) - 2</code>表达式的简化。Calcite解析器正在处理SQL表达式，并减少了其中的复杂性。</li></ul><h3 id="42bbceea-9a8d-4f05-a87e-6255afc315f8" class="">2. <code>14:57:22 [http-nio-9080-exec-2] DEBUG org.apache.calcite.sql2rel 628 - Plan after converting SqlNode to RelNode</code></h3><ul id="594e3c58-9b56-44f9-8e9b-8605dcb42c90" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这条日志表明，Calcite已经完成了从<code>SqlNode</code>（SQL解析树）到<code>RelNode</code>（关系表达式树）的转换，并显示了转换后的逻辑执行计划。</li></ul><ul id="aeb0509d-9d1a-4f82-b3e4-3b012c0ce853" class="bulleted-list"><li style="list-style-type:disc"><strong>计划细节</strong>:<ul id="850a1675-7ad0-41be-ade5-409082fecd39" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalProject(sys_imp_date=[$0], pv=[$2])</code>: 这是一个投影操作，选择了<code>sys_imp_date</code>和<code>pv</code>两列。</li></ul><ul id="15710c52-d2c1-45ae-9911-f9cd64b6c528" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalAggregate(group=[{0, 1}], s2_pv_uv_statis_pv=[SUM($2)])</code>: 这是一个聚合操作，按<code>sys_imp_date</code>和<code>imp_date</code>分组，并计算<code>s2_pv_uv_statis_pv</code>的总和。</li></ul><ul id="693800a7-ded1-410d-8f04-7c2f846636ae" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalTableScan(table=[[s2_pv_uv_statis]])</code>: 这表示对<code>s2_pv_uv_statis</code>表的扫描。</li></ul></li></ul><h3 id="d78d7ed2-b531-4f79-a7d7-9f73f5eac34d" class="">3. <code>14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.c.sql.node.SemanticNode 423 - RelNode optimize SELECT imp_date AS sys_imp_date, SUM(1) AS pv FROM s2_pv_uv_statis GROUP BY imp_date, imp_date</code></h3><ul id="edf12dbb-a9bc-4e8f-bc2e-492440e650ef" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这个日志记录了经过优化的查询计划，显示了SQL查询优化后的形式。这里展示的是一个聚合查询，计算<code>s2_pv_uv_statis</code>表中<code>imp_date</code>字段的总和，并将其作为<code>sys_imp_date</code>返回。</li></ul><ul id="8d2f15a7-9735-4678-a0db-945f952b337b" class="bulleted-list"><li style="list-style-type:disc"><strong>优化后的SQL</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="38937b3f-5ad5-41b5-9f46-94354e935127" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">SELECT imp_date AS sys_imp_date, SUM(1) AS pv
+FROM s2_pv_uv_statis
+GROUP BY imp_date, imp_date</code></pre></li></ul><h3 id="a78ed84d-c795-437f-a3f0-83883d57ca77" class="">4. <code>14:57:22 [http-nio-9080-exec-2] DEBUG o.a.c.p.A.rule_execution_summary 300 - Rule Attempts Info for HepPlanner</code></h3><ul id="db22de2c-038f-4127-ad77-a1c20ff5db42" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这条日志显示了HepPlanner（Calcite的规划器之一）在优化过程中尝试应用的规则信息。通常情况下，HepPlanner会应用一系列规则来优化查询。</li></ul><h3 id="c49b1b6f-6cbd-4bd1-abba-e0d0426513c7" class="">5. <code>14:57:22 [http-nio-9080-exec-2] DEBUG o.a.c.p.A.rule_execution_summary 301 - Rules Attempts Time (us) * Total 0 0</code></h3><ul id="dbefde0a-0d2b-4cec-9192-47258c3b6496" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这个日志记录显示，没有任何规则被应用或尝试优化（Attempts为0，时间也为0微秒）。这可能表示该特定步骤或优化阶段没有执行任何规则应用。</li></ul><h3 id="b6d5f37c-7050-4922-87d0-534b58e45320" class="">6. <code>14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#18:LogicalProject.(input=HepRelVertex#17,inputs=0,exprs=[$2])</code></h3><ul id="ea2ec0ca-ca71-4785-b367-a2623494f07d" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这是日志显示在最终计划中使用的一个<code>LogicalProject</code>操作，指定了从HepPlanner（Calcite优化器的一部分）产生的一个顶点作为输入，并应用了一个投影操作。</li></ul><h3 id="4e5b8bf6-4342-4b34-a326-cde8601067d1" class="">7. <code>14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#16:LogicalAggregate.(input=HepRelVertex#15,group={0, 1},s2_pv_uv_statis_pv=SUM($2))</code></h3><ul id="8f304575-8e18-4038-b9f3-a57dff6d3d19" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这行日志记录了另一个优化后的逻辑计划，显示了一个<code>LogicalAggregate</code>操作，它根据分组字段<code>{0, 1}</code>（通常对应于<code>sys_imp_date</code>和<code>imp_date</code>）进行聚合，并计算<code>s2_pv_uv_statis_pv</code>的总和。</li></ul><h3 id="36042f50-39f3-42d9-b7e6-a52e0b78bb3f" class="">8. <code>14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#14:LogicalProject.(input=HepRelVertex#13,exprs=[$4, $4, 1])</code></h3><ul id="408b6c22-df59-4e27-b09b-f498e2dd44cb" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 这是另一个<code>LogicalProject</code>操作，在最终的计划中投影了表达式<code>[$4, $4, 1]</code>。这里的<code>$4</code>可能是某个字段的索引值，<code>1</code>是常量值。</li></ul><h3 id="52f1055a-2b9f-4962-87af-fd0b3c5c71fb" class="">9. <code>14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#1:LogicalTableScan.(table=[s2_pv_uv_statis])</code></h3><ul id="839487f9-de19-4926-9e5f-f0a93b4f2579" class="bulleted-list"><li style="list-style-type:disc"><strong>含义</strong>: 最后，日志记录了最终计划中使用的<code>LogicalTableScan</code>操作，这表示将扫描<code>s2_pv_uv_statis</code>表的数据作为执行计划的一部分。</li></ul><h3 id="4017940e-d889-4ac9-8297-ebf5ab3b6c63" class="">总结</h3><p id="a767446e-8488-48b0-933a-514c92b449d2" class="">录了从SQL语句解析、优化到最终执行计划的生成过程。Apache Calcite先是简化了SQL表达式，然后将其转换为关系表达式（RelNode），再通过应用各种优化规则生成了最终的逻辑执行计划。这个过程展示了如何有效地从SQL到物理执行计划的转换，并通过优化器应用了多种优化策略。</p><h2 id="56ff51f2-0e6e-4b01-ba0a-7a54a7e6a758" class="">10. </h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d92fa360-0b72-4dee-99b2-e31e295e21ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">14:57:22 [http-nio-9080-exec-2] DEBUG org.apache.calcite.sql.parser 890 - Reduced `sys_imp_date` &gt;= &#x27;2024-07-31&#x27; AND `sys_imp_date` &lt;= &#x27;2024-08-06&#x27;</code></pre><ul id="62e1c6c0-aab9-44ae-b910-70b000001ccf" class="bulleted-list"><li style="list-style-type:disc"><strong>解释</strong>:<ul id="e3f41172-4b19-480d-8b6a-e52e0c6703be" class="bulleted-list"><li style="list-style-type:circle">表示 Calcite SQL 解析器已经解析并简化了条件表达式，该表达式检查 <code>sys_imp_date</code> 字段是否在 <code>&#x27;2024-07-31&#x27;</code> 和 <code>&#x27;2024-08-06&#x27;</code> 之间。这是 SQL 解析和优化过程中常见的一步，确保表达式在进一步处理和执行之前尽可能简洁和高效。</li></ul></li></ul><h2 id="57443044-97df-4bd8-acad-9a02f7c585a9" class="">11. </h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a4978d7b-daa0-4688-aafa-d25e1f724f0a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">14:57:22 [http-nio-9080-exec-2] DEBUG org.apache.calcite.sql2rel 628 - Plan after converting SqlNode to RelNode
+LogicalAggregate(group=[{}], EXPR$0=[SUM($0)])
+  LogicalProject(pv=[$1])
+    LogicalFilter(condition=[AND(&gt;=($0, _UTF-8&#x27;2024-07-31&#x27;), &lt;=($0, _UTF-8&#x27;2024-08-06&#x27;))])
+      LogicalProject(sys_imp_date=[$0], pv=[$1])
+        LogicalAggregate(group=[{0}], pv=[SUM($1)])
+          LogicalProject(imp_date=[$4], $f1=[1])
+            LogicalTableScan(table=[[s2_pv_uv_statis]])</code></pre><ul id="475cc3d5-4e0a-413a-a380-e5285fe7cde5" class="bulleted-list"><li style="list-style-type:disc"><strong>解释</strong>:<ul id="cfd700ce-2b13-4d24-9777-aabcd492a89c" class="bulleted-list"><li style="list-style-type:circle">这一行展示了 SQL 查询在转换为逻辑查询计划 (RelNode) 后的样子。Calcite 使用 Relational Algebra（关系代数）的表示法来描述查询操作的逻辑步骤。</li></ul><ul id="89aa6e7e-58f6-4e0d-9839-77a96bf6b8cc" class="bulleted-list"><li style="list-style-type:circle"><strong>具体逻辑步骤</strong>:<ol type="1" id="5b658347-a84f-47f3-8161-436550724768" class="numbered-list" start="1"><li><strong>LogicalAggregate</strong>:<ul id="09fd8761-78dd-4366-8563-5b7e226c8eff" class="bulleted-list"><li style="list-style-type:disc">这是一个聚合操作（如 SUM、COUNT 等）。</li></ul><ul id="22ac4aa4-fdde-466e-8e2b-aeb24506df0b" class="bulleted-list"><li style="list-style-type:disc"><code>group=[{}]</code> 表示没有分组字段（即全局聚合）。</li></ul><ul id="f315814b-7bbd-4654-bbbf-fb902a6b3cf4" class="bulleted-list"><li style="list-style-type:disc"><code>EXPR$0=[SUM($0)]</code> 表示对 <code>$0</code> 列进行 SUM 聚合运算。</li></ul></li></ol><ol type="1" id="e75e3fa2-51f6-4d44-96eb-5097cefaea9d" class="numbered-list" start="2"><li><strong>LogicalProject</strong>:<ul id="9d854255-b3b5-415f-ae22-72fcb4f20ef1" class="bulleted-list"><li style="list-style-type:disc">表示列投影操作，选择和重命名特定列。</li></ul><ul id="f52056d4-4d68-454d-921e-1c93e77d1ee6" class="bulleted-list"><li style="list-style-type:disc"><code>pv=[$1]</code> 表示选择第二列并将其命名为 <code>pv</code>。</li></ul></li></ol><ol type="1" id="95f42d00-cb69-4268-9037-0f3c317ca643" class="numbered-list" start="3"><li><strong>LogicalFilter</strong>:<ul id="75031fec-a6de-4acb-9d4c-2a728d802219" class="bulleted-list"><li style="list-style-type:disc">表示过滤操作（类似 SQL 的 WHERE 子句）。</li></ul><ul id="70bf89e0-800a-4f41-b4ad-4fb143f60887" class="bulleted-list"><li style="list-style-type:disc"><code>condition=[AND(&gt;=($0, _UTF-8&#x27;2024-07-31&#x27;), &lt;=($0, _UTF-8&#x27;2024-08-06&#x27;))]</code> 表示对第一个列（$0，也就是 <code>sys_imp_date</code>）应用条件过滤，检查其是否在 <code>2024-07-31</code> 和 <code>2024-08-06</code> 之间。</li></ul></li></ol><ol type="1" id="40113aff-7420-4b27-a97f-7cdda42baf5a" class="numbered-list" start="4"><li><strong>LogicalProject</strong>:<ul id="afd729d5-aa23-463f-9a38-f60b83dee113" class="bulleted-list"><li style="list-style-type:disc">再次进行列投影，选择 <code>sys_imp_date</code> 和 <code>pv</code> 列。</li></ul></li></ol><ol type="1" id="fee860fe-88ff-4755-bd9a-f74155cd14cd" class="numbered-list" start="5"><li><strong>LogicalAggregate</strong>:<ul id="97e935ef-dc74-484a-9a3a-cf7623dbdbd2" class="bulleted-list"><li style="list-style-type:disc">对第一个列（$0，也就是 <code>sys_imp_date</code>）进行分组，对第二个列（$1，也就是 <code>pv</code>）进行 SUM 聚合。</li></ul></li></ol><ol type="1" id="c347d393-d636-46a3-85cc-6d68d325a833" class="numbered-list" start="6"><li><strong>LogicalProject</strong>:<ul id="3e52366e-fae4-4a7c-9b5d-411b9da0372b" class="bulleted-list"><li style="list-style-type:disc">再次进行列投影，选择 <code>imp_date</code> 并创建一个常量列 <code>$f1</code>，值为 1。</li></ul></li></ol><ol type="1" id="b8fde632-0a17-4f48-83d2-68cef2c11fb8" class="numbered-list" start="7"><li><strong>LogicalTableScan</strong>:<ul id="b9d91c71-b9ae-4bf0-9e9c-03f0867f1564" class="bulleted-list"><li style="list-style-type:disc">表示从物理表 <code>s2_pv_uv_statis</code> 中扫描数据，这是逻辑计划中最底层的操作，用于从实际的数据表中读取数据。</li></ul></li></ol></li></ul></li></ul><h2 id="ab1ab99f-54a4-46a8-9ab5-22a87cbfd0ce" class="">12. </h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9112d1da-f645-43a4-8b49-73cb59d72504" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">14:57:22 [http-nio-9080-exec-2] DEBUG org.apache.calcite.sql2rel 628 - Plan after converting SqlNode to RelNode
+LogicalAggregate(group=[{}], EXPR$0=[SUM($0)])
+  LogicalProject(pv=[$1])
+    LogicalFilter(condition=[AND(&gt;=($0, _UTF-8&#x27;2024-07-31&#x27;), &lt;=($0, _UTF-8&#x27;2024-08-06&#x27;))])
+      LogicalProject(sys_imp_date=[$0], pv=[$1])
+        LogicalAggregate(group=[{0}], pv=[SUM($1)])
+          LogicalProject(imp_date=[$4], $f1=[1])
+            LogicalTableScan(table=[[s2_pv_uv_statis]])</code></pre><ul id="ed0c66e4-1225-470e-85b1-8adca7589d0f" class="bulleted-list"><li style="list-style-type:disc"><strong>解释</strong>:<ul id="24c8ec9e-ed4a-4d42-b9b5-0f2890470088" class="bulleted-list"><li style="list-style-type:circle">这行与前一行的内容完全相同，Calcite 再次展示了逻辑查询计划的转换结果。这可能是在日志输出时的重复展示，确保在优化和转换过程的不同阶段查看该计划。</li></ul></li></ul><p id="e3d5e2c8-33bb-455b-b5a9-82119181b9db" class="">
+</p><h2 id="1464a1de-e046-417a-804f-b438c3916885" class="">13. semanticNode 代码解析</h2><p id="60515bdc-8fcd-4e71-af23-42102405b0da" class=""><code>com.tencent.supersonic.headless.core.translator.calcite.sql.node</code> 包，主要定义了 <code>SemanticNode</code> 抽象类。这类代码使用了 Apache Calcite 进行 SQL 解析、优化和转换，是整个 SQL 处理链条中的一部分。下面我将逐步分析代码的各个部分及其作用。</p><p id="224d3d75-74fa-4404-aaeb-ad0a0f83c145" class="">类和包的结构</p><ul id="e6ace3a7-d5d9-4bbc-932e-9fda371bb4f2" class="bulleted-list"><li style="list-style-type:disc"><strong>包名:</strong> <code>com.tencent.supersonic.headless.core.translator.calcite.sql.node</code><ul id="d6b8ebfc-89e4-4a30-87e8-41ac4fdad3db" class="bulleted-list"><li style="list-style-type:circle">该包通常用于处理 SQL 语句的解析和转换，将 SQL 语句转化为 Calcite 的内部表达方式（如 RelNode）并执行优化。</li></ul></li></ul><ul id="16d7294a-bf85-4db5-832d-d34cf47f650d" class="bulleted-list"><li style="list-style-type:disc"><strong>类名:</strong> <code>SemanticNode</code><ul id="11a19fd6-0fa4-4c37-8be0-bd8fa9255963" class="bulleted-list"><li style="list-style-type:circle">这是一个抽象类，提供了多个静态方法来解析、处理、优化和转换 SQL 语句。</li></ul></li></ul><p id="c6a3871b-f364-416d-b425-6c18a046f967" class="">核心字段</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0e924619-ebcb-4363-96b0-fdfc69e76850" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">public static Set&lt;SqlKind&gt; AGGREGATION_KIND = new HashSet&lt;&gt;();
+public static Set&lt;String&gt; AGGREGATION_FUNC = new HashSet&lt;&gt;();
+public static List&lt;String&gt; groupHints = new ArrayList&lt;&gt;(Arrays.asList(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;));</code></pre><ul id="5baac01b-74e1-4111-a079-5d22784686c7" class="bulleted-list"><li style="list-style-type:disc"><strong>AGGREGATION_KIND</strong>:<ul id="7dd5989d-33df-4439-ac88-888ba38d4f90" class="bulleted-list"><li style="list-style-type:circle">这个集合存储了所有支持的聚合操作（如 AVG、COUNT、SUM、MAX、MIN）。<code>SqlKind</code> 是 Calcite 用来表示 SQL 语句中不同操作类型的枚举。</li></ul></li></ul><ul id="fbfecdef-bda2-4577-b066-2b1c9f0c6e4f" class="bulleted-list"><li style="list-style-type:disc"><strong>AGGREGATION_FUNC</strong>:<ul id="b6889498-d726-4612-954a-988fe686e269" class="bulleted-list"><li style="list-style-type:circle">该集合存储了聚合函数的名称字符串（如 &quot;sum&quot;, &quot;count&quot;, &quot;max&quot;, &quot;avg&quot;, &quot;min&quot;），用于匹配和识别 SQL 中的聚合函数。</li></ul></li></ul><ul id="75c485fa-078a-4e83-90dc-0fa2f5f284b2" class="bulleted-list"><li style="list-style-type:disc"><strong>groupHints</strong>:<ul id="7d2b298a-a433-46a7-a8ee-bef66971558a" class="bulleted-list"><li style="list-style-type:circle">这是一个存储数字字符串的列表，用于处理 SQL 中的分组提示（Group hints），这些可能是对 SQL 中分组操作的特定索引或标识。</li></ul></li></ul><p id="a0970358-dc26-4690-ac78-c28c9f517695" class="">核心方法</p><ol type="1" id="1e1554a1-0c5e-4c46-bb23-8947bfb10663" class="numbered-list" start="1"><li><strong>parse</strong> 方法</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4d1faa43-5506-466c-9524-54c655749d4f" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">public static SqlNode parse(String expression, SqlValidatorScope scope, EngineType engineType) throws Exception {
+    SqlValidatorWithHints sqlValidatorWithHints = Configuration.getSqlValidatorWithHints(
+            scope.getValidator().getCatalogReader().getRootSchema(), engineType);
+    if (Configuration.getSqlAdvisor(sqlValidatorWithHints, engineType).getReservedAndKeyWords()
+            .contains(expression.toUpperCase())) {
+        expression = String.format(&quot;`%s`&quot;, expression);
+    }
+    SqlParser sqlParser = SqlParser.create(expression, Configuration.getParserConfig(engineType));
+    SqlNode sqlNode = sqlParser.parseExpression();
+    scope.validateExpr(sqlNode);
+    return sqlNode;
+}</code></pre><ul id="9d686121-940a-4259-9e2e-38139b56153b" class="bulleted-list"><li style="list-style-type:disc"><strong>功能</strong>:<ul id="e7d28c21-d3d5-4a6a-926c-fa874ddb7a68" class="bulleted-list"><li style="list-style-type:circle">该方法解析输入的 SQL 表达式，将其转换为 Calcite 的 <code>SqlNode</code> 对象。</li></ul><ul id="3bef02ae-c107-4510-af7c-c5c183a8535b" class="bulleted-list"><li style="list-style-type:circle">首先，通过 <code>SqlValidatorWithHints</code> 验证表达式是否包含保留字，如果是，则将表达式包裹在反引号中。</li></ul><ul id="7c02a0c6-e7e4-4906-af88-b89e63c1e16f" class="bulleted-list"><li style="list-style-type:circle">然后使用 Calcite 的 <code>SqlParser</code> 进行 SQL 解析，将其转换为 <code>SqlNode</code>。</li></ul><ul id="0ea345ea-6f0f-435f-984f-df7cbd9c9d24" class="bulleted-list"><li style="list-style-type:circle">最后，对解析后的 <code>SqlNode</code> 进行验证（如语法检查）。</li></ul></li></ul><ol type="1" id="23c41a18-1a95-45c0-86a4-9674541e0fa0" class="numbered-list" start="1"><li><strong>buildAs</strong> 方法</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cd72671f-de55-4451-b0c2-e8ea88eff9e7" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">public static SqlNode buildAs(String asName, SqlNode sqlNode) throws Exception {
+    SqlAsOperator sqlAsOperator = new SqlAsOperator();
+    SqlIdentifier sqlIdentifier = new SqlIdentifier(asName, SqlParserPos.ZERO);
+    return new SqlBasicCall(sqlAsOperator, new ArrayList&lt;&gt;(Arrays.asList(sqlNode, sqlIdentifier)),
+            SqlParserPos.ZERO);
+}</code></pre><ul id="de7d80ef-19a5-4cde-af1c-0c978737edee" class="bulleted-list"><li style="list-style-type:disc"><strong>功能</strong>:<ul id="a3d4bfa5-e852-46e3-a273-a85691f505f1" class="bulleted-list"><li style="list-style-type:circle">构建一个 SQL 的 <code>AS</code> 操作（用于给表达式或字段起别名）。</li></ul><ul id="312955ff-20d5-41df-a5fd-f3016d6596c1" class="bulleted-list"><li style="list-style-type:circle"><code>sqlNode</code> 是需要重命名的 SQL 表达式或字段，而 <code>asName</code> 是新名称。</li></ul><ul id="55f6c391-3ddf-485f-995a-29850cb4a29f" class="bulleted-list"><li style="list-style-type:circle">返回一个包含 <code>AS</code> 操作的 <code>SqlNode</code>。</li></ul></li></ul><ol type="1" id="7a1f8c21-fa3b-4d1b-91ed-0fb86da5c41a" class="numbered-list" start="1"><li><strong>getSql</strong> 方法</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6f756d35-521b-4bf1-bc3d-15b8845b1926" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">public static String getSql(SqlNode sqlNode, EngineType engineType) {
+    UnaryOperator&lt;SqlWriterConfig&gt; sqlWriterConfigUnaryOperator = (c) -&gt; getSqlWriterConfig(engineType);
+    return sqlNode.toSqlString(sqlWriterConfigUnaryOperator).getSql();
+}</code></pre><ul id="c67192ad-341f-4829-86bc-9e28a1597991" class="bulleted-list"><li style="list-style-type:disc"><strong>功能</strong>:<ul id="90e2c5ea-2169-4fee-b56a-1c5176ece69e" class="bulleted-list"><li style="list-style-type:circle">将 <code>SqlNode</code> 转换为 SQL 字符串表示。</li></ul><ul id="b1a8fc06-9bbd-4e1d-9ed0-be9e1fb76eb6" class="bulleted-list"><li style="list-style-type:circle">通过 <code>SqlWriterConfig</code> 配置 SQL 的输出格式，生成适合指定 <code>engineType</code>（引擎类型）的 SQL 语句。</li></ul></li></ul><ol type="1" id="8480be22-3c2a-40cb-b2ce-081960546856" class="numbered-list" start="1"><li><strong>isNumeric</strong> 方法</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9b5b1e95-e993-4443-899d-eb490ce6e913" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">public static boolean isNumeric(String expr) {
+    return StringUtils.isNumeric(expr);
+}</code></pre><ul id="dcd98b6c-244c-4f66-969d-64f7ac45f33b" class="bulleted-list"><li style="list-style-type:disc"><strong>功能</strong>:<ul id="6cbf7b9b-3ef2-4279-b99d-fc5eaf821029" class="bulleted-list"><li style="list-style-type:circle">检查给定的表达式 <code>expr</code> 是否为数值。该方法利用 Apache Commons Lang3 库中的 <code>StringUtils.isNumeric</code> 方法。</li></ul></li></ul><ol type="1" id="a7987f8f-a467-42d1-a7a6-8188e6f238b3" class="numbered-list" start="1"><li><strong>expand</strong> 方法</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fc86a840-7eb3-4ecc-b66c-f24b0ecf4229" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">public static List&lt;SqlNode&gt; expand(SqlNode sqlNode, SqlValidatorScope scope) throws Exception {
+    if (!isIdentifier(sqlNode)) {
+        List&lt;SqlNode&gt; sqlNodeList = new ArrayList&lt;&gt;();
+        expand(sqlNode, sqlNodeList);
+        return sqlNodeList;
+    }
+    return new ArrayList&lt;&gt;(Arrays.asList(sqlNode));
+}</code></pre><ul id="b12d62c3-13ef-4ae1-aa55-7624b1e3f77a" class="bulleted-list"><li style="list-style-type:disc"><strong>功能</strong>:<ul id="4e13c938-7cce-4329-8a27-d6ac71b17f42" class="bulleted-list"><li style="list-style-type:circle">递归地展开 <code>SqlNode</code>，将复杂的表达式分解成更小的组成部分（如字段标识符、操作符等）。</li></ul><ul id="00894573-0a16-48b1-ac48-7228c1260ddc" class="bulleted-list"><li style="list-style-type:circle">该方法用于处理和拆解复杂的 SQL 表达式，使其便于进一步的处理和分析。</li></ul></li></ul><ol type="1" id="8c2e1e6f-7b0d-46a3-8713-13c2aed76ebe" class="numbered-list" start="1"><li><strong>optimize</strong> 方法</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fa8b9760-9b24-4a85-a0e2-6be3208aabff" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">public static SqlNode optimize(SqlValidatorScope scope, SemanticSchema schema, SqlNode sqlNode,
+                               EngineType engineType) {
+    try {
+        HepProgramBuilder hepProgramBuilder = new HepProgramBuilder();
+        SemanticSqlDialect sqlDialect = SqlDialectFactory.getSqlDialect(engineType);
+        hepProgramBuilder.addRuleInstance(new FilterToGroupScanRule(FilterToGroupScanRule.DEFAULT, schema));
+        RelOptPlanner relOptPlanner = new HepPlanner(hepProgramBuilder.build());
+        RelToSqlConverter converter = new RelToSqlConverter(sqlDialect);
+        SqlValidator sqlValidator = Configuration.getSqlValidator(
+                scope.getValidator().getCatalogReader().getRootSchema(), engineType);
+        SqlToRelConverter sqlToRelConverter = Configuration.getSqlToRelConverter(scope, sqlValidator,
+                relOptPlanner, engineType);
+        RelNode sqlRel = sqlToRelConverter.convertQuery(
+                sqlValidator.validate(sqlNode), false, true).rel;
+        log.debug(&quot;RelNode optimize {}&quot;,
+                SemanticNode.getSql(converter.visitRoot(sqlRel).asStatement(), engineType));
+        relOptPlanner.setRoot(sqlRel);
+        RelNode relNode = relOptPlanner.findBestExp();
+        return converter.visitRoot(relNode).asStatement();
+    } catch (Exception e) {
+        log.error(&quot;optimize error {}&quot;, e);
+    }
+    return null;
+}</code></pre><ul id="762f4cb9-6d54-4f57-aa7e-52ea14b471b2" class="bulleted-list"><li style="list-style-type:disc"><strong>功能</strong>:<ul id="d07783d9-a33a-4d60-ab67-ab0a95afcc54" class="bulleted-list"><li style="list-style-type:circle">该方法对 <code>SqlNode</code> 进行优化，将其转换为 Calcite 的 <code>RelNode</code> 形式，并通过优化器（<code>HepPlanner</code>）进行优化处理。</li></ul><ul id="4e027cfe-754f-4bd6-b960-220dd81e2a99" class="bulleted-list"><li style="list-style-type:circle">之后将优化后的 <code>RelNode</code> 再转换为 SQL 语句（<code>SqlNode</code>），并返回。</li></ul><ul id="4be37332-2ef4-4a48-93f6-32ab3198a728" class="bulleted-list"><li style="list-style-type:circle">这个过程包含 SQL 验证、转换为关系代数形式（RelNode）、应用优化规则等步骤。</li></ul></li></ul><p id="e8619f94-443f-4d16-a9f4-11db83d6ac34" class="">
+</p><h2 id="69e02be3-0706-41d0-8c39-69ad643e2958" class="">14. <code>14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.c.sql.node.SemanticNode 423 - RelNode optimize SELECT SUM(`pv`)<br/>FROM<br/>(SELECT `imp_date` AS `sys_imp_date`, SUM(1) AS `pv`<br/>FROM<br/>s2_pv_uv_statis<br/>GROUP BY `imp_date`) AS `t1`<br/>WHERE `sys_imp_date` &gt;= &#x27;2024-07-31&#x27; AND `sys_imp_date` &lt;= &#x27;2024-08-06&#x27;<br/></code></h2><h3 id="c96f3f6b-a286-4f36-a6f7-0c9fc52deec2" class="">结合代码分析</h3><ol type="1" id="26858117-cbcc-4fe7-b59a-d21f3f9050f2" class="numbered-list" start="1"><li><strong>SQL 查询结构</strong>:<ul id="d957a80a-61f0-4376-8ef3-558a60a78255" class="bulleted-list"><li style="list-style-type:disc">最外层的查询语句是 <code>SELECT SUM(pv) FROM ... WHERE sys_imp_date &gt;= &#x27;2024-07-31&#x27; AND sys_imp_date &lt;= &#x27;2024-08-06&#x27;</code>。</li></ul><ul id="e7fc4f60-8642-46f4-b94e-e3b5631e63e7" class="bulleted-list"><li style="list-style-type:disc">内层子查询为 <code>SELECT imp_date AS sys_imp_date, SUM(1) AS pv FROM s2_pv_uv_statis GROUP BY imp_date</code>。</li></ul></li></ol><ol type="1" id="6d0d08ca-4bee-4858-a1e5-3c05d5ba38e7" class="numbered-list" start="2"><li><strong>子查询</strong>:<ul id="ab59b885-6df4-41cc-88b2-401872616b24" class="bulleted-list"><li style="list-style-type:disc">内层子查询从 <code>s2_pv_uv_statis</code> 表中选取数据，将 <code>imp_date</code> 字段重命名为 <code>sys_imp_date</code>。</li></ul><ul id="86873a0b-cd85-48e8-a96c-2b17af2041f0" class="bulleted-list"><li style="list-style-type:disc">同时，对于每个 <code>imp_date</code>，计算其对应的 <code>pv</code>（访问次数）的总和。这里的 <code>SUM(1)</code> 表示对每一行的计数，通常是计算某个条件下的行数总和。</li></ul></li></ol><ol type="1" id="5269aead-54af-4763-a5f0-14819f7d0ca2" class="numbered-list" start="3"><li><strong>外层查询</strong>:<ul id="653f216d-4020-4014-9d13-3b1ef626e88e" class="bulleted-list"><li style="list-style-type:disc">外层查询对内层查询的结果进行汇总，计算出 <code>pv</code> 字段（即访问次数）的总和。</li></ul><ul id="e07dae4d-a46e-4188-a04e-9b3283377e0c" class="bulleted-list"><li style="list-style-type:disc">并对 <code>sys_imp_date</code> 进行过滤，只选取在 <code>&#x27;2024-07-31&#x27;</code> 和 <code>&#x27;2024-08-06&#x27;</code> 之间的日期范围的数据。</li></ul></li></ol><h3 id="b382e404-67a1-4b05-8f2d-f1c3f5237b46" class="">Calcite 解析和优化过程</h3><p id="69e80623-aab7-497d-956b-f4e63327283a" class="">在 <code>SemanticNode</code> 类中，有一个核心的 <code>optimize</code> 方法负责优化 SQL 查询。</p><ol type="1" id="29f07882-6ed3-47ae-bffe-15a851ac8229" class="numbered-list" start="1"><li><strong>初始解析</strong>:<ul id="429789e7-989e-46ac-8347-de1b87db182b" class="bulleted-list"><li style="list-style-type:disc">通过 <code>SqlParser</code> 解析原始的 SQL 表达式，生成 <code>SqlNode</code>。</li></ul></li></ol><ol type="1" id="c5b989bb-4c18-41d4-b619-9e84febf4668" class="numbered-list" start="2"><li><strong>SQL 验证</strong>:<ul id="b8ce5769-f291-43e2-abfd-79c94180a375" class="bulleted-list"><li style="list-style-type:disc">使用 <code>SqlValidator</code> 对 <code>SqlNode</code> 进行验证，检查语法和语义上的合法性。</li></ul></li></ol><ol type="1" id="3c84c7f7-d22e-4a83-891c-f0e6f1b3f9d8" class="numbered-list" start="3"><li><strong>转换为 RelNode</strong>:<ul id="baabd498-04d1-47ad-a97e-c076b4f86932" class="bulleted-list"><li style="list-style-type:disc"><code>SqlToRelConverter</code> 将经过验证的 <code>SqlNode</code> 转换为 <code>RelNode</code>，这一步将 SQL 语句转化为 Calcite 内部使用的关系代数树。</li></ul></li></ol><ol type="1" id="75bd2da8-ac20-47a4-987a-e6a49ace91ae" class="numbered-list" start="4"><li><strong>优化</strong>:<ul id="a133eda3-a6a0-439f-b694-68142acfd65a" class="bulleted-list"><li style="list-style-type:disc"><code>HepPlanner</code> 使用一组优化规则（如合并过滤条件、推导下推、消除冗余等）对生成的 <code>RelNode</code> 进行优化。这个过程中可能会对查询进行重写，生成更高效的执行计划。</li></ul></li></ol><ol type="1" id="5cad17b3-d41f-43ac-a76a-b55572708f08" class="numbered-list" start="5"><li><strong>生成最终 SQL</strong>:<ul id="8381e54e-321b-4b69-a58e-13dc8f3edf11" class="bulleted-list"><li style="list-style-type:disc">经过优化后的 <code>RelNode</code> 再次转换回 <code>SqlNode</code>，最后由 <code>RelToSqlConverter</code> 生成最终的 SQL 字符串。</li></ul></li></ol><h3 id="2163758f-5301-4df2-bf9d-6cd5a95643ac" class="">总结</h3><p id="9b8b077f-b9ac-4faa-a67b-d8ae0e7f2862" class="">这条日志展示了 Calcite 在优化 SQL 查询后的结果。具体来说，Calcite 通过以下步骤生成了最终 SQL：</p><ol type="1" id="8b061ba1-e90c-43f9-b041-d295f4fd8976" class="numbered-list" start="1"><li>内层子查询通过聚合和分组将原始数据表 <code>s2_pv_uv_statis</code> 中的数据按日期分组，并计算每个日期对应的 <code>pv</code>。</li></ol><ol type="1" id="3139d893-9fdf-4d88-9a5d-6a2a00f3602e" class="numbered-list" start="2"><li>外层查询汇总了 <code>pv</code> 的总和，并通过日期范围过滤符合条件的数据。</li></ol><ol type="1" id="437cb721-265d-4024-bc4c-ee9c01385319" class="numbered-list" start="3"><li>这种嵌套查询的形式可能是经过 Calcite 的优化规则决定的，以实现更高效的数据查询和处理。</li></ol><p id="549a2c84-89cf-453c-9731-8df8f700ef8b" class="">
+</p><h2 id="1ea87b05-7a9a-4669-9b0c-c93daed78503" class="">15. </h2><h3 id="1548aa1d-cf9d-48ee-8e56-0e7fa8a8ad5f" class="">日志解析</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d057b140-4c47-4f12-8bbc-35996fcde6b7" class="code"><code class="language-Plain Text">14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 45 - call#0: Apply rule [FilterToGroupScanRule] to [rel#49:LogicalFilter,rel#47:LogicalProject,rel#45:LogicalAggregate,rel#43:LogicalProject]
+14:57:22 [http-nio-9080-exec-2] DEBUG o.a.c.p.A.rule_execution_summary 300 - Rule Attempts Info for HepPlanner
+14:57:22 [http-nio-9080-exec-2] DEBUG o.a.c.p.A.rule_execution_summary 301 -
+Rules                                                                   Attempts           Time (us)
+FilterToGroupScanRule                                                          1                 968
+* Total                                                                        1                 968</code></pre><h3 id="0735ab5b-7247-4ee6-b302-22e5fcbacbc3" class="">日志内容解析</h3><ol type="1" id="362bc118-9ed8-4cba-9b6a-a949c7e888d0" class="numbered-list" start="1"><li><strong>Rule Application (</strong><code><strong>RelOptPlanner</strong></code><strong> 规则应用)</strong>:<ul id="da232465-d9b2-4c94-bc61-cbd3a3cfed85" class="bulleted-list"><li style="list-style-type:disc"><code>RelOptPlanner</code> 是 Calcite 中用于优化关系代数表达式的规划器。它通过应用一系列规则来优化查询执行计划。</li></ul><ul id="fdaabca5-3d5b-4305-a290-02ade6692f1e" class="bulleted-list"><li style="list-style-type:disc"><code>call#0: Apply rule [FilterToGroupScanRule]</code> 这条日志表明，规划器正在应用 <code>FilterToGroupScanRule</code> 规则，并将它应用到了一组逻辑操作符上：<ul id="836d57a9-19db-420e-9a29-d58129cb81b0" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalFilter</code> (rel#49)</li></ul><ul id="6f464f1b-4947-43a9-8cae-567c5a22eabe" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalProject</code> (rel#47)</li></ul><ul id="42ef6bd1-2dd3-42af-99ac-7dfd14464447" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalAggregate</code> (rel#45)</li></ul><ul id="6682eacd-b03a-4ca7-82ce-9762b5ccd255" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalProject</code> (rel#43)</li></ul></li></ul></li></ol><ol type="1" id="e16a8b5c-7fb4-4ac6-80f2-c3c79046188e" class="numbered-list" start="2"><li><strong>Rule Execution Summary (规则执行摘要)</strong>:<ul id="6d0382b4-4cff-4e72-b046-0f7cbb546918" class="bulleted-list"><li style="list-style-type:disc"><code>Rule Attempts Info for HepPlanner</code> 这一部分日志给出了一个摘要，显示了 HepPlanner 在应用优化规则时的尝试次数和所用时间。</li></ul><ul id="772cde5b-e56c-4699-93bc-c0d53e346308" class="bulleted-list"><li style="list-style-type:disc"><code>FilterToGroupScanRule</code> 规则在一次尝试中成功应用，并花费了 968 微秒（0.968 毫秒）的时间完成了这一操作。</li></ul></li></ol><h3 id="a22894ab-8b9f-4cf6-8bb0-0640e6bfe2be" class=""><code>FilterToGroupScanRule</code> 规则</h3><p id="0167ea3a-5929-4559-a8fa-e7fc02053d15" class=""><code>FilterToGroupScanRule</code> 是 Calcite 中的一条优化规则，通常用于将 <code>Filter</code> 操作符下推到 <code>GroupBy</code> 之前的阶段，从而减少要处理的数据量。这种操作通常可以提高查询的效率，因为在数据聚合之前就已经将不必要的数据过滤掉了。</p><h3 id="138b8253-0a6d-4b88-9d6b-b11323ccbce6" class="">结合之前的查询优化</h3><p id="d0831ef5-ea8b-49fd-bc59-766e4a7a0b19" class="">在之前的日志中，SQL 查询被转换为一个嵌套查询结构，并且在外层有一个过滤条件。<code>FilterToGroupScanRule</code> 识别到了可以在聚合之前应用过滤条件的机会，从而调整了逻辑计划中的操作符顺序，以实现更有效的执行计划。</p><ul id="a034c6db-55e2-446a-9464-9d7b2f92db47" class="bulleted-list"><li style="list-style-type:disc"><strong>Initial Plan</strong>:<ul id="f40f9207-6dc0-4ad8-a1e7-f7d9d7cd198e" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalProject</code> → <code>LogicalAggregate</code> → <code>LogicalFilter</code> → <code>LogicalProject</code></li></ul></li></ul><ul id="106e97f4-2e2f-41e4-a5f6-1dc2fc25a569" class="bulleted-list"><li style="list-style-type:disc"><strong>Optimized Plan</strong>:<ul id="aa35a7e8-6066-4cf4-a4ad-9c7dc444c165" class="bulleted-list"><li style="list-style-type:circle"><code>LogicalFilter</code> 被下推到 <code>LogicalAggregate</code> 之前，这样可以先过滤数据再进行聚合操作。</li></ul></li></ul><p id="33306abd-be05-4f32-874e-0daec0393837" class="">
+</p><h2 id="d1905eaf-f8ac-412c-8ae2-5fbe378e1819" class="">16.</h2><h3 id="fc8e9899-d7af-4fee-817d-4a6c7991be8c" class="">日志分析</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="eefd646d-fa04-42b0-bf6b-828e413de132" class="code"><code class="language-Plain Text">14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#53:LogicalAggregate.(input=HepRelVertex#52,group={},EXPR$0=SUM($0))
+14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#51:LogicalProject.(input=HepRelVertex#50,exprs=[$1])
+14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#49:LogicalFilter.(input=HepRelVertex#48,condition=AND(&gt;=($0, _UTF-8&#x27;2024-07-31&#x27;), &lt;=($0, _UTF-8&#x27;2024-08-06&#x27;)))
+14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#47:LogicalProject.(input=HepRelVertex#46,inputs=0..1)
+14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#45:LogicalAggregate.(input=HepRelVertex#44,group={0},pv=SUM($1))
+14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#43:LogicalProject.(input=HepRelVertex#42,exprs=[$4, 1])
+14:57:22 [http-nio-9080-exec-2] DEBUG o.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#22:LogicalTableScan.(table=[s2_pv_uv_statis])</code></pre><h3 id="4be0b966-1efc-45da-8699-482089d04721" class="">1. <code><strong>rel#53:LogicalAggregate</strong></code></h3><ul id="d237c044-2054-474c-ab57-badaa2699fe0" class="bulleted-list"><li style="list-style-type:disc"><strong>操作</strong>: 聚合操作（<code>SUM($0)</code>）。</li></ul><ul id="1bec6174-c6b2-4ada-8c95-1cc6e10da3f0" class="bulleted-list"><li style="list-style-type:disc"><strong>输入</strong>: <code>HepRelVertex#52</code>。</li></ul><ul id="03b7efc2-6a7d-4130-8bf9-b5b18b85f5dd" class="bulleted-list"><li style="list-style-type:disc"><strong>详细描述</strong>: 这个操作符执行聚合操作，这里是 <code>SUM($0)</code>，表示对之前步骤中的某个列（即第一个列 <code>$0</code>）进行求和操作。这个操作没有 <code>group by</code>，意味着它在整个数据集上计算总和。</li></ul><h3 id="4efe39d9-622f-4529-a22a-869a881b43f5" class="">2. <code><strong>rel#51:LogicalProject</strong></code></h3><ul id="a62b3cf9-825c-4546-bef3-256775653d38" class="bulleted-list"><li style="list-style-type:disc"><strong>操作</strong>: 投影操作。</li></ul><ul id="ac6c44b2-0050-4349-a35a-ea51f376b2ec" class="bulleted-list"><li style="list-style-type:disc"><strong>输入</strong>: <code>HepRelVertex#50</code>。</li></ul><ul id="bf282acf-68d8-4f86-a2cd-fa79629e8d46" class="bulleted-list"><li style="list-style-type:disc"><strong>详细描述</strong>: 该操作符从之前的结果中选择出特定的列（这里是 <code>$1</code> 列）。<code>LogicalProject</code> 用于选择特定的列或对列进行计算。</li></ul><h3 id="9b8ed773-f64d-4c45-a07b-f3488f06b6f6" class="">3. <code><strong>rel#49:LogicalFilter</strong></code></h3><ul id="a86f1c9b-390c-44e0-9062-a2a0f5c485f0" class="bulleted-list"><li style="list-style-type:disc"><strong>操作</strong>: 过滤操作。</li></ul><ul id="110fb29b-410d-4a61-882c-13e173eec6be" class="bulleted-list"><li style="list-style-type:disc"><strong>输入</strong>: <code>HepRelVertex#48</code>。</li></ul><ul id="78cc1ca8-01d3-4e51-8dfc-b36b469e3d79" class="bulleted-list"><li style="list-style-type:disc"><strong>过滤条件</strong>: <code>AND(&gt;=($0, _UTF-8&#x27;2024-07-31&#x27;), &lt;=($0, _UTF-8&#x27;2024-08-06&#x27;))</code>。</li></ul><ul id="9b975d65-918f-41a5-8bfc-62bf0006ed1c" class="bulleted-list"><li style="list-style-type:disc"><strong>详细描述</strong>: 这个操作符用于过滤数据，只保留满足指定条件的数据行。这里的条件是 <code>sys_imp_date</code> 的值在 <code>2024-07-31</code> 到 <code>2024-08-06</code> 之间。过滤操作通常用于减少后续操作所需处理的数据量。</li></ul><h3 id="bb279cd1-45dd-45fa-8c87-ef72d660894e" class="">4. <code><strong>rel#47:LogicalProject</strong></code></h3><ul id="d59c37df-fdf0-42e8-a160-d7e5c2168041" class="bulleted-list"><li style="list-style-type:disc"><strong>操作</strong>: 投影操作。</li></ul><ul id="ef0ba00c-ffb7-4fcf-b866-54aadd47a0c4" class="bulleted-list"><li style="list-style-type:disc"><strong>输入</strong>: <code>HepRelVertex#46</code>。</li></ul><ul id="38948631-0920-410a-9b1f-f493a3a01a87" class="bulleted-list"><li style="list-style-type:disc"><strong>详细描述</strong>: 另一个投影操作符，从输入数据中选择某些特定列或进行列的计算。这里它将选择列 <code>exprs=[$1]</code>。</li></ul><h3 id="cf3ac247-f751-44c6-9f6b-1c9d3cc63aba" class="">5. <code><strong>rel#45:LogicalAggregate</strong></code></h3><ul id="669ed456-8a6d-4c50-813c-491e4dcb940e" class="bulleted-list"><li style="list-style-type:disc"><strong>操作</strong>: 聚合操作。</li></ul><ul id="b967a344-8177-401f-94bf-5a44590089ef" class="bulleted-list"><li style="list-style-type:disc"><strong>输入</strong>: <code>HepRelVertex#44</code>。</li></ul><ul id="717a2a5a-17a7-456b-81dd-d7fb03ef84f9" class="bulleted-list"><li style="list-style-type:disc"><strong>分组依据</strong>: <code>group={0}</code>，根据第0列进行分组。</li></ul><ul id="c1583778-30cd-4602-829f-7fa111c6812f" class="bulleted-list"><li style="list-style-type:disc"><strong>聚合操作</strong>: <code>pv=SUM($1)</code>。</li></ul><ul id="3d91f5f8-6313-490f-8278-e05501fe7b8d" class="bulleted-list"><li style="list-style-type:disc"><strong>详细描述</strong>: 这个聚合操作符按照第 <code>0</code> 列进行分组，并对第 <code>1</code> 列的值进行求和操作，计算 <code>pv</code> 的总和。</li></ul><h3 id="18f83753-5949-4998-9873-2417a25253fc" class="">6. <code><strong>rel#43:LogicalProject</strong></code></h3><ul id="6971e701-a3d6-4a48-ab60-bfc845c253fa" class="bulleted-list"><li style="list-style-type:disc"><strong>操作</strong>: 投影操作。</li></ul><ul id="9b83379a-9d17-40d9-9b69-f91887159df4" class="bulleted-list"><li style="list-style-type:disc"><strong>输入</strong>: <code>HepRelVertex#42</code>。</li></ul><ul id="043c2bf7-0d06-4620-b98b-493b011b832b" class="bulleted-list"><li style="list-style-type:disc"><strong>详细描述</strong>: 该操作选择第 <code>4</code> 列和常量 <code>1</code>，可能是为了创建一个新的列或者为后续操作做准备。</li></ul><h3 id="45ad548d-f553-40b2-9aca-c4e0925123a8" class="">7. <code><strong>rel#22:LogicalTableScan</strong></code></h3><ul id="fce70a55-eb35-4707-895b-9ea63e33cfdb" class="bulleted-list"><li style="list-style-type:disc"><strong>操作</strong>: 表扫描。</li></ul><ul id="48efa830-1896-4501-91d2-951d143b3b00" class="bulleted-list"><li style="list-style-type:disc"><strong>表</strong>: <code>s2_pv_uv_statis</code>。</li></ul><ul id="cf6421ca-a389-4f45-98d4-0fb01a47b550" class="bulleted-list"><li style="list-style-type:disc"><strong>详细描述</strong>: 这是整个查询操作的起点，表示对物理表 <code>s2_pv_uv_statis</code> 进行扫描，读取所有相关数据。<code>LogicalTableScan</code> 通常是最底层的操作符，用于从数据库中读取数据。</li></ul><h3 id="f12473e6-10d8-4c2d-b4b5-95351b9399c2" class="">总结</h3><p id="80c6142a-d18b-4c92-afca-fac38d44f413" class="">这段日志显示了 Calcite 在优化 SQL 查询时生成的最终逻辑执行计划。该计划首先通过 <code>LogicalTableScan</code> 读取数据，然后通过一系列 <code>LogicalProject</code>、<code>LogicalAggregate</code> 和 <code>LogicalFilter</code> 操作符对数据进行处理。最终的执行计划是通过优化器应用各种规则（例如之前提到的 <code>FilterToGroupScanRule</code>）生成的，以提高查询的执行效率。</p><h2 id="dd2da373-da89-4497-807c-89713fd4ad0a" class="">17. </h2><h3 id="10a0e5cc-d81a-413f-b443-d2beb690366c" class="">1. <code><strong>simplifySql</strong></code><strong> 日志行</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="42a1a20e-0a5e-426c-beae-7910801ce4a7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.c.CalciteQueryParser 46 - simplifySql [SELECT SUM(`pv`)
+FROM
+(SELECT `imp_date` AS `sys_imp_date`, SUM(1) AS `pv`
+FROM
+s2_pv_uv_statis
+GROUP BY `imp_date`) AS `t7`
+WHERE `sys_imp_date` &gt;= &#x27;2024-07-31&#x27; AND `sys_imp_date` &lt;= &#x27;2024-08-06&#x27;]</code></pre><ul id="ee6698a8-edb1-43e1-baa7-e7c24e83a280" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 这一行展示了 <code>CalciteQueryParser</code> 在简化 SQL 查询时生成的中间 SQL 语句。</li></ul><ul id="1e16ceca-45a5-4ca9-953e-e21aa91ec273" class="bulleted-list"><li style="list-style-type:disc"><strong>简化后的 SQL</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3dbfe04e-07da-429d-a803-6890f2673a73" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">SELECT SUM(`pv`)
+FROM
+(SELECT `imp_date` AS `sys_imp_date`, SUM(1) AS `pv`
+FROM
+s2_pv_uv_statis
+GROUP BY `imp_date`) AS `t7`
+WHERE `sys_imp_date` &gt;= &#x27;2024-07-31&#x27; AND `sys_imp_date` &lt;= &#x27;2024-08-06&#x27;</code></pre></li></ul><ul id="69cbad2c-3400-4607-a34f-ecb5c2b75dfa" class="bulleted-list"><li style="list-style-type:disc"><strong>分析</strong>:<ul id="778aaf70-74a1-437e-ad56-77b734f61ded" class="bulleted-list"><li style="list-style-type:circle">该 SQL 查询先从 <code>s2_pv_uv_statis</code> 表中按 <code>imp_date</code> 分组，并计算 <code>SUM(1)</code> 作为 <code>pv</code>。<code>imp_date</code> 被别名为 <code>sys_imp_date</code>。</li></ul><ul id="d75ac6e8-6d2c-4619-b03d-4b7a00146cbe" class="bulleted-list"><li style="list-style-type:circle">然后，外层查询对计算得到的 <code>pv</code> 进行求和，同时通过 <code>sys_imp_date</code> 过滤数据，只保留时间范围在 <code>2024-07-31</code> 到 <code>2024-08-06</code> 之间的记录。</li></ul></li></ul><h3 id="ecb37656-1a73-4f8e-ae3c-148b3a0d07e3" class="">2. <code><strong>before handleNoMetric</strong></code><strong> 日志行</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="43b8e7fa-125a-4c28-977e-15928f1a13cb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.DetailQueryOptimizer 27 - before handleNoMetric, sql:with t_1 as (SELECT `imp_date` AS `sys_imp_date`, SUM(1) AS `pv`
+FROM
+s2_pv_uv_statis
+GROUP BY `imp_date`, `imp_date`)
+SELECT SUM(pv) FROM t_1 WHERE (sys_imp_date &gt;= &#x27;2024-07-31&#x27; AND sys_imp_date &lt;= &#x27;2024-08-06&#x27;) limit 1000</code></pre><ul id="fbac28b0-a0fd-47d0-9adf-f2cc85a2c31e" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: <code>DetailQueryOptimizer</code> 显示了在执行 <code>handleNoMetric</code> 优化前的 SQL 查询。</li></ul><ul id="aeaeed31-0d85-4f26-9d93-f434f33609d8" class="bulleted-list"><li style="list-style-type:disc"><strong>SQL 语句</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8481e7ba-45b6-46d2-8750-0bf6e89c8c5f" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">with t_1 as (
+    SELECT `imp_date` AS `sys_imp_date`, SUM(1) AS `pv`
+    FROM s2_pv_uv_statis
+    GROUP BY `imp_date`, `imp_date`
+)
+SELECT SUM(pv) FROM t_1 WHERE (sys_imp_date &gt;= &#x27;2024-07-31&#x27; AND sys_imp_date &lt;= &#x27;2024-08-06&#x27;) limit 1000</code></pre></li></ul><ul id="c78bdbf5-1a33-424d-8e96-5f45caa0ac8c" class="bulleted-list"><li style="list-style-type:disc"><strong>分析</strong>:<ul id="71000ea6-b54c-4033-8df9-24c58ca686a3" class="bulleted-list"><li style="list-style-type:circle">这段 SQL 使用了一个 <code>WITH</code> 子句，将子查询结果命名为 <code>t_1</code>。</li></ul><ul id="5d6e9bce-f256-44f8-8fd4-b909a087d8fc" class="bulleted-list"><li style="list-style-type:circle">子查询内容与上面简化后的 SQL 基本相同，但这里 <code>GROUP BY</code> 中重复指定了 <code>imp_date</code>。</li></ul><ul id="49460e94-adf4-43d9-92fa-69b21e714eeb" class="bulleted-list"><li style="list-style-type:circle">最终查询的目的是对 <code>t_1</code> 中满足日期条件的 <code>pv</code> 进行求和，且限制结果集为 1000 行。</li></ul></li></ul><h3 id="1f73e97a-27d0-4c7e-913c-ce9a6acf53b0" class="">3. <code><strong>after handleNoMetric</strong></code><strong> 日志行</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="458661c9-e36f-485e-8566-2a0f0b85e5d5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.DetailQueryOptimizer 36 - after handleNoMetric, sql:with t_1 as (SELECT `imp_date` AS `sys_imp_date`, SUM(1) AS `pv`
+FROM
+s2_pv_uv_statis
+GROUP BY `imp_date`, `imp_date`)
+SELECT SUM(pv) FROM t_1 WHERE (sys_imp_date &gt;= &#x27;2024-07-31&#x27; AND sys_imp_date &lt;= &#x27;2024-08-06&#x27;) limit 1000</code></pre><ul id="1558176c-f61e-4363-9915-96948bc7e2b2" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: <code>DetailQueryOptimizer</code> 显示了在执行 <code>handleNoMetric</code> 优化后的 SQL 查询。优化前后的 SQL 并没有变化，这表明在此优化步骤中，SQL 语句已经达到最佳状态，或者该优化步骤对该查询没有进一步的优化空间。</li></ul><ul id="ab11749c-a529-4022-b5cb-0170283aa63c" class="bulleted-list"><li style="list-style-type:disc"><strong>SQL 语句</strong>:<ul id="e9544b3a-e3e6-4b94-9307-0796a8f1d4ba" class="bulleted-list"><li style="list-style-type:circle">与优化前的 SQL 语句相同。</li></ul></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

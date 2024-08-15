@@ -1,0 +1,684 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>H2数据库</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2f2a60cf-af02-4a5a-88d6-516b7982a66a" class="page sans"><header><h1 class="page-title">H2数据库</h1><p class="page-description"></p></header><div class="page-body"><nav id="34fc8954-1abc-4148-865b-c01e40ac4237" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c69ebf33-ca5c-427c-9c31-8b31a66bf807">Schema主要表：</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#aa4d4bed-60d5-4814-b9eb-a9c27da5571f">详细表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a105f493-04ce-426c-941f-573385a473c3">s2_user</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b190b714-23b9-42e0-90d9-cf93dbf9aa8d">数据内容示例：</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7a5afd17-ddec-4717-ae5d-a0c6e5e9a99a">s2_user 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#fee9fe1b-f593-4cb7-ab37-81c6a0e1f5d9">s2_available_date_info 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#4ad67048-2ab1-41e8-b273-6135c75f41af">s2_canvas 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c4df4793-a3e8-4ce3-9699-1cdf955f17a4">singer 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#57f752fb-e07b-4e44-b82f-0bd2dd880b95">s2_user_department 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b8e724a2-0c5e-4efe-b494-e4c4c59f4288">s2_pv_uv_statis 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d75b9b86-b158-4969-8440-d9d03a9f5316">s2_stay_time_statis 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c8df9488-4964-440c-bd45-d4699d7c9038">genre 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c4217fd8-e08f-4b9d-aca1-972a4a7f5b15">artist 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ae9177f5-3828-48be-b8d9-f0662dee75f0">files 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a5204a07-e0b0-4d7b-b644-1b4f22493772">song 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#4286c610-25d8-403b-81e7-8bb094e6678a">company 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3cac3e83-f3b2-45eb-bf8d-2107beb0a626">brand 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#1a3d763f-fbf0-4e41-a789-863d951f031f">company_revenue 表结构示例</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#4df19f59-46ef-4090-8a46-b280f7979f59">company_brand_revenue 表结构示例</a></div></nav><h1 id="c69ebf33-ca5c-427c-9c31-8b31a66bf807" class="">Schema主要表：</h1><ol type="1" id="f1caf634-c2bf-4e65-8993-8d2259e9ce8f" class="numbered-list" start="1"><li><strong>s2_user</strong>:<ul id="99b1e12e-b723-4b8f-be60-fb3724017c87" class="bulleted-list"><li style="list-style-type:disc">存储用户信息。</li></ul></li></ol><ol type="1" id="978a3a81-9cbd-458b-a595-34447c45a1ec" class="numbered-list" start="2"><li><strong>s2_chat_context</strong>:<ul id="63441db9-4b84-4dec-9594-d270657aee86" class="bulleted-list"><li style="list-style-type:disc">存储聊天上下文信息。</li></ul></li></ol><ol type="1" id="e9267848-920a-488d-ad59-d9bf2d29c6fc" class="numbered-list" start="3"><li><strong>s2_chat</strong>:<ul id="000478a4-a22c-4228-93ca-72c923f366e3" class="bulleted-list"><li style="list-style-type:disc">存储聊天信息。</li></ul></li></ol><ol type="1" id="6aca9941-ab58-4ed4-ba19-831f0a16fb20" class="numbered-list" start="4"><li><strong>s2_chat_query</strong>:<ul id="e1f5eb3a-e321-4416-8c75-8d4b74331261" class="bulleted-list"><li style="list-style-type:disc">存储聊天查询信息。</li></ul></li></ol><ol type="1" id="7b831704-261c-4cb6-a527-168831305155" class="numbered-list" start="5"><li><strong>s2_chat_parse</strong>:<ul id="9e1411b8-d602-4051-9a5b-b78b4b900888" class="bulleted-list"><li style="list-style-type:disc">存储聊天解析信息。</li></ul></li></ol><ol type="1" id="62627995-bedc-4ca2-8f5a-ba5625d3cf10" class="numbered-list" start="6"><li><strong>s2_chat_statistics</strong>:<ul id="9c5feeb8-ceea-4c6e-9b55-5a7f3e9b5f03" class="bulleted-list"><li style="list-style-type:disc">存储聊天统计信息。</li></ul></li></ol><ol type="1" id="d64d8efc-6381-4864-a38f-e9156b846ecd" class="numbered-list" start="7"><li><strong>s2_chat_config</strong>:<ul id="038419dc-a663-4656-b367-4d06bae82a62" class="bulleted-list"><li style="list-style-type:disc">存储聊天配置。</li></ul></li></ol><ol type="1" id="9728a7d7-bd57-4db6-8dcc-2f4ed5ff4d1e" class="numbered-list" start="8"><li><strong>s2_chat_memory</strong>:<ul id="4e9b5f72-2518-49bf-8765-35dc3a982f39" class="bulleted-list"><li style="list-style-type:disc">存储聊天记忆信息。</li></ul></li></ol><ol type="1" id="89d26e06-4187-4782-bc2b-cb6e68646118" class="numbered-list" start="9"><li><strong>s2_user_department</strong>:<ul id="ca791b74-e503-47a1-9634-8c387964690a" class="bulleted-list"><li style="list-style-type:disc">存储用户部门信息。</li></ul></li></ol><ol type="1" id="006bf625-5649-48af-97d9-3989fe8763db" class="numbered-list" start="10"><li><strong>s2_pv_uv_statis</strong>:<ul id="90d0b865-7d61-40de-9961-e349caf191df" class="bulleted-list"><li style="list-style-type:disc">存储PV、UV统计信息。</li></ul></li></ol><ol type="1" id="cf76aea0-dc6f-4f13-9b48-fff9a87b1296" class="numbered-list" start="11"><li><strong>s2_stay_time_statis</strong>:<ul id="1ecbb172-d632-43e7-97a2-a0d9ac2453e4" class="bulleted-list"><li style="list-style-type:disc">存储用户停留时间统计信息。</li></ul></li></ol><ol type="1" id="e428480a-b195-4990-8761-9b231cd1c69b" class="numbered-list" start="12"><li><strong>singer</strong>:<ul id="9d82399f-4cd8-406a-ad4b-5be9c260d371" class="bulleted-list"><li style="list-style-type:disc">存储歌手信息。</li></ul></li></ol><ol type="1" id="039ed91d-4673-449c-ae18-3dd44e0a301d" class="numbered-list" start="13"><li><strong>genre</strong>:<ul id="cddebbc8-4f60-4755-8c22-ad5befe7a952" class="bulleted-list"><li style="list-style-type:disc">存储音乐流派信息。</li></ul></li></ol><ol type="1" id="a3ef1823-0c28-4cb6-9c8a-c2d84f8e5db4" class="numbered-list" start="14"><li><strong>artist</strong>:<ul id="1060af9e-f54b-4a33-b9a0-16ff7894dd79" class="bulleted-list"><li style="list-style-type:disc">存储艺术家信息。</li></ul></li></ol><ol type="1" id="61a128b6-8c44-4b2f-9ea8-95c0b26e72c6" class="numbered-list" start="15"><li><strong>files</strong>:<ul id="5cfb576d-7805-4654-b6ee-88eba97e0b94" class="bulleted-list"><li style="list-style-type:disc">存储文件信息。</li></ul></li></ol><ol type="1" id="8dae66cf-3c60-4476-ac9a-a776a76b4a89" class="numbered-list" start="16"><li><strong>song</strong>:<ul id="5c4ae8f2-b533-4841-adeb-8a581520fc08" class="bulleted-list"><li style="list-style-type:disc">存储歌曲信息。</li></ul></li></ol><ol type="1" id="3376b6ad-b0b6-44e2-ac16-c54a9310b5bf" class="numbered-list" start="17"><li><strong>company</strong>:<ul id="c2c96bf8-810c-44f3-ab05-152659819bbf" class="bulleted-list"><li style="list-style-type:disc">存储公司信息。</li></ul></li></ol><ol type="1" id="2c998690-1098-4d99-b112-beb2c34662fb" class="numbered-list" start="18"><li><strong>brand</strong>:<ul id="98318b2b-98c5-46e7-9cf7-2cde9752fbfd" class="bulleted-list"><li style="list-style-type:disc">存储品牌信息。</li></ul></li></ol><ol type="1" id="7d81c135-7764-48be-aefd-fd5b10f4a467" class="numbered-list" start="19"><li><strong>company_revenue</strong>:<ul id="30ee9063-4d74-49fb-a50e-82d42865f247" class="bulleted-list"><li style="list-style-type:disc">存储公司收入信息。</li></ul></li></ol><ol type="1" id="81240f6d-a1f9-43e9-8f92-400a2c366f99" class="numbered-list" start="20"><li><strong>company_brand_revenue</strong>:<ul id="17575877-54a0-48d7-a956-c8a849768e21" class="bulleted-list"><li style="list-style-type:disc">存储公司品牌收入信息。</li></ul></li></ol><h1 id="aa4d4bed-60d5-4814-b9eb-a9c27da5571f" class="">详细表结构示例</h1><h3 id="a105f493-04ce-426c-941f-573385a473c3" class="">s2_user</h3><ul id="484aef24-43b7-4487-beee-02b77f10239f" class="bulleted-list"><li style="list-style-type:disc">id: INT<ul id="9996585f-8d50-4d8d-be11-bbe02dc07a76" class="bulleted-list"><li style="list-style-type:circle">name: VARCHAR(100)</li></ul><ul id="aaba4ea1-5056-41b6-814d-b457edac30ae" class="bulleted-list"><li style="list-style-type:circle">display_name: VARCHAR(100)</li></ul><ul id="2e55d7d3-1d2f-4a9e-a48d-a08c2a62e3d3" class="bulleted-list"><li style="list-style-type:circle">password: VARCHAR(256)</li></ul><ul id="78abcf57-45ab-4d88-962c-564dbd25c35e" class="bulleted-list"><li style="list-style-type:circle">salt: VARCHAR(256)</li></ul><ul id="e4b7c860-6677-4335-9269-b59a3bb4cd82" class="bulleted-list"><li style="list-style-type:circle">email: VARCHAR(100)</li></ul><ul id="92de398d-9405-47d1-8c0d-78d6322be458" class="bulleted-list"><li style="list-style-type:circle">is_admin: INT</li></ul><h3 id="8af7604f-dbe5-4c45-a020-e3b7cfe3e9a8" class="">s2_chat</h3><ul id="882818cf-202c-4505-81bc-2136530bf116" class="bulleted-list"><li style="list-style-type:circle">chat_id: BIGINT</li></ul><ul id="447466e4-b2bc-4f0f-88a4-2fbd0491f450" class="bulleted-list"><li style="list-style-type:circle">agent_id: INT</li></ul><ul id="edf07b88-11c6-4b59-8506-a91f601545b8" class="bulleted-list"><li style="list-style-type:circle">chat_name: VARCHAR(100)</li></ul><ul id="1457f865-2fce-4d9a-9fb1-798501adbdf2" class="bulleted-list"><li style="list-style-type:circle">create_time: TIMESTAMP</li></ul><ul id="6244126c-81ce-4d23-bd3e-69c65465dba8" class="bulleted-list"><li style="list-style-type:circle">last_time: TIMESTAMP</li></ul><ul id="015bd84d-4b3f-4b83-8393-7384e0638595" class="bulleted-list"><li style="list-style-type:circle">creator: VARCHAR(30)</li></ul><ul id="4be33d81-a5d8-4749-a464-b5224d6bef34" class="bulleted-list"><li style="list-style-type:circle">last_question: VARCHAR(200)</li></ul><ul id="81420cf3-39f3-4f56-91e0-31ff2854db77" class="bulleted-list"><li style="list-style-type:circle">is_delete: INT</li></ul><ul id="e62f5ddb-ec01-431e-bad0-3e3bc8dabd7f" class="bulleted-list"><li style="list-style-type:circle">is_top: INT</li></ul><h3 id="7b7fcae7-829f-4c08-9e70-f20ac4f507b6" class="">s2_chat_query</h3><ul id="8d1e9108-7745-4847-86ad-9e3443df0424" class="bulleted-list"><li style="list-style-type:circle">question_id: BIGINT</li></ul><ul id="cede786d-1414-46a4-ba25-0cc4b0f995bf" class="bulleted-list"><li style="list-style-type:circle">agent_id: INT</li></ul><ul id="83e358a4-bb6f-4029-b659-b37b7a014a37" class="bulleted-list"><li style="list-style-type:circle">create_time: TIMESTAMP</li></ul><ul id="6bf9c9d1-17f0-4559-a4ee-188b2763712d" class="bulleted-list"><li style="list-style-type:circle">query_text: MEDIUMTEXT</li></ul><ul id="f5824ac9-931a-48fe-94a5-918f08026b1c" class="bulleted-list"><li style="list-style-type:circle">user_name: VARCHAR(150)</li></ul><ul id="84a4b0e9-719d-46ba-bd65-5a2b47f661c0" class="bulleted-list"><li style="list-style-type:circle">query_state: INT</li></ul><ul id="560de27b-c172-4072-9bc2-25d19277bb9e" class="bulleted-list"><li style="list-style-type:circle">chat_id: BIGINT</li></ul><ul id="95a1c3f8-df97-4370-8ba5-162170adeab5" class="bulleted-list"><li style="list-style-type:circle">query_result: MEDIUMTEXT</li></ul><ul id="5668c8f6-7ad1-4271-9fcd-2c465b0af2fc" class="bulleted-list"><li style="list-style-type:circle">score: INT</li></ul><ul id="815bad7e-9ee1-4f94-8f59-07b93591bcca" class="bulleted-list"><li style="list-style-type:circle">feedback: VARCHAR(1024)</li></ul><ul id="84ab921e-707a-46f9-a53e-6119b5fdb4bb" class="bulleted-list"><li style="list-style-type:circle">similar_queries: VARCHAR(1024)</li></ul><ul id="6cf4cc6f-7834-4197-8f14-2d920ec9a82d" class="bulleted-list"><li style="list-style-type:circle">parse_time_cost: VARCHAR(1024)</li></ul><h3 id="d724bfc5-03a1-4a0b-ba55-b1d2ed9813db" class="">s2_chat_parse</h3><ul id="9c45b3f4-7982-4918-90ea-12d1065297ba" class="bulleted-list"><li style="list-style-type:circle">question_id: BIGINT</li></ul><ul id="b88d7217-d22a-49f4-a5ab-3096fce368ff" class="bulleted-list"><li style="list-style-type:circle">chat_id: BIGINT</li></ul><ul id="83957231-26ac-4e6d-b319-09d351a8bf18" class="bulleted-list"><li style="list-style-type:circle">parse_id: INT</li></ul><ul id="2bde2d69-a027-4375-be3b-2b56bb7e0aee" class="bulleted-list"><li style="list-style-type:circle">create_time: TIMESTAMP</li></ul><ul id="a3662118-f87f-4ca4-87c7-0eae0cf5cf5c" class="bulleted-list"><li style="list-style-type:circle">query_text: VARCHAR(500)</li></ul><ul id="5ab262ab-8675-4b9f-a54c-5316c604df3c" class="bulleted-list"><li style="list-style-type:circle">user_name: VARCHAR(150)</li></ul><ul id="4db1ff5a-da39-4b7b-b773-782fa43d0061" class="bulleted-list"><li style="list-style-type:circle">parse_info: MEDIUMTEXT</li></ul><ul id="1da5de2b-0a01-49a6-8f1f-b3b089170f4c" class="bulleted-list"><li style="list-style-type:circle">is_candidate: INT</li></ul><h3 id="6737e771-b253-4c3c-84dd-58ec97777e36" class="">s2_chat_statistics</h3><ul id="c46ad38b-5acd-4c27-8f1b-db9a07fd144e" class="bulleted-list"><li style="list-style-type:circle">question_id: BIGINT</li></ul><ul id="3677c209-1e06-4a7b-bf6c-b36573c739c8" class="bulleted-list"><li style="list-style-type:circle">chat_id: BIGINT</li></ul><ul id="189ce8eb-7003-432b-814b-5417b3726c6a" class="bulleted-list"><li style="list-style-type:circle">user_name: VARCHAR(150)</li></ul><ul id="e03b402e-3c20-4e1b-b69c-a175f13c1cce" class="bulleted-list"><li style="list-style-type:circle">query_text: VARCHAR(200)</li></ul><ul id="59c62a5e-bc59-4347-83bd-a9334a24c0d3" class="bulleted-list"><li style="list-style-type:circle">interface_name: VARCHAR(100)</li></ul><ul id="a1248223-0a90-40ef-b25a-961a10fd035a" class="bulleted-list"><li style="list-style-type:circle">cost: INT</li></ul><ul id="fad557ef-c500-4abb-ae39-8334764f66b0" class="bulleted-list"><li style="list-style-type:circle">type: INT</li></ul><ul id="9c40fd2a-49a7-4f3e-9ccd-1ac6d2ab31e9" class="bulleted-list"><li style="list-style-type:circle">create_time: TIMESTAMP</li></ul><h3 id="4089cc5f-6a8d-43c8-9343-d8e8110d8f57" class="">s2_chat_config</h3><ul id="a3439f48-ddcc-4c07-8364-9b32297f0afa" class="bulleted-list"><li style="list-style-type:circle">id: INT</li></ul><ul id="f6c49cae-7753-4a69-96ee-864b0fddde32" class="bulleted-list"><li style="list-style-type:circle">model_id: INT</li></ul><ul id="84e3b90e-34e2-4ffa-91da-551c2139950c" class="bulleted-list"><li style="list-style-type:circle">chat_detail_config: VARCHAR(655)</li></ul><ul id="280f974d-158b-4385-ad4c-c99aabcc6d32" class="bulleted-list"><li style="list-style-type:circle">chat_agg_config: VARCHAR(655)</li></ul><ul id="80f3a4e9-2986-4fde-9eeb-effa8200ca1a" class="bulleted-list"><li style="list-style-type:circle">recommended_questions: VARCHAR(1500)</li></ul><ul id="6fbef1f4-00d8-438b-899c-a405bcbfaed6" class="bulleted-list"><li style="list-style-type:circle">created_at: TIMESTAMP</li></ul><ul id="ab4401f2-a518-4414-9414-b5ce066217c8" class="bulleted-list"><li style="list-style-type:circle">updated_at: TIMESTAMP</li></ul><ul id="39ef71be-cc85-433a-9f51-f75396c098f5" class="bulleted-list"><li style="list-style-type:circle">created_by: VARCHAR(100)</li></ul><ul id="88e1b8e3-8d9d-4077-874a-571064309205" class="bulleted-list"><li style="list-style-type:circle">updated_by: VARCHAR(100)</li></ul><ul id="6ecd7231-7593-42ab-b5b6-c9d66b080b46" class="bulleted-list"><li style="list-style-type:circle">status: INT</li></ul><ul id="bc1ca569-9cc3-47a1-929c-0460a4a27329" class="bulleted-list"><li style="list-style-type:circle">llm_examples: TEXT</li></ul><h3 id="6908d20b-0647-49ec-8cb8-cfb1f5e83feb" class="">s2_chat_memory</h3><ul id="2c6a1120-6648-40b3-b3d4-b9e96cc728ec" class="bulleted-list"><li style="list-style-type:circle">id: INT</li></ul><ul id="6d0d587c-ea1d-401e-9335-c8c520be7f65" class="bulleted-list"><li style="list-style-type:circle">question: VARCHAR(655)</li></ul><ul id="c958fb93-055a-492a-a089-395d36380de3" class="bulleted-list"><li style="list-style-type:circle">agent_id: INT</li></ul><ul id="9f7c0e74-13ef-41ba-aa58-fae52a19ac22" class="bulleted-list"><li style="list-style-type:circle">db_schema: TEXT</li></ul><ul id="15bfc050-1d55-4667-b6c6-458ced3279d9" class="bulleted-list"><li style="list-style-type:circle">s2_sql: TEXT</li></ul><ul id="cd6cdb26-11f3-45c4-a3f6-b2c42ae7bbd6" class="bulleted-list"><li style="list-style-type:circle">status: CHAR(10)</li></ul><ul id="0508ca96-1613-4836-b1bf-46c8e19e0fdc" class="bulleted-list"><li style="list-style-type:circle">llm_review: CHAR(10)</li></ul><ul id="8aa54fd0-390f-42fa-bce7-0b1d77d47278" class="bulleted-list"><li style="list-style-type:circle">llm_comment: TEXT</li></ul><ul id="c5e0e726-8de6-404d-8b31-2e736536186e" class="bulleted-list"><li style="list-style-type:circle">human_review: CHAR(10)</li></ul><ul id="bbbc7399-cead-4a7d-9cb4-864d92cdfda0" class="bulleted-list"><li style="list-style-type:circle">human_comment: TEXT</li></ul><ul id="c7fa68a1-7318-4d96-9001-a11d45aaeba9" class="bulleted-list"><li style="list-style-type:circle">created_at: TIMESTAMP</li></ul><ul id="75042cee-21bf-48c9-920b-b815b060fc32" class="bulleted-list"><li style="list-style-type:circle">updated_at: TIMESTAMP</li></ul><ul id="72f27aaf-4673-45a5-8a7b-22e79d585284" class="bulleted-list"><li style="list-style-type:circle">created_by: VARCHAR(100)</li></ul><ul id="a709cbc4-a680-429e-a087-312edb79f370" class="bulleted-list"><li style="list-style-type:circle">updated_by: VARCHAR(100)</li></ul><h3 id="e902a4f7-9a1a-4a53-b4d9-33276a753dfe" class="">s2_available_date_info</h3><ul id="4a584302-acb1-467f-8e27-ac3378ae5929" class="bulleted-list"><li style="list-style-type:circle">id: INT</li></ul><ul id="d6bd41f7-ea58-4567-adc0-b1566157eef8" class="bulleted-list"><li style="list-style-type:circle">item_id: INT</li></ul><ul id="96c54c2c-1939-47a5-9717-c09886fb3435" class="bulleted-list"><li style="list-style-type:circle">type: VARCHAR(255)</li></ul><ul id="ea5133f7-04a4-4a02-bd63-f5bf010f03e2" class="bulleted-list"><li style="list-style-type:circle">date_format: VARCHAR(64)</li></ul><ul id="a1d06958-af39-436a-b38d-bd268d3a19d1" class="bulleted-list"><li style="list-style-type:circle">start_date: DATE</li></ul><ul id="7af4e4a2-efcd-4eee-b0a8-03338d01e2ff" class="bulleted-list"><li style="list-style-type:circle">end_date: DATE</li></ul><ul id="13d75cc4-9bac-4fd0-922a-057fddff86ea" class="bulleted-list"><li style="list-style-type:circle">unavailable_date: JSON</li></ul><ul id="27ab8b25-eca7-45e9-a93f-1d6e6a25dabc" class="bulleted-list"><li style="list-style-type:circle">created_at: DATE</li></ul><ul id="324f7cb3-7973-4642-922c-f1e1b9eba101" class="bulleted-list"><li style="list-style-type:circle">created_by: VARCHAR(100)</li></ul><ul id="3d946180-d9d9-4527-acb5-3b1bc708b9c4" class="bulleted-list"><li style="list-style-type:circle">updated_at: DATE</li></ul><ul id="d71eac54-c77f-4a26-9ac3-ce9aeddc7492" class="bulleted-list"><li style="list-style-type:circle">updated_by: VARCHAR(100)</li></ul><h3 id="b1619f25-619f-4d59-907d-ff25e8651d12" class="">s2_canvas</h3><ul id="29fd1d32-863f-4493-9285-db06c6a5cb70" class="bulleted-list"><li style="list-style-type:circle">id: INT</li></ul><ul id="92286f51-0fd5-46df-bb8f-a61380bf204b" class="bulleted-list"><li style="list-style-type:circle">domain_id: INT</li></ul><ul id="0e4365f9-5d5e-4357-8749-8e2c9877a15d" class="bulleted-list"><li style="list-style-type:circle">type: VARCHAR(20)</li></ul><ul id="08938cb0-aae9-42ad-88bb-f5296bcd5531" class="bulleted-list"><li style="list-style-type:circle">config: JSON</li></ul><ul id="f8c86fc4-65ae-4a7b-a9ee-2716dba191ad" class="bulleted-list"><li style="list-style-type:circle">created_at: DATE</li></ul><ul id="9a6fba32-9db6-45bb-af7a-ddc42008f868" class="bulleted-list"><li style="list-style-type:circle">created_by: VARCHAR(100)</li></ul><ul id="aaecc07f-d768-4255-9690-43b9a940c090" class="bulleted-list"><li style="list-style-type:circle">updated_at: DATE</li></ul><ul id="96b05c40-479c-4702-9e19-a640b198a463" class="bulleted-list"><li style="list-style-type:circle">updated_by: VARCHAR(100)</li></ul><h3 id="0e9c7b34-5e74-4703-9b73-1db40bc9a5a6" class="">singer</h3><ul id="5f3a559a-4795-42f1-9b6f-6ea4b29cd0a7" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="4565dbee-69c7-4de7-825f-4b8c2e399199" class="bulleted-list"><li style="list-style-type:circle">singer_name: VARCHAR(200)</li></ul><ul id="5dd964ce-47c1-4916-94ec-fa6de33c2aba" class="bulleted-list"><li style="list-style-type:circle">act_area: VARCHAR(200)</li></ul><ul id="eaa0454c-e435-4ddf-af93-bcb839f0542f" class="bulleted-list"><li style="list-style-type:circle">song_name: VARCHAR(200)</li></ul><ul id="17a8e34d-50c2-4eb3-8831-196b882f4125" class="bulleted-list"><li style="list-style-type:circle">genre: VARCHAR(200)</li></ul><ul id="be9a6f56-4455-408e-a9b1-952f42d55feb" class="bulleted-list"><li style="list-style-type:circle">js_play_cnt: INT</li></ul><ul id="d41e95b2-8da3-4dcb-bb9b-0ecfef6e5880" class="bulleted-list"><li style="list-style-type:circle">down_cnt: INT</li></ul><ul id="ad633159-4158-421b-aa9c-8a1c2ddefcd0" class="bulleted-list"><li style="list-style-type:circle">favor_cnt: INT</li></ul><h3 id="efe82d7e-9936-45f0-80d1-50193d867f12" class="">s2_user_department</h3><ul id="12d2f626-f36a-4e6a-83d4-19dd4901599f" class="bulleted-list"><li style="list-style-type:circle">user_name: VARCHAR(200)</li></ul><ul id="df151978-b260-424a-9652-88f9e0b10fb1" class="bulleted-list"><li style="list-style-type:circle">department: VARCHAR(200)</li></ul><h3 id="af896736-0d32-4aa4-82e2-9e1412124591" class="">s2_pv_uv_statis</h3><ul id="712e7e6e-b9b7-4447-b3ac-837efaaa0e78" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="99b050f6-96b4-47db-a8cc-802241fb190c" class="bulleted-list"><li style="list-style-type:circle">user_name: VARCHAR(200)</li></ul><ul id="f9584649-9bb1-4323-b95a-acb3aa81f608" class="bulleted-list"><li style="list-style-type:circle">page: VARCHAR(200)</li></ul><h3 id="1b6259d1-4114-4b4c-97bf-9b83c587f7f3" class="">s2_stay_time_statis</h3><ul id="a7f8166f-40f5-435a-8ec7-facfbd2b2453" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="2a43e4d1-02c5-43f0-bd98-d096b5d26348" class="bulleted-list"><li style="list-style-type:circle">user_name: VARCHAR(200)</li></ul><ul id="4e911924-5cb4-4fb9-88d3-746d16418de6" class="bulleted-list"><li style="list-style-type:circle">stay_hours: FLOAT</li></ul><ul id="944f9d6d-e6ff-4caf-933d-1a4f3c8d12a3" class="bulleted-list"><li style="list-style-type:circle">page: VARCHAR(200)</li></ul><h3 id="f71e9cb2-05a8-4b2c-8fa4-021fe43e7667" class="">genre</h3><ul id="6d308899-7c46-40c1-bf53-b4a570742502" class="bulleted-list"><li style="list-style-type:circle">g_name: VARCHAR(20)</li></ul><ul id="6215693f-0cb6-4f07-8be6-d7cad7671c92" class="bulleted-list"><li style="list-style-type:circle">rating: INT</li></ul><ul id="76c7509e-8236-43f2-9d23-c6e872ec8647" class="bulleted-list"><li style="list-style-type:circle">most_popular_in: VARCHAR(50)</li></ul><h3 id="b8289cf0-381a-4673-a428-0ebe645096f9" class="">artist</h3><ul id="17243aa0-2cf7-4c12-8051-d5adf417ed1c" class="bulleted-list"><li style="list-style-type:circle">artist_name: VARCHAR(50)</li></ul><ul id="b49fbe14-0bf1-429d-9cc6-4e6161bf293d" class="bulleted-list"><li style="list-style-type:circle">citizenship: VARCHAR(20)</li></ul><ul id="4c0edf26-4399-4b1c-916a-93c0e02cfd95" class="bulleted-list"><li style="list-style-type:circle">gender: VARCHAR(20)</li></ul><ul id="0500e239-2b8d-4662-a007-73ec94b751f4" class="bulleted-list"><li style="list-style-type:circle">g_name: VARCHAR(50)</li></ul><h3 id="88ebb18b-97dc-4496-9f11-b3be498747bd" class="">files</h3><ul id="27dabe26-7aa6-4395-bbf0-0cf17c8fc560" class="bulleted-list"><li style="list-style-type:circle">f_id: INT</li></ul><ul id="c2ac53aa-60b6-4938-a73e-3d33095ebe82" class="bulleted-list"><li style="list-style-type:circle">artist_name: VARCHAR(50)</li></ul><ul id="19a8695e-a3df-4bef-89fa-dd4d09be060d" class="bulleted-list"><li style="list-style-type:circle">file_size: VARCHAR(20)</li></ul><ul id="89de0b3e-cc5e-46ce-8330-88f1cf9b78bd" class="bulleted-list"><li style="list-style-type:circle">duration: VARCHAR(20)</li></ul><ul id="242f5303-6a78-4869-bc24-4f039b20ebe5" class="bulleted-list"><li style="list-style-type:circle">formats: VARCHAR(20)</li></ul><h3 id="bfc0e0a6-d402-496a-828b-bad3b8fb6d34" class="">song</h3><ul id="05d47e35-4dcc-4c90-89c6-95ad738a9d66" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="4c62c1fc-b99e-4ff8-bbd8-867a4b27d611" class="bulleted-list"><li style="list-style-type:circle">song_name: VARCHAR(50)</li></ul><ul id="3a3afb44-7012-4f14-ad02-6e4a54386386" class="bulleted-list"><li style="list-style-type:circle">artist_name: VARCHAR(50)</li></ul><ul id="5165b22f-ef11-477d-9253-538a415e9206" class="bulleted-list"><li style="list-style-type:circle">country: VARCHAR(20)</li></ul><ul id="a10a257f-0f54-4371-9f4e-55e3c7c922b5" class="bulleted-list"><li style="list-style-type:circle">f_id: INT</li></ul><ul id="a0da21dd-a5d1-400a-bdbe-76ae78a8962f" class="bulleted-list"><li style="list-style-type:circle">g_name: VARCHAR(20)</li></ul><ul id="3a401cbf-c9e7-4c10-a88d-be450a401015" class="bulleted-list"><li style="list-style-type:circle">rating: INT</li></ul><ul id="0c1d858e-b3be-4cbd-ae99-5af56e7f4b27" class="bulleted-list"><li style="list-style-type:circle">languages: VARCHAR(20)</li></ul><ul id="deee6f25-7ced-421b-a00d-92ffd8e62b20" class="bulleted-list"><li style="list-style-type:circle">releasedate: DATE</li></ul><ul id="3391f05b-f311-460f-bbf7-31a78248fe5b" class="bulleted-list"><li style="list-style-type:circle">resolution: INT</li></ul><h3 id="69529eff-dcec-4634-bdd9-ac91431bee22" class="">company</h3><ul id="d7afee95-b7f5-4d08-ac4d-ca9974aa4b4e" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="cdb3c621-1959-47f5-af6e-71ea3583329d" class="bulleted-list"><li style="list-style-type:circle">company_id: VARCHAR(50)</li></ul><ul id="39b7636f-91b0-4503-ba68-f8b204aa9336" class="bulleted-list"><li style="list-style-type:circle">company_name: VARCHAR(50)</li></ul><ul id="7d164a26-376e-4d23-bb62-70129f29d0b2" class="bulleted-list"><li style="list-style-type:circle">headquarter_address: VARCHAR(50)</li></ul><ul id="2ca5d32d-7822-4be1-8ca8-5b8e73b311a1" class="bulleted-list"><li style="list-style-type:circle">company_established_time: DATE</li></ul><ul id="4b50a238-f743-4b5f-bed5-e02d76df8172" class="bulleted-list"><li style="list-style-type:circle">founder: VARCHAR(20)</li></ul><ul id="077b689f-09ab-4182-bc6c-916bb64211e3" class="bulleted-list"><li style="list-style-type:circle">ceo: VARCHAR(20)</li></ul><ul id="e4f4e5b1-d0b2-4f50-a686-3b9e96852c72" class="bulleted-list"><li style="list-style-type:circle">annual_turnover: INT</li></ul><ul id="05052fd8-c8e1-4d4e-8293-4b8848fd1459" class="bulleted-list"><li style="list-style-type:circle">employee_count: INT</li></ul><h3 id="bfa7e327-a83d-425d-b002-2b769dd96473" class="">brand</h3><ul id="cf1464e9-f250-4bca-a41e-2fc719221900" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="e7aa2685-ef0b-45d0-80e5-b0b79e4fa4f9" class="bulleted-list"><li style="list-style-type:circle">brand_id: VARCHAR(50)</li></ul><ul id="f4082087-929f-4463-95f2-010adea8aeb2" class="bulleted-list"><li style="list-style-type:circle">brand_name: VARCHAR(50)</li></ul><ul id="62585bf6-b2e8-4979-aece-804416a1b491" class="bulleted-list"><li style="list-style-type:circle">brand_established_time: DATE</li></ul><ul id="de103f2f-8f85-4194-a205-7a0b9c6fa3d4" class="bulleted-list"><li style="list-style-type:circle">company_id: VARCHAR(50)</li></ul><ul id="24bd0834-bc51-437b-b93c-9d2334b361ca" class="bulleted-list"><li style="list-style-type:circle">legal_representative: VARCHAR(20)</li></ul><ul id="dbbfc671-3b9a-4037-8683-e43edfced155" class="bulleted-list"><li style="list-style-type:circle">registered_capital: INT</li></ul><h3 id="cf2ec80e-43f0-4416-aa6a-f93932c8598b" class="">company_revenue</h3><ul id="48d88c76-114e-4ede-9809-1708d3fb0c27" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="f751f950-536f-4d5a-a5e6-9d155724965f" class="bulleted-list"><li style="list-style-type:circle">company_id: VARCHAR(50)</li></ul><ul id="6e4c62ab-2de0-454a-95e6-81467020510c" class="bulleted-list"><li style="list-style-type:circle">brand_id: VARCHAR(50)</li></ul><ul id="7367aea8-a31d-4a6a-8e4c-9d401dc1b464" class="bulleted-list"><li style="list-style-type:circle">revenue_proportion: FLOAT</li></ul><ul id="3679835f-cf7b-46d9-a747-feb97c1ebcd8" class="bulleted-list"><li style="list-style-type:circle">profit_proportion: FLOAT</li></ul><ul id="c32ca3f7-9e05-45a9-a63e-b40a7e937c93" class="bulleted-list"><li style="list-style-type:circle">expenditure_proportion: FLOAT</li></ul><h3 id="9a77c382-4843-42de-8645-249634191cbf" class="">company_brand_revenue</h3><ul id="20e90042-9cf8-4a77-8ad3-19d005d158fa" class="bulleted-list"><li style="list-style-type:circle">imp_date: DATE</li></ul><ul id="378ebe6a-f97a-455a-8469-4e65a6d125b1" class="bulleted-list"><li style="list-style-type:circle">year_time: DATE</li></ul><ul id="d65f6ba1-e903-4831-b27a-4ecff8fb9666" class="bulleted-list"><li style="list-style-type:circle">brand_id: VARCHAR(50)</li></ul><ul id="c874a288-1e78-4648-baa9-58181ba66c95" class="bulleted-list"><li style="list-style-type:circle">revenue: INT</li></ul><ul id="38b61d29-1168-4ef6-8520-f138b8971aa2" class="bulleted-list"><li style="list-style-type:circle">profit: INT</li></ul><ul id="4f3ba3b4-d2f7-4801-811e-02701880e61b" class="bulleted-list"><li style="list-style-type:circle">revenue_growth_year_on_year: FLOAT</li></ul><ul id="cfd6c0ab-157d-40cc-9acd-68f7537ef8bc" class="bulleted-list"><li style="list-style-type:circle">profit_growth_year_on_year: FLOAT</li></ul></li></ul><h1 id="b190b714-23b9-42e0-90d9-cf93dbf9aa8d" class="">数据内容示例：</h1><h3 id="7a5afd17-ddec-4717-ae5d-a0c6e5e9a99a" class="">s2_user 表结构示例</h3><table id="f113c12c-855b-46ca-8e0e-c85b58b7602f" class="simple-table"><tbody><tr id="5e306fe2-249b-4bdd-ac8f-adaef329c3e6"><td id="~C@u" class="">id</td><td id="&gt;teO" class="">name</td><td id="a]ke" class="">display_name</td><td id="Uu@}" class="">email</td><td id="XGrQ" class="">is_admin</td></tr><tr id="c121f92d-c95d-40af-8316-54ad42297d25"><td id="~C@u" class="">1</td><td id="&gt;teO" class="">admin</td><td id="a]ke" class="">admin</td><td id="Uu@}" class="">admin@xx.com</td><td id="XGrQ" class="">1</td></tr><tr id="b0b1d8ee-4320-44ed-8adb-cfd57945c6ec"><td id="~C@u" class="">2</td><td id="&gt;teO" class="">jack</td><td id="a]ke" class="">jack</td><td id="Uu@}" class="">jack@xx.com</td><td id="XGrQ" class="">0</td></tr><tr id="c0253784-6946-4580-a801-14f95862210b"><td id="~C@u" class="">3</td><td id="&gt;teO" class="">tom</td><td id="a]ke" class="">tom</td><td id="Uu@}" class="">tom@xx.com</td><td id="XGrQ" class="">0</td></tr><tr id="9c0e3359-26ea-4d83-ac82-9149826fa409"><td id="~C@u" class="">4</td><td id="&gt;teO" class="">lucy</td><td id="a]ke" class="">lucy</td><td id="Uu@}" class="">lucy@xx.com</td><td id="XGrQ" class="">0</td></tr><tr id="d074a146-d0cc-4180-a1d3-66e33d666c61"><td id="~C@u" class="">5</td><td id="&gt;teO" class="">alice</td><td id="a]ke" class="">alice</td><td id="Uu@}" class="">alice@xx.com</td><td id="XGrQ" class="">0</td></tr></tbody></table><h3 id="fee9fe1b-f593-4cb7-ab37-81c6a0e1f5d9" class="">s2_available_date_info 表结构示例</h3><table id="55ff7283-d5af-4dba-9f11-1f88268f64e8" class="simple-table"><tbody><tr id="7aef2dd1-0e98-4c87-b939-bc419ef577bc"><td id="U^_N" class="">id</td><td id="mP@;" class="">item_id</td><td id="xjah" class="">type</td><td id="eKPh" class="">date_format</td><td id="a~gr" class="">start_date</td><td id="xyO\" class="">end_date</td><td id="=S&lt;\" class="">unavailable_date</td><td id="{hSF" class="">created_at</td><td id="Ne\o" class="">created_by</td><td id="Ez&gt;_" class="">updated_at</td><td id="JOAr" class="">updated_by</td></tr><tr id="166f5385-804c-4639-a026-6de86de7f407"><td id="U^_N" class="">1</td><td id="mP@;" class="">1</td><td id="xjah" class="">dimension</td><td id="eKPh" class="">yyyy-MM-dd</td><td id="a~gr" class="">2023-05-09</td><td id="xyO\" class="">2023-06-06</td><td id="=S&lt;\" class="">[]</td><td id="{hSF" class="">2023-06-01</td><td id="Ne\o" class="">admin</td><td id="Ez&gt;_" class="">2023-06-01</td><td id="JOAr" class="">admin</td></tr><tr id="e2f702bb-7c63-40d0-8291-4571f5249880"><td id="U^_N" class="">2</td><td id="mP@;" class="">2</td><td id="xjah" class="">dimension</td><td id="eKPh" class="">yyyy-MM-dd</td><td id="a~gr" class="">2023-05-09</td><td id="xyO\" class="">2023-06-06</td><td id="=S&lt;\" class="">[]</td><td id="{hSF" class="">2023-06-01</td><td id="Ne\o" class="">admin</td><td id="Ez&gt;_" class="">2023-06-01</td><td id="JOAr" class="">admin</td></tr><tr id="e6320204-e6b7-4590-80cc-2579815e1b44"><td id="U^_N" class="">3</td><td id="mP@;" class="">3</td><td id="xjah" class="">dimension</td><td id="eKPh" class="">yyyy-MM-dd</td><td id="a~gr" class="">2023-05-09</td><td id="xyO\" class="">2023-06-06</td><td id="=S&lt;\" class="">[]</td><td id="{hSF" class="">2023-06-01</td><td id="Ne\o" class="">admin</td><td id="Ez&gt;_" class="">2023-06-01</td><td id="JOAr" class="">admin</td></tr></tbody></table><h3 id="4ad67048-2ab1-41e8-b273-6135c75f41af" class="">s2_canvas 表结构示例</h3><table id="a8309211-89f8-4c35-be35-1ad0e4c21e34" class="simple-table"><tbody><tr id="b99fec41-ead4-4c22-9dfa-3a21a4030b8f"><td id="tEQN" class="">id</td><td id="bhe&gt;" class="">domain_id</td><td id="u{~~" class="">type</td><td id="tV@x" class="">config</td><td id="vGMC" class="">created_at</td><td id="fAxd" class="">created_by</td><td id=";MF@" class="">updated_at</td><td id="NqUT" class="">updated_by</td></tr><tr id="daa1d8eb-b709-4cd7-897d-a2357e99fd5b"><td id="tEQN" class="">1</td><td id="bhe&gt;" class="">1</td><td id="u{~~" class="">modelEdgeRelation</td><td id="tV@x" class="">[{&quot;source&quot;:&quot;datasource-1&quot;,&quot;target&quot;:&quot;datasource-3&quot;}]</td><td id="vGMC" class="">2023-06-01</td><td id="fAxd" class="">admin</td><td id=";MF@" class="">2023-06-01</td><td id="NqUT" class="">admin</td></tr></tbody></table><h3 id="c4df4793-a3e8-4ce3-9699-1cdf955f17a4" class="">singer 表结构示例</h3><table id="864b15cb-85e0-4d5d-892a-c11a85dcd7a6" class="simple-table"><tbody><tr id="5047c25a-08d1-47a8-8ea6-173ebd6dde7c"><td id="Q&gt;fW" class="">imp_date</td><td id=":Xpm" class="">singer_name</td><td id="DvFz" class="">act_area</td><td id="Sjnv" class="">song_name</td><td id="Fa;|" class="">genre</td><td id="UBz@" class="">js_play_cnt</td><td id="=u:V" class="">down_cnt</td><td id="v@Bv" class="">favor_cnt</td></tr><tr id="4745d194-4c4b-40e7-87a6-e25bab4db5ad"><td id="Q&gt;fW" class="">2023-06-01</td><td id=":Xpm" class="">周杰伦</td><td id="DvFz" class="">港台</td><td id="Sjnv" class="">青花瓷</td><td id="Fa;|" class="">国风</td><td id="UBz@" class="">1000000</td><td id="=u:V" class="">1000000</td><td id="v@Bv" class="">1000000</td></tr><tr id="12c4eec4-65dc-43e2-b5fe-2360495b891d"><td id="Q&gt;fW" class="">2023-05-31</td><td id=":Xpm" class="">周杰伦</td><td id="DvFz" class="">港台</td><td id="Sjnv" class="">青花瓷</td><td id="Fa;|" class="">国风</td><td id="UBz@" class="">1000000</td><td id="=u:V" class="">1000000</td><td id="v@Bv" class="">1000000</td></tr><tr id="8ae3ec28-2397-4a2b-b73d-f06b5428410a"><td id="Q&gt;fW" class="">2023-05-30</td><td id=":Xpm" class="">周杰伦</td><td id="DvFz" class="">港台</td><td id="Sjnv" class="">青花瓷</td><td id="Fa;|" class="">国风</td><td id="UBz@" class="">1000000</td><td id="=u:V" class="">1000000</td><td id="v@Bv" class="">1000000</td></tr><tr id="1106fe43-f89e-42f2-92e3-5f315ce7a7e6"><td id="Q&gt;fW" class="">2023-05-29</td><td id=":Xpm" class="">周杰伦</td><td id="DvFz" class="">港台</td><td id="Sjnv" class="">青花瓷</td><td id="Fa;|" class="">国风</td><td id="UBz@" class="">1000000</td><td id="=u:V" class="">1000000</td><td id="v@Bv" class="">1000000</td></tr><tr id="360a5db8-4a13-4362-9b7e-1abb2ba2dc3c"><td id="Q&gt;fW" class="">2023-05-28</td><td id=":Xpm" class="">周杰伦</td><td id="DvFz" class="">港台</td><td id="Sjnv" class="">青花瓷</td><td id="Fa;|" class="">国风</td><td id="UBz@" class="">1000000</td><td id="=u:V" class="">1000000</td><td id="v@Bv" class="">1000000</td></tr></tbody></table><h3 id="57f752fb-e07b-4e44-b82f-0bd2dd880b95" class="">s2_user_department 表结构示例</h3><table id="5af83ac7-0140-40c4-b11b-e3d22ccba812" class="simple-table"><tbody><tr id="d46b5f12-d4b3-41a8-ba8e-7ad38054fa1d"><td id="&gt;lrU" class="">user_name</td><td id="VilX" class="">department</td></tr><tr id="c8d05025-bb34-4d93-aefe-7b4af93120e6"><td id="&gt;lrU" class="">jack</td><td id="VilX" class="">HR</td></tr><tr id="e29fbf20-f710-4d0e-8659-ed9fec250661"><td id="&gt;lrU" class="">tom</td><td id="VilX" class="">sales</td></tr><tr id="864cad7f-df48-4a37-9bb7-588c2c14ad88"><td id="&gt;lrU" class="">lucy</td><td id="VilX" class="">marketing</td></tr><tr id="8c91b43b-f40d-4486-a0b2-884cd912a0d7"><td id="&gt;lrU" class="">john</td><td id="VilX" class="">strategy</td></tr><tr id="47856de0-04e8-4d89-92ea-eb155b011da4"><td id="&gt;lrU" class="">alice</td><td id="VilX" class="">sales</td></tr></tbody></table><h3 id="b8e724a2-0c5e-4efe-b494-e4c4c59f4288" class="">s2_pv_uv_statis 表结构示例</h3><table id="bf88e105-0d04-40be-91fe-76ac418708e0" class="simple-table"><tbody><tr id="95d543fc-424e-405b-82c9-7473796c3f05"><td id="lf;z" class="">imp_date</td><td id="F^LW" class="">user_name</td><td id="pA^?" class="">page</td></tr><tr id="791f4651-97dd-40b3-8388-7dcbb472184f"><td id="lf;z" class="">2023-06-01</td><td id="F^LW" class="">lucy</td><td id="pA^?" class="">p1</td></tr><tr id="603bfd96-7c7b-4cb2-a1ef-7464098afea6"><td id="lf;z" class="">2023-06-01</td><td id="F^LW" class="">jack</td><td id="pA^?" class="">p1</td></tr><tr id="17666b48-2c53-4b3a-ab87-646f39a19145"><td id="lf;z" class="">2023-06-01</td><td id="F^LW" class="">lucy</td><td id="pA^?" class="">p4</td></tr><tr id="0bf82909-e19e-4e88-aec9-6bc7f8f1d40a"><td id="lf;z" class="">2023-06-01</td><td id="F^LW" class="">tom</td><td id="pA^?" class="">p2</td></tr><tr id="6fb8e698-1401-45ed-b237-d8ac2e74ce67"><td id="lf;z" class="">2023-06-01</td><td id="F^LW" class="">john</td><td id="pA^?" class="">p3</td></tr></tbody></table><h3 id="d75b9b86-b158-4969-8440-d9d03a9f5316" class="">s2_stay_time_statis 表结构示例</h3><table id="bf1cfa9d-1233-4493-b7fc-de4cdf11d9a4" class="simple-table"><tbody><tr id="015a65c3-0b14-4d4f-b151-85dac11cf222"><td id="sz:M" class="">imp_date</td><td id="ODha" class="">user_name</td><td id="PZht" class="">stay_hours</td><td id="DaHY" class="">page</td></tr><tr id="9edede10-5601-4427-8a9b-6b6b1a92a125"><td id="sz:M" class="">2023-06-01</td><td id="ODha" class="">jack</td><td id="PZht" class="">0.76</td><td id="DaHY" class="">p4</td></tr><tr id="bb1dcca0-2b5e-4bc0-ab14-9c88fde118cb"><td id="sz:M" class="">2023-06-01</td><td id="ODha" class="">dean</td><td id="PZht" class="">0.18</td><td id="DaHY" class="">p2</td></tr><tr id="a44e0ab2-be6b-432e-829d-a01b16f9b660"><td id="sz:M" class="">2023-06-01</td><td id="ODha" class="">alice</td><td id="PZht" class="">0.39</td><td id="DaHY" class="">p3</td></tr><tr id="a0f02895-499b-492f-9ec0-b29ad6eb2dfa"><td id="sz:M" class="">2023-06-01</td><td id="ODha" class="">lucy</td><td id="PZht" class="">0.27</td><td id="DaHY" class="">p3</td></tr><tr id="76da90c4-d650-4194-b5a1-fe56aa48e40b"><td id="sz:M" class="">2023-06-01</td><td id="ODha" class="">tom</td><td id="PZht" class="">0.94</td><td id="DaHY" class="">p4</td></tr></tbody></table><h3 id="c8df9488-4964-440c-bd45-d4699d7c9038" class="">genre 表结构示例</h3><table id="98eb5b59-fb8b-453d-b2a3-029979d61f18" class="simple-table"><tbody><tr id="42f28313-7604-483a-89bf-03e6cbc7815e"><td id="o~ua" class="">g_name</td><td id="ITI@" class="">rating</td><td id="M=Ad" class="">most_popular_in</td></tr><tr id="a87d590e-079a-47e0-a8e4-a61283fa36e3"><td id="o~ua" class="">tagore</td><td id="ITI@" class="">8</td><td id="M=Ad" class="">孟加拉国</td></tr><tr id="b0481532-e5d2-451c-b364-09ae8d28966f"><td id="o~ua" class="">nazrul</td><td id="ITI@" class="">7</td><td id="M=Ad" class="">孟加拉国</td></tr><tr id="a26472c3-b801-4124-b89a-dda3e4000b6d"><td id="o~ua" class="">民间</td><td id="ITI@" class="">9</td><td id="M=Ad" class="">锡尔赫特、吉大港、库斯蒂亚</td></tr><tr id="676fc372-f8be-4eaf-91e4-b590b89076db"><td id="o~ua" class="">现代</td><td id="ITI@" class="">8</td><td id="M=Ad" class="">孟加拉国</td></tr><tr id="79670e58-6e27-4b76-bb30-70819c87e83b"><td id="o~ua" class="">蓝调</td><td id="ITI@" class="">7</td><td id="M=Ad" class="">加拿大</td></tr><tr id="a67f7268-d990-4869-80e1-085d8b7dd5fc"><td id="o~ua" class="">流行</td><td id="ITI@" class="">9</td><td id="M=Ad" class="">美国</td></tr></tbody></table><h3 id="c4217fd8-e08f-4b9d-aca1-972a4a7f5b15" class="">artist 表结构示例</h3><table id="9243330c-664b-4cd4-8ddd-003dad34e442" class="simple-table"><tbody><tr id="a6d9f807-9da7-4100-9580-f85020affbcb"><td id="e^C~" class="">artist_name</td><td id="m|gm" class="">citizenship</td><td id="iFh[" class="">gender</td><td id="DacX" class="">g_name</td></tr><tr id="62ba550b-ae21-4a9c-aadb-09ba34ab8099"><td id="e^C~" class="">Shrikanta</td><td id="m|gm" class="">印度</td><td id="iFh[" class="">男性</td><td id="DacX" class="">tagore</td></tr><tr id="97c70d18-9b0e-4d4c-829c-0d7bc3c198b7"><td id="e^C~" class="">Prity</td><td id="m|gm" class="">孟加拉国</td><td id="iFh[" class="">女性</td><td id="DacX" class="">nazrul</td></tr><tr id="0746236a-0b55-4c87-8c25-4ead5fc7918d"><td id="e^C~" class="">Farida</td><td id="m|gm" class="">孟加拉国</td><td id="iFh[" class="">女性</td><td id="DacX" class="">民间</td></tr><tr id="a560830f-d92d-40de-94d1-6501cc8c9b5b"><td id="e^C~" class="">Topu</td><td id="m|gm" class="">印度</td><td id="iFh[" class="">女性</td><td id="DacX" class="">现代</td></tr><tr id="12e39d26-3f81-400c-8209-b8ab4032c7a4"><td id="e^C~" class="">Enrique</td><td id="m|gm" class="">美国</td><td id="iFh[" class="">男性</td><td id="DacX" class="">蓝调</td></tr><tr id="6fada89a-ed5d-4d1a-8c95-e324d24b6470"><td id="e^C~" class="">Michel</td><td id="m|gm" class="">英国</td><td id="iFh[" class="">男性</td><td id="DacX" class="">流行</td></tr></tbody></table><h3 id="ae9177f5-3828-48be-b8d9-f0662dee75f0" class="">files 表结构示例</h3><table id="b7d009d4-178f-403b-bdce-cc91ca97d165" class="simple-table"><tbody><tr id="86b7a46d-d093-4bf1-80dd-b994909c36ee"><td id="fMoQ" class="">f_id</td><td id="&lt;N`g" class="">artist_name</td><td id=";^z=" class="">file_size</td><td id="CSgJ" class="">duration</td><td id="Fnam" class="">formats</td></tr><tr id="f82addb7-e276-4525-9a21-4b7d4df8bf14"><td id="fMoQ" class="">1</td><td id="&lt;N`g" class="">Shrikanta</td><td id=";^z=" class="">3.78 MB</td><td id="CSgJ" class="">3:45</td><td id="Fnam" class="">mp4</td></tr><tr id="83b9cf92-3dcb-4203-b9ac-4ce5940efdc3"><td id="fMoQ" class="">2</td><td id="&lt;N`g" class="">Prity</td><td id=";^z=" class="">4.12 MB</td><td id="CSgJ" class="">2:56</td><td id="Fnam" class="">mp3</td></tr><tr id="ff239cb1-4254-4750-a9d1-30e4c09c2c99"><td id="fMoQ" class="">3</td><td id="&lt;N`g" class="">Farida</td><td id=";^z=" class="">3.69 MB</td><td id="CSgJ" class="">4:12</td><td id="Fnam" class="">mp4</td></tr><tr id="5aede236-6f97-4263-932c-aeabbed05192"><td id="fMoQ" class="">4</td><td id="&lt;N`g" class="">Enrique</td><td id=";^z=" class="">4.58 MB</td><td id="CSgJ" class="">5:23</td><td id="Fnam" class="">mp4</td></tr><tr id="3168944b-3791-4564-8e5c-23edfa30f4ef"><td id="fMoQ" class="">5</td><td id="&lt;N`g" class="">Michel</td><td id=";^z=" class="">5.10 MB</td><td id="CSgJ" class="">4:34</td><td id="Fnam" class="">mp3</td></tr><tr id="4e53f5b0-776d-4032-9e7e-bd3fac700beb"><td id="fMoQ" class="">6</td><td id="&lt;N`g" class="">Topu</td><td id=";^z=" class="">4.10 MB</td><td id="CSgJ" class="">4:30</td><td id="Fnam" class="">mp4</td></tr></tbody></table><h3 id="a5204a07-e0b0-4d7b-b644-1b4f22493772" class="">song 表结构示例</h3><table id="0dd26b42-20b3-4b36-bd52-062d429a1ffe" class="simple-table"><tbody><tr id="b52f312d-995b-4cb6-b34a-45f607ac4d05"><td id="^qzz" class="">imp_date</td><td id="YId_" class="">song_name</td><td id="\VZK" class="">artist_name</td><td id="Uus|" class="">country</td><td id="ZIGR" class="">f_id</td><td id="_GpB" class="">g_name</td><td id="JPyt" class="">rating</td><td id="O[@J" class="">languages</td><td id="::lg" class="">releasedate</td><td id="ycoP" class="">resolution</td></tr><tr id="f602f660-38a8-4107-b558-746ccde31c5c"><td id="^qzz" class="">2023-06-01</td><td id="YId_" class="">Tumi 长袍 尼罗布</td><td id="\VZK" class="">Shrikanta</td><td id="Uus|" class="">印度</td><td id="ZIGR" class="">1</td><td id="_GpB" class="">tagore</td><td id="JPyt" class="">8</td><td id="O[@J" class="">孟加拉语</td><td id="::lg" class="">2011-08-28</td><td id="ycoP" class="">1080</td></tr><tr id="054a345b-7ca9-4fa6-a1e3-3da2da578620"><td id="^qzz" class="">2023-06-01</td><td id="YId_" class="">舒克诺 帕塔尔 努普尔 帕埃</td><td id="\VZK" class="">Prity</td><td id="Uus|" class="">孟加拉国</td><td id="ZIGR" class="">2</td><td id="_GpB" class="">nazrul</td><td id="JPyt" class="">5</td><td id="O[@J" class="">孟加拉语</td><td id="::lg" class="">1997-09-21</td><td id="ycoP" class="">512</td></tr><tr id="812076bb-8318-47bc-95ca-04ff15aaaeec"><td id="^qzz" class="">2023-06-01</td><td id="YId_" class="">阿米·奥帕尔·霍伊</td><td id="\VZK" class="">Farida</td><td id="Uus|" class="">孟加拉国</td><td id="ZIGR" class="">3</td><td id="_GpB" class="">民间</td><td id="JPyt" class="">7</td><td id="O[@J" class="">孟加拉语</td><td id="::lg" class="">2001-04-07</td><td id="ycoP" class="">320</td></tr><tr id="a56d33e6-9885-43e8-a1af-d4757463916b"><td id="^qzz" class="">2023-06-01</td><td id="YId_" class="">我的爱</td><td id="\VZK" class="">Enrique</td><td id="Uus|" class="">美国</td><td id="ZIGR" class="">4</td><td id="_GpB" class="">蓝调</td><td id="JPyt" class="">6</td><td id="O[@J" class="">英文</td><td id="::lg" class="">2007-01-24</td><td id="ycoP" class="">1080</td></tr><tr id="c99deea9-9ab1-43b6-a9cd-b7260463480f"><td id="^qzz" class="">2023-06-01</td><td id="YId_" class="">打败它</td><td id="\VZK" class="">Michel</td><td id="Uus|" class="">英国</td><td id="ZIGR" class="">5</td><td id="_GpB" class="">流行</td><td id="JPyt" class="">8</td><td id="O[@J" class="">英文</td><td id="::lg" class="">2002-03-17</td><td id="ycoP" class="">720</td></tr><tr id="66ef28bf-c8b1-462e-aa1e-6959034b7218"><td id="^qzz" class="">2023-06-01</td><td id="YId_" class="">阿杰伊阿卡什</td><td id="\VZK" class="">Topu</td><td id="Uus|" class="">印度</td><td id="ZIGR" class="">6</td><td id="_GpB" class="">现代</td><td id="JPyt" class="">10</td><td id="O[@J" class="">孟加拉语</td><td id="::lg" class="">2004-03-27</td><td id="ycoP" class="">320</td></tr></tbody></table><h3 id="4286c610-25d8-403b-81e7-8bb094e6678a" class="">company 表结构示例</h3><table id="99c60b7d-0566-4ada-bdea-0fad7b70f000" class="simple-table"><tbody><tr id="7c34e72a-d199-46ef-813e-d413d177be5d"><td id="KPy;" class="">imp_date</td><td id="{[Dd" class="">company_id</td><td id="YzD?" class="">company_name</td><td id="y]aK" class="">headquarter_address</td><td id="GaSG" class="">company_established_time</td><td id="^FT}" class="">founder</td><td id="JHjU" class="">ceo</td><td id="}wtc" class="">annual_turnover</td><td id="AnKu" class="">employee_count</td></tr><tr id="b58b37e1-4e9a-4415-bf0d-22c402ee36cf"><td id="KPy;" class="">2023-06-01</td><td id="{[Dd" class="">item_enterprise_13_131</td><td id="YzD?" class="">百度集团</td><td id="y]aK" class="">北京</td><td id="GaSG" class="">2000</td><td id="^FT}" class="">李彦宏</td><td id="JHjU" class="">李彦宏</td><td id="}wtc" class="">102300000000</td><td id="AnKu" class="">40000</td></tr><tr id="26525886-a5f3-4d6c-aebd-b5b7bf5bd74c"><td id="KPy;" class="">2023-06-01</td><td id="{[Dd" class="">item_enterprise_13_132</td><td id="YzD?" class="">阿里巴巴集团</td><td id="y]aK" class="">杭州</td><td id="GaSG" class="">1999</td><td id="^FT}" class="">马云</td><td id="JHjU" class="">张勇</td><td id="}wtc" class="">376800000000</td><td id="AnKu" class="">103699</td></tr><tr id="787127af-ad6f-4f37-b386-30344f27a1c1"><td id="KPy;" class="">2023-06-01</td><td id="{[Dd" class="">item_enterprise_13_133</td><td id="YzD?" class="">深圳市腾讯计算机系统有限公司</td><td id="y]aK" class="">深圳</td><td id="GaSG" class="">1998</td><td id="^FT}" class="">马化腾</td><td id="JHjU" class="">刘炽平</td><td id="}wtc" class="">321600000000</td><td id="AnKu" class="">56310</td></tr><tr id="ee6cf92d-5f56-48c3-a363-edbfd50386e6"><td id="KPy;" class="">2023-06-01</td><td id="{[Dd" class="">item_enterprise_13_134</td><td id="YzD?" class="">北京京东世纪贸易有限公司</td><td id="y]aK" class="">北京</td><td id="GaSG" class="">1998</td><td id="^FT}" class="">刘强东</td><td id="JHjU" class="">刘强东</td><td id="}wtc" class="">28800000000</td><td id="AnKu" class="">179000</td></tr><tr id="bfe591d4-ed49-4f9e-a088-e70f7e831a42"><td id="KPy;" class="">2023-06-01</td><td id="{[Dd" class="">item_enterprise_13_135</td><td id="YzD?" class="">网易公司</td><td id="y]aK" class="">杭州</td><td id="GaSG" class="">1997</td><td id="^FT}" class="">丁磊</td><td id="JHjU" class="">丁磊</td><td id="}wtc" class="">67500000000</td><td id="AnKu" class="">20000</td></tr></tbody></table><h3 id="3cac3e83-f3b2-45eb-bf8d-2107beb0a626" class="">brand 表结构示例</h3><table id="e1d58d0d-7419-4e77-9ec2-cc4600e68c47" class="simple-table"><tbody><tr id="8d4d60b7-8684-4799-b137-3fa9c14e67d1"><td id="ll\i" class="">imp_date</td><td id=";SQy" class="">brand_id</td><td id="sMwA" class="">brand_name</td><td id="B_op" class="">brand_established_time</td><td id="TkXe" class="">company_id</td><td id=":NrC" class="">legal_representative</td><td id="CEj_" class="">registered_capital</td></tr><tr id="d9000dd2-dd45-4b02-b40d-fe1c89345ef6"><td id="ll\i" class="">2023-06-01</td><td id=";SQy" class="">item_enterprise_13_136</td><td id="sMwA" class="">阿里云</td><td id="B_op" class="">2009-09-10</td><td id="TkXe" class="">item_enterprise_13_132</td><td id=":NrC" class="">张勇</td><td id="CEj_" class="">50000000</td></tr><tr id="3dbb543b-dec9-4a9e-86bc-385a70eb88b7"><td id="ll\i" class="">2023-06-01</td><td id=";SQy" class="">item_enterprise_13_137</td><td id="sMwA" class="">天猫</td><td id="B_op" class="">2012-01-11</td><td id="TkXe" class="">item_enterprise_13_132</td><td id=":NrC" class="">张勇</td><td id="CEj_" class="">100000000</td></tr><tr id="8145d5d0-19d0-4e57-a706-0c0b4663727d"><td id="ll\i" class="">2023-06-01</td><td id=";SQy" class="">item_enterprise_13_138</td><td id="sMwA" class="">腾讯游戏</td><td id="B_op" class="">2003</td><td id="TkXe" class="">item_enterprise_13_133</td><td id=":NrC" class="">马化腾</td><td id="CEj_" class="">50000000</td></tr><tr id="296a24e6-bac9-46ef-9776-f4df32ea90f2"><td id="ll\i" class="">2023-06-01</td><td id=";SQy" class="">item_enterprise_13_139</td><td id="sMwA" class="">度小满</td><td id="B_op" class="">2018</td><td id="TkXe" class="">item_enterprise_13_131</td><td id=":NrC" class="">朱光</td><td id="CEj_" class="">100000000</td></tr><tr id="a102a1c9-fbca-443a-b701-e7fc64a44a45"><td id="ll\i" class="">2023-06-01</td><td id=";SQy" class="">item_enterprise_13_140</td><td id="sMwA" class="">京东金融</td><td id="B_op" class="">2017</td><td id="TkXe" class="">item_enterprise_13_134</td><td id=":NrC" class="">刘强东</td><td id="CEj_" class="">100000000</td></tr></tbody></table><h3 id="1a3d763f-fbf0-4e41-a789-863d951f031f" class="">company_revenue 表结构示例</h3><table id="ac772215-7747-4d5e-a615-ff72307e2b87" class="simple-table"><tbody><tr id="6e11e0e0-2fb5-40ba-a018-058a2176046a"><td id="K{PV" class="">imp_date</td><td id="[\ZG" class="">company_id</td><td id="ttMf" class="">brand_id</td><td id="xLVS" class="">revenue_proportion</td><td id="aEDF" class="">profit_proportion</td><td id="OjpV" class="">expenditure_proportion</td></tr><tr id="bcb4cec2-2ecc-4ce5-beb4-0cb352df2b31"><td id="K{PV" class="">2023-06-01</td><td id="[\ZG" class="">item_enterprise_13_131</td><td id="ttMf" class="">item_enterprise_13_139</td><td id="xLVS" class="">10</td><td id="aEDF" class="">10</td><td id="OjpV" class="">30</td></tr><tr id="1b1276e8-fe56-4aea-83d5-a65b5d298a3e"><td id="K{PV" class="">2023-06-01</td><td id="[\ZG" class="">item_enterprise_13_133</td><td id="ttMf" class="">item_enterprise_13_138</td><td id="xLVS" class="">80</td><td id="aEDF" class="">80</td><td id="OjpV" class="">60</td></tr><tr id="c43f3c7b-9f37-416d-86a5-fc4d3d54a4ca"><td id="K{PV" class="">2023-06-01</td><td id="[\ZG" class="">item_enterprise_13_134</td><td id="ttMf" class="">item_enterprise_13_140</td><td id="xLVS" class="">80</td><td id="aEDF" class="">80</td><td id="OjpV" class="">60</td></tr><tr id="bb92ce65-8d09-4bc1-9540-1ea8c651af7a"><td id="K{PV" class="">2023-06-01</td><td id="[\ZG" class="">item_enterprise_13_132</td><td id="ttMf" class="">item_enterprise_13_137</td><td id="xLVS" class="">80</td><td id="aEDF" class="">80</td><td id="OjpV" class="">60</td></tr><tr id="58b262ff-39ff-41d3-b34f-66ba2abdbda0"><td id="K{PV" class="">2023-06-01</td><td id="[\ZG" class="">item_enterprise_13_132</td><td id="ttMf" class="">item_enterprise_13_136</td><td id="xLVS" class="">10</td><td id="aEDF" class="">10</td><td id="OjpV" class="">30</td></tr></tbody></table><h3 id="4df19f59-46ef-4090-8a46-b280f7979f59" class="">company_brand_revenue 表结构示例</h3><table id="d4f14e57-7dbe-462a-a8ae-6b2d514eedb5" class="simple-table"><tbody><tr id="29235d80-7b1f-45a1-a150-a38c7428d9a3"><td id="QQ\\" class="">imp_date</td><td id="Omph" class="">year_time</td><td id="W&gt;:^" class="">brand_id</td><td id="idLE" class="">revenue</td><td id="zljm" class="">profit</td><td id="eFj\" class="">revenue_growth_year_on_year</td><td id="\J\s" class="">profit_growth_year_on_year</td></tr><tr id="8739eebd-8f51-4f8b-8b9f-2398aefaedf3"><td id="QQ\\" class="">2023-06-01</td><td id="Omph" class="">2018</td><td id="W&gt;:^" class="">item_enterprise_13_138</td><td id="idLE" class="">500000000</td><td id="zljm" class="">-300000000</td><td id="eFj\" class="">10</td><td id="\J\s" class="">-10</td></tr><tr id="ac1bfc78-4941-4c36-ae19-18524e81ccd1"><td id="QQ\\" class="">2023-06-01</td><td id="Omph" class="">2019</td><td id="W&gt;:^" class="">item_enterprise_13_136</td><td id="idLE" class="">100000000000</td><td id="zljm" class="">50000000000</td><td id="eFj\" class="">100</td><td id="\J\s" class="">50</td></tr><tr id="43cdb454-36ec-4491-bce9-686c91f01659"><td id="QQ\\" class="">2023-06-01</td><td id="Omph" class="">2018</td><td id="W&gt;:^" class="">item_enterprise_13_137</td><td id="idLE" class="">100000000000</td><td id="zljm" class="">50000000000</td><td id="eFj\" class="">100</td><td id="\J\s" class="">-10</td></tr><tr id="8e7b69a3-5ba0-4e7f-b264-208605e169c8"><td id="QQ\\" class="">2023-06-01</td><td id="Omph" class="">2018</td><td id="W&gt;:^" class="">item_enterprise_13_139</td><td id="idLE" class="">500000000</td><td id="zljm" class="">50000000000</td><td id="eFj\" class="">10</td><td id="\J\s" class="">50</td></tr><tr id="98e67c28-a528-46df-963a-40ecfd65537a"><td id="QQ\\" class="">2023-06-01</td><td id="Omph" class="">2018</td><td id="W&gt;:^" class="">item_enterprise_13_140</td><td id="idLE" class="">100000000000</td><td id="zljm" class="">-300000000</td><td id="eFj\" class="">10</td><td id="\J\s" class="">50</td></tr></tbody></table></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

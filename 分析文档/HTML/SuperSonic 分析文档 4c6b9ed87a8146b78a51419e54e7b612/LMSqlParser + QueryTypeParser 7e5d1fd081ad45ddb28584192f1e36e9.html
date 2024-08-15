@@ -1,0 +1,698 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>LMSqlParser + QueryTypeParser</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="7e5d1fd0-81ad-45dd-b285-84192f1e36e9" class="page sans"><header><h1 class="page-title"><code>LMSqlParser</code> + <code>QueryTypeParser</code></h1><p class="page-description"></p></header><div class="page-body"><p id="6dc310bc-ed01-4277-a6c4-6060d0dff348" class=""><code>LLMSqlParser</code> 类主要用于通过大型语言模型（LLM）理解查询语义并生成 S2SQL 语句，这些语句由语义查询引擎执行。下面是对该类的详细解析：</p><h3 id="17f8916f-cb17-496d-8e64-1b1f28ee296c" class="">主要职责</h3><p id="e2c1dda2-eee3-4b3f-921f-d7bc0b2e503c" class=""><code>LLMSqlParser</code> 类的主要职责是：</p><ol type="1" id="4b043dc5-779a-4f5e-8bd7-05862618342e" class="numbered-list" start="1"><li>通过调用大型语言模型服务，解析用户输入的自然语言查询。</li></ol><ol type="1" id="ddbed5f0-6a30-450d-86fb-7d77cc1c0cff" class="numbered-list" start="2"><li>基于解析结果生成 S2SQL 语句。</li></ol><ol type="1" id="1f5fb4e9-691b-48a7-8297-119aaa4ccae2" class="numbered-list" start="3"><li>对生成的多个 S2SQL 语句去重，并根据权重选择最优的语句用于执行。</li></ol><h3 id="3fa6a33e-3230-4ae9-8c84-00a3885365b7" class="">关键方法解析</h3><h3 id="e6964fc6-dcaa-47cb-99e3-15420fc86f2e" class=""><code>parse(QueryContext queryCtx, ChatContext chatCtx)</code></h3><p id="bc89632a-dff3-4f94-86ef-dfb6513391e9" class="">这是实现 <code>SemanticParser</code> 接口的主要方法，该方法执行如下操作：</p><ol type="1" id="bb5bb0d4-9d0b-4173-8315-db3f20927032" class="numbered-list" start="1"><li><strong>获取 </strong><code><strong>LLMRequestService</strong></code><strong> 实例</strong>：通过 <code>ContextUtils.getBean(LLMRequestService.class)</code> 获取 <code>LLMRequestService</code> 实例，用于后续处理请求。</li></ol><ol type="1" id="aa088c54-b6b9-4237-931e-4ed29a913027" class="numbered-list" start="2"><li><strong>判断是否跳过解析</strong>：调用 <code>requestService.isSkip(queryCtx)</code> 方法确定是否跳过该解析器。</li></ol><ol type="1" id="100de59b-06ac-4f9b-aab3-2b2f3b8bd690" class="numbered-list" start="3"><li><strong>获取数据集 ID</strong>：通过 <code>requestService.getDataSetId(queryCtx)</code> 获取当前上下文中的数据集 ID。如果无法获取，则直接返回，不继续解析。</li></ol><ol type="1" id="0ef97951-bf15-445a-9fb7-badcef86da35" class="numbered-list" start="4"><li><strong>调用 LLM 服务进行解析</strong>：调用 <code>tryParse(queryCtx, dataSetId)</code> 方法，实际执行调用 LLM 服务进行解析的逻辑。</li></ol><h3 id="69fa61f5-28f2-4775-91ec-f479506858f7" class=""><code>tryParse(QueryContext queryCtx, Long dataSetId)</code></h3><p id="1e29826d-49ef-4a00-a770-a6e9bf823f26" class="">这个方法是核心逻辑所在：</p><ol type="1" id="57100d64-365c-4b32-b211-19dfac61f50c" class="numbered-list" start="1"><li><strong>获取相关服务实例</strong>：获取 <code>LLMRequestService</code>、<code>LLMResponseService</code> 以及 <code>LLMParserConfig</code> 实例，分别用于请求、响应处理和配置管理。</li></ol><ol type="1" id="49ca25cd-9500-4cd3-a519-0324d90575b5" class="numbered-list" start="2"><li><strong>构建 LLM 请求</strong>：使用 <code>requestService.getLlmReq(queryCtx, dataSetId)</code> 构建 LLM 请求对象 <code>LLMReq</code>。</li></ol><ol type="1" id="cc7e18f4-bc98-486d-aad8-3f9f1a083522" class="numbered-list" start="3"><li><strong>循环重试</strong>：基于配置的最大重试次数，循环尝试调用 LLM 服务：<ul id="ef18f538-86db-4841-8ec7-afeb3ef8f612" class="bulleted-list"><li style="list-style-type:disc"><strong>调用 LLM 服务</strong>：使用 <code>requestService.runText2SQL(llmReq)</code> 发送请求并获取 LLM 响应 <code>LLMResp</code>。</li></ul><ul id="da778cf7-aca4-47fd-a5cc-7761e4df768d" class="bulleted-list"><li style="list-style-type:disc"><strong>去重并解析</strong>：调用 <code>responseService.getDeduplicationSqlResp(currentRetry, llmResp)</code> 方法对返回的 SQL 结果进行去重，并构建 <code>ParseResult</code> 对象。</li></ul><ul id="62b02bd0-e713-4e6e-a4f2-b00c7ce24a3e" class="bulleted-list"><li style="list-style-type:disc"><strong>检查并记录解析结果</strong>：如果有可用的 SQL 结果，则记录解析结果并结束循环。</li></ul></li></ol><ol type="1" id="7b33efcc-4d15-4c56-9c11-e8f0b31a29e1" class="numbered-list" start="4"><li><strong>处理结果</strong>：如果存在有效的 SQL 结果，则通过 <code>responseService.addParseInfo</code> 方法将解析信息添加到 <code>QueryContext</code> 中。</li></ol><h3 id="7c87ee42-c378-4872-aaaa-806d829e0fe7" class="">类的意义</h3><p id="ba59c981-a432-417b-aafe-a4fa7d92ce8b" class=""><code>LLMSqlParser</code> 通过与 LLM 的交互，使得系统能够理解复杂的自然语言查询，并将其转换为结构化的 SQL 语句。这一过程充分利用了 LLM 的强大能力，并且通过多次重试和去重机制，确保生成的 SQL 语句质量较高，能够满足用户的查询需求。</p><h3 id="c9905de5-d470-4ba9-959a-283c2d5305e3" class="">结合 <code>QueryContext</code> 和 <code>ChatContext</code></h3><ul id="1e00ba67-8866-4732-a939-35cd04b96ac5" class="bulleted-list"><li style="list-style-type:disc"><code><strong>QueryContext</strong></code>: 主要用于保存查询的上下文信息，包括查询文本、用户信息、数据集 ID 等。这些信息被传递给 LLM，用于生成 SQL 语句。</li></ul><ul id="8d555198-a100-41e5-b442-a7656bcf710d" class="bulleted-list"><li style="list-style-type:disc"><code><strong>ChatContext</strong></code>: 用于存储与当前对话相关的上下文信息，比如查询文本和解析信息。</li></ul><p id="b091a349-b842-43ca-bcaf-26f314bf986d" class="">在 <code>LLMSqlParser</code> 中，<code>QueryContext</code> 和 <code>ChatContext</code> 被用来维持与用户查询的语义信息，从而生成合适的 SQL 语句。这两个上下文对象携带了丰富的元数据，使得整个解析过程更加准确和高效。</p><h3 id="4f1eb4b2-bd5e-4ed8-816c-09628edc11ad" class="">总结</h3><p id="2f99a01d-a786-482c-be21-e3c62d55aec0" class=""><code>LLMSqlParser</code> 通过与 LLM 服务的交互，将自然语言转换为结构化查询语言（SQL），以满足用户的查询需求。它通过多次重试、去重和选择最优 SQL 语句的方式，保证了生成结果的准确性和可靠性。</p><p id="b2ddd4e1-9978-4d73-a211-60ce13ffc55a" class="">
+</p><h1 id="a8c2fb95-20a6-4c3c-96f0-f88c13f43869" class=""><code>QueryTypeParser</code></h1><h3 id="1cfdd690-b4ac-409f-8582-c61d0a47bcab" class=""><code>QueryContext</code> 类解析</h3><p id="8e05d4f3-6c20-458c-828d-d499d65bbaa2" class=""><code>QueryContext</code> 类主要负责保存与查询相关的上下文信息，它包含了一些关键字段，如 <code>queryText</code>（用户输入的查询文本）、<code>dataSetIds</code>（数据集的 ID 集合）、<code>candidateQueries</code>（候选查询列表）、<code>semanticSchema</code>（语义模式）等。它的主要作用是为查询解析和执行提供必要的上下文信息。</p><p id="37f681b9-d60a-464f-8f09-4cc190cf9728" class="">关键字段说明：</p><ul id="77b41f36-b4a3-42d1-88e4-3bc93ba79877" class="bulleted-list"><li style="list-style-type:disc"><strong>queryText</strong>：用户输入的自然语言查询文本。</li></ul><ul id="c3dec153-4c40-492f-9ee4-df9fc1010dab" class="bulleted-list"><li style="list-style-type:disc"><strong>dataSetIds</strong>：与查询相关的数据集的 ID。</li></ul><ul id="cd9570f8-62be-4577-81c0-f20b87bd72b6" class="bulleted-list"><li style="list-style-type:disc"><strong>modelIdToDataSetIds</strong>：模型 ID 与数据集 ID 的映射关系。</li></ul><ul id="3f1ef04f-8fad-427c-921b-5d6efcef38f4" class="bulleted-list"><li style="list-style-type:disc"><strong>user</strong>：当前执行查询的用户信息。</li></ul><ul id="043c080c-8b26-40bc-aa95-ddb47bb9e8ea" class="bulleted-list"><li style="list-style-type:disc"><strong>text2SQLType</strong>：表示将文本转化为 SQL 的方式（如通过规则或 LLM）。</li></ul><ul id="a33368c9-34ef-4a6e-bad0-07b666a6540b" class="bulleted-list"><li style="list-style-type:disc"><strong>candidateQueries</strong>：候选的语义查询列表，通过解析后生成的可能查询。</li></ul><ul id="106438ef-24b8-45f3-a7e1-72420cb40611" class="bulleted-list"><li style="list-style-type:disc"><strong>semanticSchema</strong>：语义模式，用于查询解析时的语义理解。</li></ul><ul id="c7e674ea-279d-4edc-bf7f-55fc0b0c40fe" class="bulleted-list"><li style="list-style-type:disc"><strong>workflowState</strong>：当前查询的工作流状态。</li></ul><ul id="7d005648-b4c4-4a1c-b247-6894a31f20f7" class="bulleted-list"><li style="list-style-type:disc"><strong>llmConfig</strong>：与大语言模型（LLM）相关的配置。</li></ul><ul id="0262bf29-9591-47e8-a989-585885892558" class="bulleted-list"><li style="list-style-type:disc"><strong>exemplars</strong>：示例 SQL，用于支持或参考生成 SQL 的过程。</li></ul><p id="cea2076a-ea13-40ef-a5c5-c605f3e23f26" class=""><code>getCandidateQueries</code> 方法根据某种排序标准（通常是解析评分）对候选查询进行排序，并限制返回的数量。这说明在 <code>QueryTypeParser</code> 执行前，<code>QueryContext</code> 已经包含多个经过不同程度解析的候选查询。</p><h3 id="50fe486a-4f24-483a-9947-be474682c31f" class=""><code>ChatContext</code> 类解析</h3><p id="3f9b2df3-e4b9-4747-b114-83f7b5296706" class=""><code>ChatContext</code> 类则用于保存聊天上下文信息，通常是与用户交互相关的内容。它包括查询的 ID、查询文本以及 <code>SemanticParseInfo</code>（语义解析信息）。</p><p id="800d203e-6dcd-4231-835b-f378c96d43a4" class="">关键字段说明：</p><ul id="beb8d660-2d23-436a-9619-3a017f1b1051" class="bulleted-list"><li style="list-style-type:disc"><strong>chatId</strong>：聊天的 ID，用于唯一标识一个会话。</li></ul><ul id="66ef8439-9a45-4c29-bd3c-1f2ed7c005fc" class="bulleted-list"><li style="list-style-type:disc"><strong>queryText</strong>：用户的查询文本。</li></ul><ul id="05ba66dd-514a-4261-9a35-dc91a230f6fb" class="bulleted-list"><li style="list-style-type:disc"><strong>parseInfo</strong>：包含了语义解析的详细信息（如生成的 SQL、解析评分等）。</li></ul><ul id="3092b25f-b839-4355-8046-8b87910b49cd" class="bulleted-list"><li style="list-style-type:disc"><strong>user</strong>：执行查询的用户。</li></ul><p id="0e159df4-5f19-4615-a925-ec109cc1ad8e" class="">这个类的主要目的是跟踪与特定聊天会话相关的查询解析状态。</p><h3 id="eb5f729d-dfcb-4ff2-a0a0-1bb4bba9cf05" class=""> <code>QueryTypeParser</code> 类</h3><p id="48bee2bd-c4aa-4c8e-acab-b304213e4da2" class=""><code>QueryTypeParser</code> 类的主要功能是通过对 <code>QueryContext</code> 中的候选查询进行进一步解析和分类，确定每个查询的类型（如 METRIC、TAG、ID 或 DETAIL）。</p><p id="7425fb48-bcf6-4897-9665-c9cd091ad68d" class="">在上下文中：</p><ul id="2c9b815c-311d-4736-a452-1a34dd230a13" class="bulleted-list"><li style="list-style-type:disc"><strong>初始化 S2SQL</strong>：在 <code>parse</code> 方法中，首先通过调用 <code>semanticQuery.initS2Sql()</code> 初始化每个候选查询的 SQL。这一步依赖于 <code>QueryContext</code> 中的 <code>semanticSchema</code> 和 <code>user</code> 信息。<code>initS2Sql</code> 会使用这些上下文信息生成初步的 SQL 查询。</li></ul><ul id="1d694260-6edb-4486-921b-59b9f4bca60d" class="bulleted-list"><li style="list-style-type:disc"><strong>设置查询类型</strong>：通过调用 <code>getQueryType()</code> 方法，<code>QueryTypeParser</code> 对 SQL 查询进行分类。<code>getQueryType()</code> 方法会根据 <code>SqlInfo</code> 中的信息来判断查询类型。这个过程中使用了 <code>SemanticSchema</code> 来检查 <code>select</code> 和 <code>where</code> 子句中的字段是否与度量（metric）、实体（entity）、标签（tag）或时间维度（time dimension）相关。</li></ul><p id="8ab5b99b-cc07-4310-84dc-9257d52d5f40" class="">结合上下文，我们可以看到：</p><ul id="62b9e0b9-e0f8-405b-b037-de4a495cf72c" class="bulleted-list"><li style="list-style-type:disc"><code>QueryContext</code> 提供了丰富的上下文信息，如候选查询、语义模式、用户信息等，供 <code>QueryTypeParser</code> 在解析过程中使用。</li></ul><ul id="727ffd18-8732-42ae-81a2-481ce1d2cf34" class="bulleted-list"><li style="list-style-type:disc"><code>ChatContext</code> 提供了与当前查询相关的会话信息，并记录了初步解析的结果，便于 <code>QueryTypeParser</code> 进一步分类。</li></ul><h3 id="11efcfe5-20cf-4e89-83c3-b559188b690b" class=""><code>QueryTypeParser</code> 类中的 <code>parse</code> 方法</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="32ff1fda-9131-4667-976c-f8f5d5ada8b1" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">@Override
+public void parse(QueryContext queryContext, ChatContext chatContext) {
+    List&lt;SemanticQuery&gt; candidateQueries = queryContext.getCandidateQueries();
+    User user = queryContext.getUser();
+
+    for (SemanticQuery semanticQuery : candidateQueries) {
+        // 1. init S2SQL
+        semanticQuery.initS2Sql(queryContext.getSemanticSchema(), user);
+        // 2. set queryType
+        QueryType queryType = getQueryType(queryContext, semanticQuery);
+        semanticQuery.getParseInfo().setQueryType(queryType);
+    }
+}</code></pre><ul id="79a2400f-4b18-4f2b-bc20-9084539330c2" class="bulleted-list"><li style="list-style-type:disc"><strong>数据流</strong>：<code>QueryContext</code> 中的 <code>candidateQueries</code> 被逐一处理，每个查询都被初始化 S2SQL，随后通过 <code>getQueryType()</code> 进行类型分类。</li></ul><ul id="5c54b434-bbca-4ec8-bfbf-39f05af00b9e" class="bulleted-list"><li style="list-style-type:disc"><strong>候选查询的处理</strong>：在 <code>QueryContext</code> 中，候选查询是通过某种排序机制生成的，<code>QueryTypeParser</code> 进一步对这些查询进行分类，确定其类型。</li></ul><ul id="78e4b2a1-041b-4a04-b1eb-bb9f5c1ba8ed" class="bulleted-list"><li style="list-style-type:disc"><strong>SQL校正和优化</strong>：<ul id="0de2761f-5b98-4b76-9c52-4f91275465d0" class="bulleted-list"><li style="list-style-type:circle"><strong>时间戳</strong>：14:57:19</li></ul><ul id="36f2233b-a3aa-4b61-b954-eada52680b73" class="bulleted-list"><li style="list-style-type:circle">在接下来的步骤中，通过多个语义校正器（如<code>WhereCorrector</code>, <code>GroupByCorrector</code>, <code>AggCorrector</code>等），对初步生成的SQL语句进行校正和优化。</li></ul><ul id="8e68b704-9473-413e-ae4b-cad9fe3375d9" class="bulleted-list"><li style="list-style-type:circle"><code>supersonic\headless\chat\src\main\java\com\tencent\supersonic\headless\chat\corrector</code></li></ul><ul id="e579c7f8-3de6-478b-89cd-978a899be5cd" class="bulleted-list"><li style="list-style-type:circle">这些校正步骤包括确保SQL语句在语法和逻辑上的正确性，例如添加WHERE子句以确保日期范围正确，调整聚合函数和分组条件等，以确保查询结果的准确性和相关性。</li></ul></li></ul><ul id="1f401fae-11e4-4c67-8878-c56ba7514821" class="bulleted-list"><li style="list-style-type:disc"><strong>最终SQL输出</strong>：<ul id="eafc4434-edae-471f-88c1-b1d1142027f9" class="bulleted-list"><li style="list-style-type:circle">输出修正后的SQL语句，确保它完全符合业务需求和数据查询的正确性。</li></ul></li></ul><p id="2b862833-da3a-463d-8f43-763ea9ff8dd6" class="">
+</p><h1 id="8c8a2930-0fde-4c93-bfff-c65e3cf93254" class="">流程分析</h1><h3 id="f04fdcf3-45ab-46ec-8878-5d9a6bb388d1" class=""><code>LLMSqlParser</code> 的职责</h3><p id="cfb9cc18-619f-4435-a575-4b54baa1a0e4" class=""><code>LLMSqlParser</code> 是一个用于处理和解析自然语言查询的组件，它利用大型语言模型（LLM）将自然语言查询转换为 SQL 查询。具体来说，<code>LLMSqlParser</code> 负责以下任务：</p><ol type="1" id="002c737a-6a67-45db-98bd-6a7bd450c689" class="numbered-list" start="1"><li><strong>调用 LLM 服务</strong>：通过调用 LLM 服务来生成 SQL 查询。</li></ol><ol type="1" id="5a970759-7817-4fd6-8afb-f3ccf1fd32ad" class="numbered-list" start="2"><li><strong>多轮重试</strong>：如果第一次解析失败，它会重试多次以确保生成的 SQL 查询是最佳的。</li></ol><ol type="1" id="304d12ce-2317-4395-80e1-331de755307c" class="numbered-list" start="3"><li><strong>去重</strong>：在多轮重试过程中，它会对生成的 SQL 结果进行去重处理。</li></ol><ol type="1" id="8ed7957f-b193-498e-b1e9-84a57e6231e5" class="numbered-list" start="4"><li><strong>生成解析信息</strong>：将最终的解析结果（SQL 查询）存储在 <code>QueryContext</code> 中。</li></ol><h3 id="6a005bbe-516f-42b0-8066-b4b10fa91439" class=""><code>QueryTypeParser</code> 的职责</h3><p id="63210fe4-1525-42a6-84bc-007f43481080" class=""><code>QueryTypeParser</code> 的主要任务是确定 SQL 查询的类型，即 <code>QueryType</code>。根据解析后的 SQL 查询的内容，它会将查询分类为以下类型之一：</p><ol type="1" id="a501807e-b6cb-45f6-88ea-752288d7944d" class="numbered-list" start="1"><li><strong>ID 查询</strong>：当 SQL 查询的 WHERE 子句包含时间字段，并且这些字段与实体 ID 相关联时，查询类型被归类为 ID 查询。</li></ol><ol type="1" id="f5decbb7-9363-4467-919c-74e0dae8001d" class="numbered-list" start="2"><li><strong>METRIC 查询</strong>：当 SQL 查询的 SELECT 子句中包含度量（Metric）字段时，查询类型被归类为 METRIC 查询。</li></ol><ol type="1" id="ac2fae27-19af-4e9d-8647-f99af7c47a59" class="numbered-list" start="3"><li><strong>DETAIL 查询</strong>：如果 SQL 查询不符合以上条件，则被归类为 DETAIL 查询。</li></ol><h3 id="861fec43-d8d5-41e8-b0fa-3b4abc088be1" class="">两者的关联与关系</h3><ol type="1" id="e2a8f7d3-03af-4887-aa46-6afc11b50942" class="numbered-list" start="1"><li><strong>流程中的位置</strong>：在查询处理流程中，<code>LLMSqlParser</code> 通常会先于 <code>QueryTypeParser</code> 运行。<code>LLMSqlParser</code> 生成 SQL 查询后，这些查询会被传递给 <code>QueryTypeParser</code>，后者对生成的 SQL 查询进行类型判断。</li></ol><ol type="1" id="1bbf7ff5-29a4-48b3-a0ec-fe27e861fcb8" class="numbered-list" start="2"><li><strong>依赖关系</strong>：<code>QueryTypeParser</code> 依赖于 <code>LLMSqlParser</code> 生成的 SQL 查询进行分析。因此，<code>QueryTypeParser</code> 的输入实际上是 <code>LLMSqlParser</code> 生成的输出。</li></ol><ol type="1" id="9bf034d5-f619-42cc-a4c7-1d99f0f21b82" class="numbered-list" start="3"><li><strong>查询优化与理解</strong>：<code>LLMSqlParser</code> 主要关注的是将自然语言转换为 SQL 查询，而 <code>QueryTypeParser</code> 则进一步理解和分类这些 SQL 查询，以便后续的查询执行和优化。这种分类可以影响查询的执行计划，进而影响查询性能和结果的准确性。</li></ol></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

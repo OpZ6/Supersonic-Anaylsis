@@ -1,0 +1,831 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>SuperSonic 部署配置文档</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="5afa1b32-eefc-42a9-97a0-0a5c93c2ff39" class="page sans"><header><h1 class="page-title">SuperSonic 部署配置文档</h1><p class="page-description"></p></header><div class="page-body"><p id="1927ac3b-83bc-4da6-8267-18a3be96151d" class="">
+</p><p id="9239edbb-66bb-43f5-af07-a9db33a95483" class="">作者：罗天成 </p><p id="7965d9f6-aab6-4cd0-8d10-24f31b548752" class="">日期：2024.08.15</p><p id="8139ea41-02eb-4e96-a522-e17a0ad67852" class="">
+</p><nav id="b44ee11d-0b9a-4220-ac7c-b13d37ec40ab" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#72fb24dc-b1f0-4ed5-a408-417e87322eb9">1. 文档概述</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#1f99ac0b-0e64-4adf-ad81-490ed8222951">1.1 目的</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#84e145f2-08d9-4cce-b93a-4bc02115345b">1.2 官方文档</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f74a46c0-99bf-4fb8-b63a-14ec7d315b3b">在线体验</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a29cdb4a-26ce-4ce7-99a3-12f31e0700bb">配置安装</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ccdc4c28-8865-4a78-8d7a-a168c3862b06">2. 环境要求</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7d2ef99c-89ed-4e5e-b4ad-4bfd909a2334">2.1 硬件要求</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#712379ac-f663-4767-a0f0-75914041c32c">2.2 软件要求</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#67d42d98-579f-487e-9a2a-76dd8ddc4ea3">相关库及语言</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#4f9e7ba1-44c8-4da0-a26f-b5f5536be74b">其他配套</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#921c3465-fbe8-45b1-9b9e-b4c8b0d5ad37">3. 安装步骤</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#43ecc7e6-7a0b-4a18-a013-29d86f464ded">3.1 docker启动</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#68a0af73-0dcb-42d0-81bf-7c16966e37ae">部署前提</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a9d53b33-a8a2-460c-84b4-82db70079575">启动流程</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#21e45f87-c1ef-44d7-a948-390af9bf703c">3.2 本地IDE启动</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#e653bd2a-f166-484c-9d49-16700d8bafd0">修正错误（可能新版本已修复）</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#12d993c8-643e-4a57-8f5b-870f91fd982b">启动流程</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a96dcf5b-32bb-4af9-b436-ac0655b3e86d">3.3 源代码编译包启动（未验证）</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f09b02bd-ead4-408e-b77e-d57d45b33f1f">4. 配置说明</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#cf5f9941-085d-4785-9469-b337072c5024">4.1 数据库配置</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f10b47ba-1403-48bb-a133-4a1034260d68">官方说明</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#e6c0d8bc-28ce-41b0-b980-8091a24980f1">SQL脚本分析</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#cfdd50fc-5f90-45fd-8407-e00ccbbbf006">配置流程</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#ed9045c9-63fb-4780-81e7-503994b306c7">Mysql数据库链接成功：</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#4d1dd7e0-890a-47ab-bf14-5a415f99ad07">4.2 大模型配置</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#2bed6a6a-c6cb-4f3f-be6b-152897d13146">官方文档</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#dd93dc00-86f6-4207-b71b-800487ea9e04">有哪些国内的大模型服务对接？</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1e1ea120-54a5-4bc9-9754-0480170deb52">OpenAI模型配置参考</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#af74b7d0-46f6-4146-ac2e-e6dd3dfe04d7">4.3 数据集配置</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#64852e10-10d9-43b3-9938-179a29e2f777">4.4 日志输出设置</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1acf7852-bd2c-4e23-bf3f-75af077e55cb">log4j日志设置</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#c400607b-4eeb-45dd-9e36-0c5f765e8dcf">修改 <code>logback-spring.xml</code> 文件</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f0173054-31db-4706-877b-8a31613525b3">解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#684d23b2-bd47-421d-a477-68d91f984001">重新启动项目</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#60dcf116-699e-4c86-9f3c-358622bc8cba">验证日志输出</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#607bd098-1d37-43fc-b283-af41e728a9ff">5. 验证与测试</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ef4c7e25-bc56-456b-a1f3-a24c31575c57">5.1 数据库测试</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#f30092bd-64db-4d41-88b8-17e7cf17ac0e">5.2 大模型测试</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8228eaec-b01c-4fe7-8741-6b17e824fd36">6. 相关资料</a></div></nav><p id="461d295a-ca7f-4f09-b353-fe850efe3277" class="">
+</p><h1 id="72fb24dc-b1f0-4ed5-a408-417e87322eb9" class="">1. 文档概述</h1><h2 id="1f99ac0b-0e64-4adf-ad81-490ed8222951" class="">1.1 目的</h2><p id="9cb41c23-2b20-4e24-baee-9248e24a1c77" class="">项目本身含有官方说明文档，其中包含在线体验、docker启动、本地配置启动等说明档案。但由于项目还在完善开发中，存在说明不够细致以及各种安装指引不明确等问题，因此撰写这份作为补充说明，便于后续开发安装配置。</p><h2 id="84e145f2-08d9-4cce-b93a-4bc02115345b" class="">1.2 官方文档</h2><h3 id="f74a46c0-99bf-4fb8-b63a-14ec7d315b3b" class="">在线体验</h3><figure id="d34bd550-64ff-43c2-a587-30677de16654"><a href="http://117.72.46.148:9080/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">http://117.72.46.148:9080/</div></div><div class="bookmark-href">http://117.72.46.148:9080/</div></div></a></figure><h3 id="a29cdb4a-26ce-4ce7-99a3-12f31e0700bb" class="">配置安装</h3><figure id="9aa88973-6730-4092-b613-57ada25f5ef9"><a href="https://supersonicbi.github.io/docs/快速体验/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">快速体验</div><div class="bookmark-description">快速体验 # SuperSonic内置用于DEMO的语义模型和智能助理，因而只需要以下三步即可快速体验。 启动系统 # 下载相应版本release包 解压zip包，执行启动脚本：sh bin/supersonic-daemon.sh start 访问浏览器：http://localhost:9080 注意 启动之前请安装好Java环境(JDK1.8)，Windows系统请到bin目录下执行.\supersonic-daemon.bat start 即可 测试LLM连通性 # 配置LLM # 进入菜单“助理管理”，选择系统内置的DEMO助理“来闲聊” 点击“修改信息”，选择“大模型配置”，填入自己申请的大模型服务信息，包括“Model Name”、“Base URL”以及&quot;API Key&quot; 点击“确定”，保存助理大模型配置 问题对话 # 进入菜单&quot;问答对话&quot;，选择智能助理“来闲聊” 随便输入文字，如何收到回复，则代表大模型连接成功 测试Text2SQL # 进入菜单“助理管理”，选择系统内置的DEMO助理“算指标”，配置LLM（与上节相同） 进入菜单“问答对话”，选择智能助理“算指标” 点击“新对话”，输入问题“近半个月sales部门访问量最高的用户是谁” 点击&quot;LLM解析S2SQL&quot;可以查看大模型生成的SQL</div></div><div class="bookmark-href"><img src="https://supersonicbi.github.io/favicon.png" class="icon bookmark-icon"/>https://supersonicbi.github.io/docs/快速体验/</div></div></a></figure><h1 id="ccdc4c28-8865-4a78-8d7a-a168c3862b06" class="">2. 环境要求</h1><h2 id="7d2ef99c-89ed-4e5e-b4ad-4bfd909a2334" class="">2.1 硬件要求</h2><p id="ce08c4e9-daca-4f1d-a399-61ec1cde937c" class="">任意windows和linux系统电脑均可，分别具有相应的配置脚本。</p><h2 id="712379ac-f663-4767-a0f0-75914041c32c" class="">2.2 软件要求</h2><h3 id="67d42d98-579f-487e-9a2a-76dd8ddc4ea3" class="">相关库及语言</h3><p id="18a55881-4b0d-48dc-948a-44f1f1bb7dcc" class="">Java 8（验证可用） / 11</p><p id="dfebb11f-3567-4740-ab6b-a2d8a0b5e829" class="">maven ≥ 3.8.0</p><p id="15036faa-246d-44e9-9c35-6258bc5cacd4" class="">node j&#x27;s</p><p id="27bcb4e4-3c25-43b7-8f45-5efef1ae125f" class="">npm</p><p id="4b84093e-b386-44be-9f91-aab1cfe238e9" class="">pnpm</p><h3 id="4f9e7ba1-44c8-4da0-a26f-b5f5536be74b" class="">其他配套</h3><p id="9b0a4589-99ef-477a-bbc4-82a2ce93d333" class="">Docker ≥ 26.0.0</p><p id="7e3dd3f4-a21d-4993-9673-b46b2ffed42f" class="">任意Java开发IDE（IDEA、VScode等）</p><p id="80c20257-8c3a-4274-809c-2adffd0221a3" class="">任意数据库（Mysql 8.0/8.4等）</p><h1 id="921c3465-fbe8-45b1-9b9e-b4c8b0d5ad37" class="">3. 安装步骤</h1><p id="999e9dd3-1261-41ac-8375-68697392e1f6" class="">以windows系统为例</p><h2 id="43ecc7e6-7a0b-4a18-a013-29d86f464ded" class="">3.1 docker启动</h2><h3 id="68a0af73-0dcb-42d0-81bf-7c16966e37ae" class="">部署前提</h3><p id="08a3878d-ab51-4b12-a894-98a8c8fecad3" class="">下载安装Docker和Docker Compose，并启动docker</p><p id="144ab3be-ea3c-403d-8134-771b17ca7afe" class="">Docker版本：26.0.0+</p><p id="2199da76-2a96-49ae-a222-d56c263d65dd" class="">Docker Compose：v2.26.1+</p><h3 id="a9d53b33-a8a2-460c-84b4-82db70079575" class="">启动流程</h3><ol type="1" id="1d0ca673-6daa-4a8a-ba54-7c9f0f8a8361" class="numbered-list" start="1"><li>下载项目：<code>git clone </code><code><a href="https://github.com/tencentmusic/supersonic.git">https://github.com/tencentmusic/supersonic.git</a></code></li></ol><ol type="1" id="978f437b-2fa1-4942-8cf8-add8663efca5" class="numbered-list" start="2"><li>启动服务：<code>docker-compose up -d</code></li></ol><blockquote id="7aa7d332-7224-4867-879b-c7e1a9e1e5b3" class="">注意：支持按照版本启动，不指定版本默认是：latest<p id="81eda025-dd28-46f5-a32c-2faa27e2830d" class=""><code>SUPERSONIC_VERSION=0.9.2-SNAPSHOT docker-compose up -d</code></p></blockquote><ol type="1" id="7c967b3b-ed71-4877-9877-4d50a0cf5e66" class="numbered-list" start="3"><li>查看容器：<code>docker-compose ps</code></li></ol><ol type="1" id="a9d42ea4-d868-4872-92eb-28915cc11e15" class="numbered-list" start="4"><li>等待启动完成直接浏览器进入：<a href="http://localhost:9080/">http://localhost:9080</a> </li></ol><ol type="1" id="4d578728-57a4-4476-ba59-e74fce09087f" class="numbered-list" start="5"><li>查看进程日志信息：<code>docker exec -it supersonic_standalone bash</code></li></ol><ol type="1" id="15ecd13d-7835-4278-aef3-2b8a482e19dd" class="numbered-list" start="6"><li>关闭服务：<code>docker-compose down</code></li></ol><p id="aed14cb0-0736-43f8-b649-f6d0c73191e1" class="">
+</p><h2 id="21e45f87-c1ef-44d7-a948-390af9bf703c" class="">3.2 本地IDE启动</h2><h3 id="e653bd2a-f166-484c-9d49-16700d8bafd0" class="">修正错误（可能新版本已修复）</h3><figure id="1015234d-3a54-4db5-b7ec-021e53205a3c" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled.png"><img style="width:1248px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled.png"/></a></figure><p id="26fa94b0-104a-45e8-ae66-e36f36c1a999" class="">impl改大写：<code>package com.tencent.supersonic.auth.authentication.persistence.repository.Impl;</code></p><h3 id="12d993c8-643e-4a57-8f5b-870f91fd982b" class="">启动流程</h3><ol type="1" id="df4781bd-91ca-4bf0-9b07-3f11104ba470" class="numbered-list" start="1"><li>下载项目：<code>git clone </code><code><a href="https://github.com/tencentmusic/supersonic.git">https://github.com/tencentmusic/supersonic.git</a></code></li></ol><ol type="1" id="ad9725cc-6bf8-4b53-8888-bededf4394d2" class="numbered-list" start="2"><li>配置jdk以及maven必须：<code><strong>java1.8 + maven ≥ 3.8.0</strong></code>，参考IDE：IntelliJ IDEA （官方：后端编译需要JDK，推荐安装版本11）</li></ol><ol type="1" id="d785055b-f5c8-4d3b-aa70-2ed780199cad" class="numbered-list" start="3"><li>确保npm，nodejs保持最新即可，安装pnpm：<code>npm install -g pnpm</code> （官方：前端编译需要Node，推荐安装版本v20.16.0）</li></ol><ol type="1" id="f96edc23-ec82-4539-9e1a-d1e2c177e332" class="numbered-list" start="4"><li>IDEA打开maven项目目录为根目录，等待识别project完成</li></ol><ol type="1" id="d366f018-e497-41ba-a307-04fb3e490e7a" class="numbered-list" start="5"><li><code>mvn clean install</code>  确保完成构建，大约2分钟</li></ol><ol type="1" id="b411b5d8-d799-485e-969a-cebe3bab85ed" class="numbered-list" start="6"><li>Windows：<code>.\assembly\bin\supersonic-build.bat webapp</code> <p id="64172670-202e-4dc5-8094-b222bf66778f" class="">Linux：<code>sh assembly/bin/supersonic-build.sh webapp</code></p></li></ol><ol type="1" id="b0361165-a2b1-4776-b29e-ce06b769d1b2" class="numbered-list" start="7"><li>检查是否构建完成 <code>.\assembly\build\supersonic-webapp.tar.gz</code></li></ol><ol type="1" id="c51e49eb-2e82-4c6f-aeb4-645daa88e301" class="numbered-list" start="8"><li><del><mark class="highlight-gray"><strong>解压并移动生成的文件</strong></mark></del><del><mark class="highlight-gray">：</mark></del><ul id="95b361c0-236c-4060-a4fe-6091ad585fc5" class="bulleted-list"><li style="list-style-type:disc"><del><mark class="highlight-gray">检查生成的 </mark></del><del><mark class="highlight-gray"><code>supersonic-webapp.tar.gz</code></mark></del><del><mark class="highlight-gray"> 文件：</mark></del><p id="a334a050-2a32-4afc-88b8-9aa1e337d8be" class=""><del><mark class="highlight-gray"><code>ls assembly/build/supersonic-webapp.tar.gz</code></mark></del></p></li></ul><ul id="78f678d9-1ca1-44a9-8d0c-0e55f93c5b2c" class="bulleted-list"><li style="list-style-type:disc"><del><mark class="highlight-gray">解压并移动文件到 </mark></del><del><mark class="highlight-gray"><code>standalone/target/classes/</code></mark></del><del><mark class="highlight-gray"> 目录下：</mark></del><p id="b78f4213-91c5-4f8d-911b-7febaa5a310f" class=""><del><mark class="highlight-gray"><code>cd assembly/build<br/>tar xvf supersonic-webapp.tar.gz<br/>mv supersonic-webapp ../launchers/standalone/target/classes/<br/></code></mark></del></p></li></ul><ul id="3da68a52-e974-43e4-9924-631dfb213fa3" class="bulleted-list"><li style="list-style-type:disc"><del><mark class="highlight-gray">确认 </mark></del><del><mark class="highlight-gray"><code>supersonic-webapp</code></mark></del><del><mark class="highlight-gray"> 目录存在于 </mark></del><del><mark class="highlight-gray"><code>standalone/target/classes/</code></mark></del><del><mark class="highlight-gray"> 目录下：</mark></del><p id="0c556257-f71c-403e-b7d6-bdf105c6ff1f" class=""><del><mark class="highlight-gray"><code>ls ../launchers/standalone/target/classes/supersonic-webapp</code></mark></del></p></li></ul><ul id="f9b2af0c-d3db-42ce-bc2b-efacf1ca77ba" class="bulleted-list"><li style="list-style-type:disc"><del><mark class="highlight-gray">也可以全程手动移动和检查，默认会在</mark></del><del><mark class="highlight-gray"><code>standalone/target/classes/</code></mark></del><del><mark class="highlight-gray"> 目录下创建webapp文件夹，内容基本一致但是无法后续启动</mark></del></li></ul></li></ol><ol type="1" id="5ef7717d-0f8d-407e-8492-7a115fd6b815" class="numbered-list" start="9"><li><strong>运行 </strong><code><strong>StandaloneLauncher</strong></code><strong> 类</strong>：<p id="0eb849e4-887e-497c-9ecf-92ef5eac534c" class="">IDE进入目录：</p><p id="d2704b10-fc05-4a3c-b1fc-8f2441f2bf35" class=""><code>.\launchers\standalone\src\main\java\com\tencent\supersonic\StandaloneLauncher.java</code></p><ul id="5e447c0c-7462-4b9c-b8be-8135f84d5a4d" class="bulleted-list"><li style="list-style-type:disc">在文件顶部，点击绿色的三角形按钮（<code>Run</code>）</li></ul><ul id="4fa80e95-22ef-4418-b6ce-59535b4f5f4a" class="bulleted-list"><li style="list-style-type:disc">或者右键点击<code>StandaloneLauncher</code>类，然后选择<code>Run &#x27;StandaloneLauncher.main()&#x27;</code></li></ul></li></ol><p id="839a116a-9121-4256-a922-cc37e94efa2a" class="">10. 成功运行</p><figure id="f3b8c5f0-d55b-408b-927b-145afa2c8c91" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%201.png"><img style="width:432px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%201.png"/></a></figure><p id="5c0c4a5c-7e11-45cf-ab25-fd90423e79fa" class="">存在大模型接口设置问题，需要自行设置api，否则报错到达token上限（使用默认demo api仅1000 token长度限制）</p><ol type="1" id="8794b666-8662-4ab5-8eee-c01e7d9c3387" class="numbered-list" start="11"><li>等待启动完成直接浏览器进入：<a href="http://localhost:9080/">http://localhost:9080</a> 可以看到如下界面：</li></ol><figure id="4f6efe06-2d7e-49ed-8d51-270ee9910210" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/image.png"><img style="width:707.2727661132812px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/image.png"/></a></figure><p id="236b26ee-d09e-4b84-aa6a-d4fa43ced017" class="">
+</p><h2 id="a96dcf5b-32bb-4af9-b436-ac0655b3e86d" class="">3.3 源代码编译包启动（未验证）</h2><ol type="1" id="80fb9ef8-fdad-4c26-9110-542eeeac4d29" class="numbered-list" start="1"><li>下载相应版本<a href="https://github.com/tencentmusic/supersonic">source code</a></li></ol><ol type="1" id="6dc2ed21-12ae-42f0-bd10-3a9b5743fe7f" class="numbered-list" start="2"><li>执行编译脚本：<code>sh assembly/bin/supersonic-build.sh</code> 注：前端编译需要Node，推荐安装版本v20.16.0；后端编译需要JDK，推荐安装版本11</li></ol><ol type="1" id="4e0b7b8a-09bd-4cd2-9f42-a639da68fa8e" class="numbered-list" start="3"><li>编译完成后从<code>assembly/build</code>目录获取release包</li></ol><ol type="1" id="09157597-1052-4a04-b00e-e9fc1cc9b450" class="numbered-list" start="4"><li>解压release包，<code>unzip supersonic-standalone-{revision}.zip</code></li></ol><ol type="1" id="2e98476b-1ac6-4d8e-aa48-d6a37f0f75b2" class="numbered-list" start="5"><li>进行release目录，执行启动脚本<code>sh bin/supersonic-daemon.sh start</code></li></ol><ol type="1" id="c8313154-8faa-4abe-bb9c-eb8dfcd3a01e" class="numbered-list" start="6"><li>访问浏览器：<a href="http://localhost:9080/">http://localhost:9080/</a></li></ol><h1 id="f09b02bd-ead4-408e-b77e-d57d45b33f1f" class="">4. 配置说明</h1><h2 id="cf5f9941-085d-4785-9469-b337072c5024" class="">4.1 数据库配置</h2><p id="910ae852-96a6-4454-97c6-25acfedcef7e" class="">项目默认使用H2内存数据库 ，直接启动即可，但是无法保存信息，重新启动记录消失，如需要保存前序操作内容，需要自行配置相关数据库保存数据。</p><h3 id="f10b47ba-1403-48bb-a133-4a1034260d68" class="">官方说明</h3><figure id="9a5458f3-a2d5-4455-9d2a-02dc8fbec121"><a href="https://supersonicbi.github.io/docs/系统部署/配置db/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">配置DB</div><div class="bookmark-description">配置DB # 注意 系统默认使用H2内存数据库, 重启后会丢失数据, 若需要替换为自己的MySQL, 请按以下进行配置. 1. 执行SQL脚本 # 初次配置DB请依次执行conf/db下schema-mysql.sql、 data-mysql.sql, 这两个脚本均为最新表结构 若是已配置过DB并部署好的服务, 可参考sql-update.sql, 这里会注明每次功能改动需要改动的表结构 2. 配置YAML文件 # conf下application-local.yaml中默认的DB配置为H2配置, 替换为自己的MySQL即可 spring: datasource: url: jdbc:mysql://localhost:3306/your_database?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false&amp;allowMultiQueries=true username: your_username password: your_password driver-class-name: com.mysql.jdbc.Driver</div></div><div class="bookmark-href"><img src="https://supersonicbi.github.io/favicon.png" class="icon bookmark-icon"/>https://supersonicbi.github.io/docs/系统部署/配置db/</div></div></a></figure><h3 id="e6c0d8bc-28ce-41b0-b980-8091a24980f1" class="">SQL脚本分析</h3><figure id="a71f321f-83ba-4dd3-b1e1-f2d3b112b2e4" class="link-to-page"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/SQL%E8%84%9A%E6%9C%AC%E5%88%86%E6%9E%90%20a71f321f83ba4dd3b1e1f2d3b112b2e4.html">SQL脚本分析</a></figure><h3 id="cfdd50fc-5f90-45fd-8407-e00ccbbbf006" class="">配置流程</h3><p id="96cbdf51-874c-49b5-a975-28f8e1ba1e4d" class="">以MySQL数据库为例：8.4LTS版本—8.0/5.7更优</p><ol type="1" id="5720b39f-1d66-4678-aaf1-00b4494e66b5" class="numbered-list" start="1"><li>启动本地Mysql并链接<ul id="ec7cce82-7ee3-4bbc-a6de-7a0a10432f72" class="bulleted-list"><li style="list-style-type:disc">链接数据库：<code>mysql -h 127.0.0.1 -uroot -proot</code></li></ul><ul id="3ae23f0b-884d-4e64-ba9d-581ff40ef109" class="bulleted-list"><li style="list-style-type:disc">查看所有数据库：<code>show databases;</code></li></ul><ul id="a390ccdf-857b-4d44-b0bd-a996002bb0ce" class="bulleted-list"><li style="list-style-type:disc">查看该数据库下的表：<code>show tables;</code></li></ul></li></ol><ol type="1" id="dc0f1af6-367f-40d6-801f-2a33cf7fd828" class="numbered-list" start="2"><li><code>CREATE DATABASE supersonic CHARACTER SET utf8 COLLATE utf8_unicode_ci;</code></li></ol><ol type="1" id="d22a1cbd-aa8b-4a68-861f-39cb03f5e86c" class="numbered-list" start="3"><li><code>USE supersonic;</code></li></ol><ol type="1" id="7ca07722-a40e-43ec-8f28-1d310d404424" class="numbered-list" start="4"><li><code>SOURCE your_path\supersonic\launchers\standalone\src\main\resources\db\schema-mysql.sql;</code></li></ol><figure id="ab30c4fc-9692-4874-80e9-b738c9c351ae" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%202.png"><img style="width:192px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%202.png"/></a></figure><ol type="1" id="e1152fa9-ce5a-49bb-a851-44bc257170f2" class="numbered-list" start="5"><li><code>SOURCE your_path\supersonic\launchers\standalone\src\main\resources\db\data-mysql.sql;</code></li></ol><figure id="53832d19-a715-4f53-9b9b-12d603c679eb" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%203.png"><img style="width:384px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%203.png"/></a></figure><p id="dee4c41a-28c3-4a03-bdf6-9feb15f990da" class="">（存在部分数据导入问题，问题应为列长度不足，不影响整体数据暂保持不处理）</p><ol type="1" id="28c5d2dc-3190-48ae-8d2d-09f2d9b0de84" class="numbered-list" start="6"><li>配置YAML文件：将conf下<code>application-local.yaml</code>文件（<code>supersonic\launchers\standalone\src\main\resources\application-local.yaml</code>）默认的DB - H2配置, 替换为本地MySQL或其他在线数据库</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bbe9683c-5cf9-47af-a45e-b763c1b4fd9c" class="code"><code class="language-YAML">spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/supersonic?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false&amp;allowMultiQueries=true
+    username: root
+    password: root
+  h2:
+    console:
+      path: /h2-console/semantic
+      enabled: false
+  config:
+    import:
+      - classpath:langchain4j-local.yaml</code></pre><ol type="1" id="db51f2a0-797c-4cfa-a5e4-207867468c2e" class="numbered-list" start="7"><li>进入网页设置Mysql服务器版本：</li></ol><figure id="4a6b863f-3e34-4362-9b63-f374246617df" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%204.png"><img style="width:708px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%204.png"/></a></figure><figure id="8a7960f6-5538-44b0-9c4e-876b46566c12" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%205.png"><img style="width:2520px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%205.png"/></a></figure><ul id="4280847a-9cb9-410c-8541-60151f2ed017" class="bulleted-list"><li style="list-style-type:disc">检查数据库配置是否正确并更改数据库版本为8.0：</li></ul><figure id="e4f0f78e-7a19-4bbc-b2fd-ecc0ed37fa67" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%206.png"><img style="width:2520px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%206.png"/></a></figure><figure id="05bd9342-a947-43be-83e6-c65862855f4c" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%207.png"><img style="width:708px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%207.png"/></a></figure><h3 id="ed9045c9-63fb-4780-81e7-503994b306c7" class="">Mysql数据库链接成功：</h3><figure id="d3dc5768-1e01-45fb-a737-86c16d49689d" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%208.png"><img style="width:708px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%208.png"/></a></figure><h2 id="4d1dd7e0-890a-47ab-bf14-5a415f99ad07" class="">4.2 大模型配置</h2><h3 id="2bed6a6a-c6cb-4f3f-be6b-152897d13146" class="">官方文档</h3><p id="8d9aea7f-4919-43ba-9922-94749d003b06" class="">非openai设置参考：<a href="https://supersonicbi.github.io/docs/系统部署/配置llm/">https://supersonicbi.github.io/docs/系统部署/配置llm/</a></p><h3 id="dd93dc00-86f6-4207-b71b-800487ea9e04" class="">有哪些国内的大模型服务对接？</h3><p id="73610803-5baf-4bd6-9a4e-609696ad04c5" class="">A: 当前我们验证过一些主流大模型服务，其申请链接如下表所示：</p><table id="6ab5534a-0f3e-4464-adad-edf1b4b0d2fe" class="simple-table"><tbody><tr id="abda39a0-494d-474c-a665-dd19db0b6de4"><td id=":Q&lt;h" class="">提供商</td><td id="AmHC" class="">API申请链接</td><td id="pG}k" class="">推荐模型</td></tr><tr id="61686608-55d1-40e0-90fe-8164c9a60333"><td id=":Q&lt;h" class="">智谱AI</td><td id="AmHC" class=""><a href="https://open.bigmodel.cn/api/paas/v4">https://open.bigmodel.cn/api/paas/v4</a></td><td id="pG}k" class="">glm-4</td></tr><tr id="6dd55646-b026-4d35-a213-8c6a6d06e264"><td id=":Q&lt;h" class="">阿里云</td><td id="AmHC" class=""><a href="https://dashscope.aliyuncs.com/compatible-mode/v1">https://dashscope.aliyuncs.com/compatible-mode/v1</a></td><td id="pG}k" class="">qwen-max</td></tr><tr id="49f20dc7-e70e-44a0-8e4e-c28cb199393c"><td id=":Q&lt;h" class="">幻方</td><td id="AmHC" class=""><a href="https://api.deepseek.com/">https://api.deepseek.com</a></td><td id="pG}k" class="">deepseek-chat</td></tr><tr id="a04eed61-69ea-471c-bfa9-30beea79c069"><td id=":Q&lt;h" class="">月之暗面</td><td id="AmHC" class=""><a href="https://api.moonshot.cn/v1">https://api.moonshot.cn/v1</a></td><td id="pG}k" class="">moonshot-v1-8k</td></tr></tbody></table><h3 id="1e1ea120-54a5-4bc9-9754-0480170deb52" class="">OpenAI模型配置参考</h3><ol type="1" id="2659c0b5-a425-49b8-9a79-9a4b1787d60e" class="numbered-list" start="1"><li>创建OpenAI的api端口获取密钥：</li></ol><figure id="db99d38a-e9d6-4656-870c-686403b941e9"><a href="https://platform.openai.com/api-keys" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">OpenAI Platform</div><div class="bookmark-description">Explore developer resources, tutorials, API docs, and dynamic examples to get the most out of OpenAI&#x27;s platform.</div></div><div class="bookmark-href"><img src="https://openaiapi-site.azureedge.net/public-assets/d/ddd16bc977/favicon.svg" class="icon bookmark-icon"/>https://platform.openai.com/api-keys</div></div><img src="https://cdn.openai.com/API/images/opengraph.png" class="bookmark-image"/></a></figure><ol type="1" id="9896a126-2854-4579-a0b5-e24d3f5ee8e8" class="numbered-list" start="2"><li>测试链接：<code>curl </code><code><a href="https://api.openai.com/v1/models">https://api.openai.com/v1/models</a></code><code> -H &quot;Authorization: Bearer your_api_key&quot;</code></li></ol><ol type="1" id="cd25da0a-8dc8-40f6-a232-1bc8562c9b47" class="numbered-list" start="3"><li>测试api返回：</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="670a4ad3-00f3-4db8-af3f-c78314e8011d" class="code"><code class="language-Python">import openai
+
+openai.api_key = &quot;your_api_key&quot;
+
+
+response = openai.ChatCompletion.create(
+  model=&quot;gpt-3.5-turbo&quot;,
+  messages=[
+      {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+      {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Say this is a test&quot;}
+  ]
+)
+
+print(response.choices[0].message[&#x27;content&#x27;])</code></pre><ol type="1" id="bb7af940-ea2a-4e69-a4cd-3e47710d6ec7" class="numbered-list" start="4"><li>进入路径：<code>your_path\supersonic\launchers\standalone\src\main\resources\langchain4j-local.yaml</code></li></ol><ol type="1" id="4a459d5e-49db-4c9d-9ea1-8a3cbe9f1ffc" class="numbered-list" start="5"><li>设置<code>langchain4j-local.yaml</code></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bef17c1a-b21a-411b-9136-36685b49053a" class="code"><code class="language-YAML">langchain4j:
+  # Replace `open_ai` with ollama/zhipu/azure/dashscope as needed.
+  # Note:
+  # 1. `open_ai` is commonly used to connect to cloud-based models;
+  # 2. `ollama` is commonly used to connect to local models.
+  open-ai:
+    chat-model:
+      # It is recommended to replace with your API key in production.
+      # Note: The default API key `demo` is provided by langchain4j community
+      #       which limits 1000 tokens per request.
+#      base-url: ${OPENAI_API_BASE:https://api.openai.com/v1}
+#      api-key: ${OPENAI_API_KEY:demo}
+#      model-name: ${OPENAI_MODEL_NAME:gpt-3.5-turbo}
+#      temperature: ${OPENAI_TEMPERATURE:0.0}
+#      timeout: ${OPENAI_TIMEOUT:PT60S}
+
+      base-url: ${OPENAI_API_BASE:https://api.openai.com/v1}
+      api-key: ${OPENAI_API_KEY:your_api_key}
+      model-name: ${OPENAI_MODEL_NAME:gpt-3.5-turbo}
+      temperature: ${OPENAI_TEMPERATURE:0.0}
+      timeout: ${OPENAI_TIMEOUT:PT60S}</code></pre><ol type="1" id="f4459340-d8fc-480b-83e9-4a0c1cc3bdf3" class="numbered-list" start="6"><li>保存并启动supersonic，启动方式见前</li></ol><ol type="1" id="3c5aa387-1b89-4003-860d-382d3ee78170" class="numbered-list" start="7"><li>登录并按照如下顺序配置：</li></ol><figure id="b9aa55cb-8a6d-4eab-ae25-207390e0285d" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%209.png"><img style="width:2507px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%209.png"/></a></figure><h2 id="af74b7d0-46f6-4146-ac2e-e6dd3dfe04d7" class="">4.3 数据集配置</h2><p id="14f58c0e-b1d4-487e-bb5a-bf65a920997e" class="">系统自带默认数据集Supersonic/超音速，自行数据集配置参考官方文档</p><figure id="ef724532-e837-421b-bc89-01faee3abc63"><a href="https://supersonicbi.github.io/docs/headless-bi/组装数据集/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">SuperSonic</div><div class="bookmark-description">组装数据集 # 1. 挑选指标维度 # 如下图，创建数据集时，首先填写好数据集的名称等基本信息，然后即可进入到下一步，可以选择相同主题域下的所有模型，并挑选符合场景需要的指标维度加入到数据集中。 注意 加入到数据集的指标维度所在的模型必须已在构建模型时配置好关联关系，否则将会提示报错。 2. 查询设置 # 指标模式: 可设置默认时间范围 明细模式: 可设置默认时间以及查询表头 注意 当未能从问询文本中得到时间信息时，默认会用这里的时间作为过滤条件，若不想加上时间限制，请把时间设置为-1</div></div><div class="bookmark-href"><img src="https://supersonicbi.github.io/favicon.png" class="icon bookmark-icon"/>https://supersonicbi.github.io/docs/headless-bi/组装数据集/</div></div></a></figure><figure id="d7296e8e-f068-4207-b5ad-f9e6e123864d" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/image%201.png"><img style="width:303px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/image%201.png"/></a></figure><h2 id="64852e10-10d9-43b3-9938-179a29e2f777" class="">4.4 日志输出设置</h2><p id="fc9537a7-2c33-4103-b9be-9f279fe73470" class="">默认使用INFO级别输出，会缺少大量中间信息输出，需要手动调整</p><h3 id="1acf7852-bd2c-4e23-bf3f-75af077e55cb" class="">log4j日志设置</h3><p id="758ca7cf-1903-40dc-9d90-1c3d2ad1a3c9" class="">目录：<code>\supersonic\launchers\standalone\src\main\resources\logback-spring.xml</code></p><p id="2d0cab4d-a661-41d3-9e9b-eb3ef6700f6d" class=""><code>logback-spring.xml</code>是Logback配置文件的一种形式。如果您的项目使用的是Spring框架并且配置文件被命名为<code>logback-spring.xml</code>，那么它将由Spring Boot自动加载。</p><p id="b3e25eb4-f52b-42bf-a1c9-12ff4ca00e6b" class="">要增加日志的详细程度，将日志级别设置为<code>DEBUG</code>，可以按以下步骤进行：</p><h3 id="c400607b-4eeb-45dd-9e36-0c5f765e8dcf" class="">修改 <code>logback-spring.xml</code> 文件</h3><ol type="1" id="a1841519-7472-427f-873c-6ed6b9f14e82" class="numbered-list" start="1"><li>将 <code>&lt;root&gt;</code> 元素中的 <code>level</code> 属性修改为 <code>DEBUG</code>。</li></ol><ol type="1" id="7a818096-6607-4e85-93de-aaab3e25f1bd" class="numbered-list" start="2"><li>确保您感兴趣的 <code>logger</code> 元素也设置为 <code>DEBUG</code>。</li></ol><p id="32678f50-91d9-4fe0-9acb-91c6c8be6e40" class="">以下是修改后的 <code>logback-spring.xml</code> 示例：</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1af6649e-ffe2-4908-94dc-dfc98db34307" class="code"><code class="language-XML" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration scan=&quot;true&quot;&gt;
+    &lt;contextName&gt;logback&lt;/contextName&gt;
+    &lt;!--    &lt;property name=&quot;LOG_PATH&quot; value=&quot;${logback.logdir:-logs}&quot;/&gt;--&gt;
+    &lt;property name=&quot;LOG_PATH&quot; value=&quot;${LOG_PATH:-logs}&quot;/&gt;
+    &lt;property name=&quot;LOG_APPNAME&quot; value=&quot;chat&quot;/&gt;
+    &lt;!--输出到控制台--&gt;
+    &lt;appender name=&quot;consoleLog&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{HH:mm:ss} [%thread] %-5level %logger{36} %line - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;appender name=&quot;fileInfoLog&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;File&gt;${LOG_PATH}/info.${LOG_APPNAME}.log&lt;/File&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;FileNamePattern&gt;${LOG_PATH}/info.${LOG_APPNAME}.%d{yyyy-MM-dd}.log.gz&lt;/FileNamePattern&gt;
+            &lt;maxHistory&gt;30&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+            &lt;pattern&gt;%d [%thread] %-5level [%X{traceId}] %logger{36} %line - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;appender name=&quot;fileErrorLog&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;filter class=&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&gt;
+            &lt;level&gt;ERROR&lt;/level&gt;
+        &lt;/filter&gt;
+        &lt;File&gt;${LOG_PATH}/error.${LOG_APPNAME}.log&lt;/File&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;FileNamePattern&gt;${LOG_PATH}/error.${LOG_APPNAME}.%d{yyyy-MM-dd}.log.gz&lt;/FileNamePattern&gt;
+            &lt;maxHistory&gt;90&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+            &lt;pattern&gt;%d [%thread] %-5level [%X{traceId}] %logger{36} %line - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;appender name=&quot;serviceLog&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;File&gt;${LOG_PATH}/serviceinfo.${LOG_APPNAME}.log&lt;/File&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;FileNamePattern&gt;${LOG_PATH}/serviceinfo.${LOG_APPNAME}.%d{yyyy-MM-dd}.log.gz&lt;/FileNamePattern&gt;
+            &lt;maxHistory&gt;30&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+            &lt;pattern&gt;%d [%thread] %-5level [%X{traceId}] %logger{36} %line - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;logger name=&quot;com.tencent.supersonic&quot; level=&quot;DEBUG&quot; additivity=&quot;true&quot;&gt;
+        &lt;appender-ref ref=&quot;serviceLog&quot;/&gt;
+    &lt;/logger&gt;
+
+    &lt;!-- 业务日志输出 --&gt;
+    &lt;appender name=&quot;keyPipelineAppender&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;File&gt;${LOG_PATH}/keyPipeline.log&lt;/File&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;fileNamePattern&gt;${LOG_PATH}/keyPipeline.%d{yyyy-MM-dd}.log&lt;/fileNamePattern&gt;
+            &lt;maxHistory&gt;30&lt;/maxHistory&gt;
+            &lt;cleanHistoryOnStart&gt;true&lt;/cleanHistoryOnStart&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+            &lt;pattern&gt;%d [%thread] %-5level [%X{traceId}] %logger{36} %line - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+         &lt;!--&lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&gt;--&gt;
+             &lt;!--&lt;level&gt;DEBUG&lt;/level&gt;--&gt;
+         &lt;!--&lt;/filter&gt;--&gt;
+    &lt;/appender&gt;
+    &lt;!--keyPipeline相关日志--&gt;
+    &lt;logger name=&quot;keyPipeline&quot; level=&quot;DEBUG&quot; additivity=&quot;false&quot;&gt;
+        &lt;appender-ref ref=&quot;keyPipelineAppender&quot;/&gt;
+    &lt;/logger&gt;
+
+    &lt;root level=&quot;DEBUG&quot;&gt;
+        &lt;appender-ref ref=&quot;fileInfoLog&quot;/&gt;
+        &lt;appender-ref ref=&quot;fileErrorLog&quot;/&gt;
+        &lt;appender-ref ref=&quot;consoleLog&quot;/&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;</code></pre><h3 id="f0173054-31db-4706-877b-8a31613525b3" class="">解释</h3><p id="ddc3d477-035b-42e0-b7bd-fa329c9a32cc" class="">全部更改为DEBUG级别</p><h3 id="684d23b2-bd47-421d-a477-68d91f984001" class="">重新启动项目</h3><p id="56288ef4-9ed1-4d22-9370-4a7878a374df" class="">完成配置修改后，重新编译并启动您的项目，查看控制台输出和日志文件，确认日志级别设置已生效。</p><h3 id="60dcf116-699e-4c86-9f3c-358622bc8cba" class="">验证日志输出</h3><p id="8728095e-ccc4-462b-b98a-da9a856e129f" class="">确认您在控制台和日志文件中可以看到 <code>DEBUG</code> 级别的日志消息，包括之前无法看到的<code>&quot;before handleNoMetric, sql:{}&quot;</code>和<code>&quot;after handleNoMetric, sql:{}&quot;</code>日志输出。</p><h1 id="607bd098-1d37-43fc-b283-af41e728a9ff" class="">5. 验证与测试</h1><h2 id="ef4c7e25-bc56-456b-a1f3-a24c31575c57" class="">5.1 数据库测试</h2><p id="4ae79d2c-9380-4c32-a822-d4b92527c19c" class="">入网页设置Mysql服务器版本：</p><figure id="115871fe-fb65-49cb-beb3-f9161c7bb716" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%204.png"><img style="width:708px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%204.png"/></a></figure><figure id="caa51e91-7913-4386-98d6-cd7ce534c767" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%205.png"><img style="width:2520px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%205.png"/></a></figure><ul id="bd26b8a1-64c7-46b9-9716-94365ac5c28d" class="bulleted-list"><li style="list-style-type:disc">检查数据库配置是否正确并更改数据库版本为8.0：</li></ul><figure id="d5eaf7e4-6c7a-49c0-8279-4f9a0cf00dc7" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%206.png"><img style="width:2520px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%206.png"/></a></figure><figure id="c78b78bc-cedf-462a-9a00-16d5b6976423" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%207.png"><img style="width:708px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%207.png"/></a></figure><p id="1b739c50-dca7-459e-9513-878ac42febc6" class="">以及直接控制台代码测试数据库内容</p><ul id="65df7b79-33eb-4ab2-ab7d-36c832dd0ab3" class="bulleted-list"><li style="list-style-type:disc">链接数据库：<code>mysql -h 127.0.0.1 -uroot -proot</code></li></ul><ul id="48bc7158-c2ef-4a6a-bbee-92834c4ea527" class="bulleted-list"><li style="list-style-type:disc">查看所有数据库：<code>show databases;</code></li></ul><ul id="267f2e58-8dc5-4722-8761-a4a9c15e0328" class="bulleted-list"><li style="list-style-type:disc">查看该数据库下的表：<code>show tables;</code> 等</li></ul><h2 id="f30092bd-64db-4d41-88b8-17e7cf17ac0e" class="">5.2 大模型测试</h2><p id="8815d92a-3863-480d-862b-3fb07d7d2fd1" class="">控制台测试/新调试创建接口：</p><figure id="3024cbe6-835d-4668-b6c7-38e7bb93ee64" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2010.png"><img style="width:318px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2010.png"/></a></figure><figure id="0bf38bee-16fc-4b9a-bf33-4394e4bd3323" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2011.png"><img style="width:288px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2011.png"/></a></figure><figure id="5e52019d-471d-4e45-a8b7-e17312de9076" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2012.png"><img style="width:1453px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2012.png"/></a></figure><p id="e08ff236-eb54-4aff-b83b-daf0429d8456" class="">测试代码及结果：</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="def7d9dc-8429-41a3-8a69-160604f936d7" class="code"><code class="language-Python">import openai
+
+openai.api_key = &quot;YOUR_API_KEY&quot;
+
+response = openai.ChatCompletion.create(
+  model=&quot;gpt-3.5-turbo&quot;,
+  messages=[
+    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Say this is a test&quot;}
+  ]
+)
+
+print(response.choices[0].message[&#x27;content&#x27;])
+
+# response = openai.Model.list()
+# print(response)</code></pre><figure id="595a675f-4047-4cd8-b130-a2c324bda636" class="image"><a href="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2013.png"><img style="width:2146px" src="SuperSonic%20%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E6%96%87%E6%A1%A3%205afa1b32eefc42a997a00a5c93c2ff39/Untitled%2013.png"/></a></figure><p id="a1ab0225-d741-49d4-8208-2c8b2c9b18d8" class="">LLM配置使用说明：</p><figure id="b1372975-80c6-40a3-b984-065d89ad5108"><a href="https://supersonicbi.github.io/docs/chat-bi/配置助理/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">SuperSonic</div><div class="bookmark-description">配置助理 # 1. 信息配置 # 助理的配置主要分为三个部分: 基本信息的配置 大模型连接配置 工具配置 1.1 基本信息的配置 # 名称: 即助理的名称 支持联想: 默认开启，开启后，用户在问答对话中输入问题时，会进行联想提示 开启多轮: 默认关闭，开启后，用户在问答对话时，可自动保存上下文，提供多轮对话的效果 示例问题: 配置后，用户在问答对话选择这个助理时，可以看到示例问题 描述: 这个助理的描述信息 1.2 大模型信息的配置 # 当前主要针对支持OpenAI协议的大模型进行配置: 1.3 工具的配置 # 规则语义解析工具的配置 规则语义解析工具主要支持配置这个工具可作用的数据集范围以及查询模式， 通过对数据集范围的限定，就可以分场景创建助理: 大模型语义解析工具的配置 注意 若想用到大模型的能力，则必须要配置上这个工具，并填写上面的大模型连接信息 大模型语义解析工具主要支持配置这个工具可作用的数据集: 第三方插件工具的配置 第三方插件工具主要支持配置选用一个具体的插件: 2. 助理使用 # 助理的使用也很简单，在问答对话左侧选择使用即可:</div></div><div class="bookmark-href"><img src="https://supersonicbi.github.io/favicon.png" class="icon bookmark-icon"/>https://supersonicbi.github.io/docs/chat-bi/配置助理/</div></div></a></figure><p id="0c54f435-9ce5-4f01-8216-c73a73e29635" class="">最终直接进行“来闲聊”模块对话即可验证是否连接成功。</p><h1 id="8228eaec-b01c-4fe7-8741-6b17e824fd36" class="">6. 相关资料</h1><figure id="85195b93-ddfd-4fdf-b521-f6df74a13226"><a href="https://supersonicbi.github.io/docs/系统部署/docker部署/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Docker部署</div><div class="bookmark-description">部署前提 # 下载安装Docker和Docker Compose，并启动docker Docker版本：26.0.0+ Docker Compose：v2.26.1+ 注意 1 如果报如下错: Cannot connect to the Docker daemon at unix:///Users/lexluo/.docker/run/docker.sock. Is the docker daemon running? 说明docker没有启动 2 supersonic_db_init主要作用是数据库数据初始化，不是常驻服务。执行完成后，exited是正常现象。 启动部署 # 进入docker目录，执行脚步启动 # docker-compose up -d 注意 支持按SuperSonic版本启动，不指定版本默认是：latest SUPERSONIC_VERSION=0.9.2-SNAPSHOT docker-compose up -d 注意 镜像下载慢，可配置国内镜像源，许多国内的云服务提供商提供了Docker镜像加速服务。你可以配置Docker使用这些镜像源来加速下载。 以阿里云为例： 登录阿里云控制台，进入容器镜像服务。 在左侧导航栏中选择“镜像加速器”。 复制加速器地址，例如 https://.mirror.aliyuncs.com。 编辑 Docker 配置文件 /etc/docker/daemon.json，添加以下内容： { “registry-mirrors”: [“https://.mirror.aliyuncs.com”] } 重启 Docker 服务： sudo systemctl daemon-reload sudo systemctl restart docker 运维操作 # 1 查看进程运行状况： docker-compose ps 正常会出现三个服务： 2 查看进程日志信息：</div></div><div class="bookmark-href"><img src="https://supersonicbi.github.io/favicon.png" class="icon bookmark-icon"/>https://supersonicbi.github.io/docs/系统部署/docker部署/</div></div></a></figure><figure id="19bbd677-3df4-4095-8f52-7d312f572efa"><div class="source">https://github.com/tencentmusic/supersonic/blob/master/README_CN.md</div></figure><figure id="87367798-d599-4a05-910d-bdf3785c7424"><a href="https://www.jianshu.com/p/c51d92a9f91d" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title"></div></div><div class="bookmark-href">https://www.jianshu.com/p/c51d92a9f91d</div></div></a></figure><figure id="194ad3b3-5fb3-40e0-bb87-3d9e4e3b01e1"><a href="https://blog.csdn.net/zhouyan8603/article/details/109039732" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">windows安装npm教程_npm 安装-CSDN博客</div><div class="bookmark-description">文章浏览阅读10w+次，点赞187次，收藏436次。在使用之前，先类掌握3个东西，明白它们是用来干什么的：npm: nodejs 下的包管理器。webpack: 它主要用途是通过CommonJS 的语法把所有浏览器端需要发布的静态资源作相应的准备，比如资源的合并和打包。vue-cli: 用户生成Vue工程模板。（帮你快速开始一个vue的项目，也就是给你一套vue的结构，包含基础的依赖库，只需要npm install 就可以安装。2、nodejs下载网址：https://nodejs.org/en/  【如果嫌下载的慢，可以下载其他网站..._npm 安装</div></div><div class="bookmark-href"><img src="https://g.csdnimg.cn/static/logo/favicon32.ico" class="icon bookmark-icon"/>https://blog.csdn.net/zhouyan8603/article/details/109039732</div></div></a></figure><figure id="d43b719b-a8ec-4a0a-9cbd-3670b41bbde8"><a href="https://nodejs.cn/download/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">下载 | Node.js 中文网</div></div><div class="bookmark-href"><img src="https://img.nodejs.cn/favicon.png" class="icon bookmark-icon"/>https://nodejs.cn/download/</div></div></a></figure><figure id="0aa4d4dc-1583-4645-ae65-b5df473a7a2f"><a href="https://blog.csdn.net/m0_56416743/article/details/136122153" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">pnpm 基本详细使用教程（安装、卸载、使用、可能遇到的问题及解决办法）-CSDN博客</div><div class="bookmark-description">文章浏览阅读6.6w次，点赞120次，收藏240次。本文详细介绍了PNPM8.x版本的安装过程，包括通过npm和HomeBrew安装，以及如何配置镜像源、修改默认安装路径。重点讲述了如何处理可能遇到的环境变量设置问题，如pnpmsetup、手动配置和验证全局安装路径。</div></div><div class="bookmark-href"><img src="https://g.csdnimg.cn/static/logo/favicon32.ico" class="icon bookmark-icon"/>https://blog.csdn.net/m0_56416743/article/details/136122153</div></div></a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

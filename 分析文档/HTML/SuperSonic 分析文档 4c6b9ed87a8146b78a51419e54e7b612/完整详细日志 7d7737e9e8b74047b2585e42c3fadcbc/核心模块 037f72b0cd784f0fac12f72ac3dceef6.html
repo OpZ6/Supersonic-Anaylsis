@@ -1,0 +1,686 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>核心模块</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="037f72b0-cd78-4f0f-ac12-f72ac3dceef6" class="page sans"><header><h1 class="page-title">核心模块</h1><p class="page-description"></p></header><div class="page-body"><nav id="94af61b1-e3a2-4149-acd7-3346f30f1473" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#78203833-ba90-4b7a-a91e-c0619236c41b"><strong>请求处理和响应</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b62fc8fc-8c3c-413e-b85d-4dbc2a23a859"><strong>身份验证和用户信息解析</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#69932a8a-858f-48d4-8f2a-d4b803f07949"><strong>数据库交互</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#da195ca7-a7dd-4841-8ecf-22905ab82cf5"><strong>模块</strong>：<code>o.m.s.t.SpringManagedTransaction</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#120791cc-8f94-459c-b126-d688e906c3ad"><strong>资源请求处理</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#7f73a058-3949-429a-90d1-522a3195b20f"><strong>异常处理</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#207a2987-1ecc-4c50-a19d-ba780fb76682"><strong>DispatcherServlet</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#af528c88-3898-4819-a743-76d216e145ce"><strong>RequestMappingHandlerMapping</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5aaced24-fb40-45df-8f7c-1885b23b39fa"><strong>MyBatis 映射器</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#63e83bf8-bd85-4a99-ba42-ef75966019da"><strong>LLMSqlParser（LLM SQL 解析器）</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4af54536-a237-4148-bfb1-9917374b18d8"><strong>模块</strong>: <code>SysTimeDimensionBuilder</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5096a6b9-1d3f-4f98-8422-0261f1d05d56"><strong>模块</strong>: <code>DefaultSemanticTranslator</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#9f749237-2224-40e1-a70c-bcf21e0014b3"><strong>模块</strong>: <code>DataSourceNode</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b0be516f-d4e8-4361-856e-d5157c7ae3f4"><strong>模块</strong>: <code>LogicalTableScan</code>、<code>LogicalJoin</code>、<code>LogicalProject</code> 等Calcite规划模块</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f8a002f0-a15d-4237-abe4-25085dd9ac3a">SQL解析与优化模块：<code>org.apache.calcite.sql2rel</code>, <code>org.apache.calcite.plan.RelOptPlanner</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#de7e42d8-e3df-4ace-80e6-3919dc6dea4c">语义解析模块：<code>c.t.s.h.c.t.c.sql.node.SemanticNode</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#04b30989-d531-446e-b98e-f29fcf526407">SQL执行规则汇总模块：<code>o.a.c.p.A.rule_execution_summary</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#1f4074f1-73d6-47f1-b0db-babbc8b44735">待分析模块（非关键模块）</a></div></nav><h3 id="78203833-ba90-4b7a-a91e-c0619236c41b" class=""><strong>请求处理和响应</strong></h3><ul id="a4437902-a8b8-4b8b-8661-b14a29f08b43" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>DispatcherServlet</code></li></ul><ul id="44ea9df8-8525-4456-9f9f-6b8e32a9f58e" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 处理HTTP请求，映射到具体的处理函数，然后返回响应。</li></ul><ul id="e7dce418-4e2b-42be-ad6c-9065c3ffaade" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 返回HTTP状态码如200 OK或404 NOT_FOUND。</li></ul><ul id="ab832c77-3be8-46b6-b6d3-48d09fe2fc7d" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="c79ba788-e5d7-4ec1-a9bc-329f0795d92f" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:23 [http-nio-9080-exec-10] DEBUG o.s.web.servlet.DispatcherServlet 1131 - Completed 200 OK</code></li></ul><ul id="93a4e8a6-8274-48e9-a6ef-bfd5b23a2657" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:27 [http-nio-9080-exec-4] DEBUG o.s.web.servlet.DispatcherServlet 1131 - Completed 404 NOT_FOUND</code></li></ul></li></ul><h3 id="b62fc8fc-8c3c-413e-b85d-4dbc2a23a859" class=""><strong>身份验证和用户信息解析</strong></h3><ul id="fcea7033-682c-4a1c-966d-c96eff29c00a" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>ExceptionHandlerExceptionResolver</code> </li></ul><ul id="de523977-2985-43f9-b449-d948a9a97c9d" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 解析用户的Token，验证身份，并处理任何异常。</li></ul><ul id="55b93bf9-866e-4e56-b084-aa3321ab3de2" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 如果Token有效，处理继续；如果无效，抛出异常。</li></ul><ul id="3252b5d0-59a2-4479-9807-63a6e2f1fc2e" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="f6ac36d6-1159-4d3f-a49e-1660983216c9" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:22 [http-nio-9080-exec-8] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor 91 - Writing [ResultData(code=403, msg=parse user info from token failed :Bearer ...</code></li></ul><ul id="8c47b01e-886e-4e8d-b634-99445152c1e8" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:23 [http-nio-9080-exec-8] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver 145 - Resolved [com.tencent.supersonic.common.pojo.exception.AccessException: parse user info from token failed :Bearer ...</code></li></ul></li></ul><ul id="ed65f5ab-c3cf-4ec9-bc60-9cd5dacae6eb" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>RequestResponseBodyMethodProcessor</code></li></ul><ul id="10d2bf0a-8783-4656-9abe-c4e6127ab266" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 处理请求体和响应体的读写。</li></ul><ul id="154d8d6b-e480-4b9c-ac81-0a2e3ec0b44d" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 解析请求数据，以及将响应数据序列化为JSON。</li></ul><ul id="294ff928-3c7d-45c5-b0c7-3f5a48c5071e" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="48e8cd88-ba93-448b-b3e2-2aa7652bc7d7" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor 91 - Read &quot;application/json;charset=UTF-8&quot; to [PageQueryInfoReq(current=2, pageSize=3, userName=null, ids=null)]</code></li></ul><ul id="ff063cb1-c951-48e3-a4c6-9186247b802b" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor 91 - Writing [ResultData(code=200, msg=success, data=PageInfo{pageNum=2, pageSize=3, size=0, startRow=0, endRow=0, (truncated)...]</code></li></ul></li></ul><h3 id="69932a8a-858f-48d4-8f2a-d4b803f07949" class=""><strong>数据库交互</strong></h3><ul id="e0a0a94d-84d6-4974-a7e6-3c0b2db25f1d" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>SqlSessionUtils</code>, <code>DataSourceUtils</code></li></ul><ul id="568a808e-bf93-4cfd-90f1-bc6028e99953" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>：管理MyBatis的SqlSession生命周期，包括创建和关闭SqlSession，确保SqlSession不会注册同步当同步不活动时。</li></ul><ul id="2844310c-2853-4070-b0d3-21db2bbe2eca" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 开启和关闭数据库会话，管理数据库事务的生命周期。查询结果，如用户信息或配置数据。</li></ul><ul id="3bd86eeb-d7ae-402a-ad87-a2d21b58356e" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="4cb00318-4ddd-4430-a1e1-5f7b21773ba4" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:26 [http-nio-9080-exec-5] DEBUG org.mybatis.spring.SqlSessionUtils 49 - Creating a new SqlSession</code></li></ul><ul id="69946a47-cedf-44c6-b450-d3c85c2730aa" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:26 [http-nio-9080-exec-5] DEBUG c.t.s.a.a.p.m.U.selectByExample 135 - ==&gt; Parameters: admin(String)</code></li></ul><ul id="25dbd4ea-e317-4443-841d-4c3c1368d3b7" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG org.mybatis.spring.SqlSessionUtils 49 - Creating a new SqlSession</code></li></ul><ul id="aa9b8509-f8e5-4f42-98f3-5e3455e24476" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG o.s.jdbc.datasource.DataSourceUtils 115 - Fetching JDBC Connection from DataSource</code></li></ul></li></ul><h3 id="da195ca7-a7dd-4841-8ecf-22905ab82cf5" class=""><strong>模块</strong>：<code>o.m.s.t.SpringManagedTransaction</code></h3><ul id="35f9d1a2-c591-41bb-a59a-04c61bb9bdaf" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>：Spring管理的事务模块，用于管理JDBC连接的事务行为。</li></ul><ul id="4832d424-6018-4ea6-9357-119e1598f493" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>：确认JDBC连接是否由Spring管理。</li></ul><ul id="ec790b76-bb20-47d4-90c5-e86b97fb6ecb" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>：<ul id="0cd64858-8d8b-4c8e-a27a-915032f12f3c" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:04 [http-nio-9080-exec-2] DEBUG o.m.s.t.SpringManagedTransaction 49 - JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@fb920f5] will not be managed by Spring</code></li></ul></li></ul><ul id="0b89a113-248f-4549-870a-7c8e6efc9c13" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>DataSourceUtils</code></li></ul><ul id="b7d8cbb5-497c-4aa9-8ba7-ae8d75d117eb" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 从配置的数据源中获取JDBC连接。</li></ul><ul id="4e99c022-59f6-4fce-b1b2-45e50174ac3b" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 提供数据库连接给请求处理流程。</li></ul><ul id="d72102ef-870d-4838-a281-3e6bb8ea65b0" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="d8c234dc-aa16-476c-bbdc-d51cfe19e986" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG o.s.jdbc.datasource.DataSourceUtils 115 - Fetching JDBC Connection from DataSource</code></li></ul></li></ul><h3 id="120791cc-8f94-459c-b126-d688e906c3ad" class=""><strong>资源请求处理</strong></h3><ul id="94dea26c-58dc-4753-bf3d-533cfb109e42" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>SimpleUrlHandlerMapping</code>, <code>ResourceHttpRequestHandler</code></li></ul><ul id="5261cb9a-248c-49c2-a496-99e57e5f05be" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 处理静态资源请求。</li></ul><ul id="703f6449-8c6a-4996-ad2f-87a58016f948" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 成功或失败的HTTP状态。</li></ul><ul id="500f6096-3926-4e8f-8f99-f134b606294f" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="30e3471d-b01c-41d6-95c9-4bd091bacdb4" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:23 [http-nio-9080-exec-10] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping 522 - Mapped to ResourceHttpRequestHandler [Classpath [webapp/]]</code></li></ul><ul id="260558cc-2ec4-47d5-b700-14c568d4f5da" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:23 [http-nio-9080-exec-6] DEBUG o.s.web.servlet.DispatcherServlet 1131 - Completed 304 NOT_MODIFIED</code></li></ul></li></ul><h3 id="7f73a058-3949-429a-90d1-522a3195b20f" class=""><strong>异常处理</strong></h3><ul id="2f2563fd-5fed-48de-a221-9a842ce08eef" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>ExceptionHandlerExceptionResolver</code></li></ul><ul id="6b838ed3-eaba-498a-8682-c4e247924c10" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 捕获并处理请求处理过程中抛出的异常。</li></ul><ul id="83cf62df-9053-4611-a633-fa3b603fd021" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 错误响应，通常包括错误代码和消息。</li></ul><ul id="94e5a7a1-db22-4442-a3b5-1c5d88c5bdd6" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="49d02504-80f6-41f9-9590-379b3be468fe" class="bulleted-list"><li style="list-style-type:circle"><code>14:28:23 [http-nio-9080-exec-8] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver 145 - Resolved [com.tencent.supersonic.common.pojo.exception.AccessException: parse user info from token failed :Bearer ...</code></li></ul></li></ul><h3 id="207a2987-1ecc-4c50-a19d-ba780fb76682" class=""><strong>DispatcherServlet</strong></h3><ul id="c3bddad4-c686-4c25-b626-fc9b910acef5" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>DispatcherServlet</code></li></ul><ul id="25cfe6e8-1989-4c9b-a03f-97c5deb1d2b4" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 负责接收HTTP请求，并将请求分派到相应的处理器。</li></ul><ul id="614431e0-88b7-4ae4-8522-24cc81b19dbc" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 根据不同的请求路径，将请求映射到对应的控制器方法。</li></ul><ul id="433c9fbe-4035-4909-a9d9-60ac8bef7896" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="0bbef954-e7ba-4cab-a494-31eada951071" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG o.s.web.servlet.DispatcherServlet 91 - POST &quot;/api/chat/manage/pageQueryInfo?chatId=1&quot;, parameters={masked}</code></li></ul></li></ul><h3 id="af528c88-3898-4819-a743-76d216e145ce" class=""><strong>RequestMappingHandlerMapping</strong></h3><ul id="4e2dcf09-e3a7-4942-96e5-c2513c02ffdc" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: <code>RequestMappingHandlerMapping</code></li></ul><ul id="9c3ff659-d06c-4a1b-9460-77c83de1a22c" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 确定由哪个控制器方法处理当前请求。</li></ul><ul id="9379cc52-e830-45ed-9cfe-e49c6dab3fbd" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 请求被映射到具体的方法。</li></ul><ul id="63b2d749-55d4-4359-b0fc-461e6da44244" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="9330ec06-9565-4a3a-835f-5b94334e933c" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping 522 - Mapped to com.tencent.supersonic.chat.server.rest.ChatController#pageQueryInfo(PageQueryInfoReq, long, HttpServletRequest, HttpServletResponse)</code></li></ul></li></ul><h3 id="5aaced24-fb40-45df-8f7c-1885b23b39fa" class=""><strong>MyBatis 映射器</strong></h3><ul id="81131b4e-55c7-4395-a3da-0100d2836290" class="bulleted-list"><li style="list-style-type:disc"><strong>模块</strong>: MyBatis 映射器 (如 <code>C.selectList</code>, <code>S.selectList</code>)</li></ul><ul id="4c548138-bbf4-4ad5-8170-c396aaddb8fc" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 执行具体的SQL查询，返回查询结果。</li></ul><ul id="274da71c-63ae-4fda-8874-f13864df9649" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 从数据库查询数据并返回。</li></ul><ul id="88fc1d44-c84d-4044-8faf-e289aa7eec51" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="84d4d313-70cb-4f8c-afd3-2779089fa65a" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG c.t.s.c.p.m.S.selectList 135 - ==&gt; Preparing: SELECT id,parameters,admin FROM s2_system_config</code></li></ul><ul id="60261084-86c4-45f5-8334-300ac993a0ad" class="bulleted-list"><li style="list-style-type:circle"><code>14:56:29 [http-nio-9080-exec-7] DEBUG c.t.s.c.p.m.S.selectList 135 - &lt;== Total: 1</code></li></ul></li></ul><h3 id="63e83bf8-bd85-4a99-ba42-ef75966019da" class=""><strong>LLMSqlParser（LLM SQL 解析器）</strong></h3><ul id="57e80d4f-4e2a-4e3b-9222-5f481ee70d0e" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>：尝试为给定的数据集 ID 生成 SQL 查询语句。</li></ul><ul id="8159d3bf-cb1f-45af-b073-6a84d43a0989" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>：生成基于数据集 ID 的 SQL 查询语句。</li></ul><ul id="296687e1-f6fb-432c-b716-6124300c3a49" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>：<ul id="030431e9-3e6a-4131-bd12-f28903d74d49" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:07 [http-nio-9080-exec-2] INFO c.t.s.h.chat.parser.llm.LLMSqlParser 38 - try generating query statement for dataSetId:1</code></li></ul><ul id="2e0b64e7-98fa-4290-b334-00e0f36444f1" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:07 [http-nio-9080-exec-2] INFO c.t.s.h.chat.parser.llm.LLMSqlParser 58 - currentRetryRound:1, start runText2SQL</code></li></ul></li></ul><p id="1afe14e5-aefa-4557-b735-54f9041e5f46" class="">
+</p><h3 id="4af54536-a237-4148-bfb1-9917374b18d8" class=""><strong>模块</strong>: <code>SysTimeDimensionBuilder</code></h3><ul id="e2b8fe34-efa3-4514-8897-f192436d7a5f" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 添加或修改系统时间维度。该模块负责处理时间相关的维度数据，包括创建和更新时间维度。</li></ul><ul id="45590666-aeba-4223-8e20-5d46089997ed" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 修改后的时间维度数据。</li></ul><ul id="fb1ec9de-725c-445c-adc1-fbd71179629d" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="919c055a-68ea-4116-a606-116a7639f3ad" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:20 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.u.SysTimeDimensionBuilder 19 - addSysTimeDimension before:[...]</code></li></ul><ul id="aa51f4a4-d472-474f-9d37-0bacc2d08eb7" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:20 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.u.SysTimeDimensionBuilder 29 - addSysTimeDimension after:[...]</code></li></ul></li></ul><h3 id="5096a6b9-1d3f-4f98-8422-0261f1d05d56" class=""><strong>模块</strong>: <code>DefaultSemanticTranslator</code></h3><ul id="9e8d98d3-33ba-4c41-a159-715c0bdd9627" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 语义转换处理。该模块将用户的查询请求转换成数据库可执行的SQL查询，包括处理查询参数和数据集。</li></ul><ul id="6d984413-9fd8-4430-8cbf-076ae2f5d4f5" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 经过语义转换后的查询参数和SQL查询。</li></ul><ul id="906abfa6-da45-4e8f-942e-b10496f84554" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="def91a3f-d7a2-43c4-ad32-a5850f6af28a" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:20 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.DefaultSemanticTranslator 51 - SemanticConverter before [QueryParam(...)]</code></li></ul><ul id="e5f63e14-9f78-4ea2-800d-8c6310477acf" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:20 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.DefaultSemanticTranslator 58 - SemanticConverter after QueryParam(...)</code></li></ul><ul id="906020c0-64c5-41b8-afad-443591e89a43" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] INFO  c.t.s.h.c.t.DefaultSemanticTranslator 78 - parse dataSetQuery [DataSetQueryParam(...)]</code></li></ul><ul id="c8f08414-939d-4cf7-8c19-f31b53cc2a1a" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] INFO  c.t.s.h.c.t.DefaultSemanticTranslator 125 - parse metricQuery [MetricQueryParam(...) isAgg [DEFAULT]</code></li></ul></li></ul><h3 id="9f749237-2224-40e1-a70c-bcf21e0014b3" class=""><strong>模块</strong>: <code>DataSourceNode</code></h3><ul id="4f84d756-ca70-406b-934f-881c3db51f10" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 数据源节点管理。管理和优化来自不同数据源的数据查询。</li></ul><ul id="dbf2cc99-4466-42d3-a0ae-94c3cca0bb1b" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 数据查询的执行计划和优化。</li></ul><ul id="636d1e59-142f-4004-8f28-1225d31d5c7b" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="80916406-af01-4ad5-a04a-f681604ab204" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.c.s.node.DataSourceNode 204 - dataSourceMeasures [{...}]</code></li></ul><ul id="e2043519-6996-4873-a175-9ab85fa618bd" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.c.s.node.DataSourceNode 250 - linkDataSources [DataSource(id=1, name=user_department, sourceId=1, type=mysql, ...)]</code></li></ul></li></ul><h3 id="b0be516f-d4e8-4361-856e-d5157c7ae3f4" class=""><strong>模块</strong>: <code>LogicalTableScan</code>、<code>LogicalJoin</code>、<code>LogicalProject</code> 等Calcite规划模块</h3><ul id="d64032ac-ab27-41fc-b55f-06f6bdebabbd" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>: 执行SQL解析、计划优化和查询执行计划的生成。</li></ul><ul id="45f2746e-edc7-4dcb-82da-b5f1567b1071" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>: 查询执行计划。</li></ul><ul id="a28fc68f-7246-4ee6-9b2f-c26831cc1576" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>:<ul id="0597126d-6278-4833-a286-5df357b49c59" class="bulleted-list"><li style="list-style-type:circle"><code>swiftCopy code14:57:22 [http-nio-9080-exec-2] DEBUG org.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#84:LogicalProject.(input=HepRelVertex#83,exprs=[$3, $1, $2])</code></li></ul></li></ul><h3 id="f8a002f0-a15d-4237-abe4-25085dd9ac3a" class="">SQL解析与优化模块：<code>org.apache.calcite.sql2rel</code>, <code>org.apache.calcite.plan.RelOptPlanner</code></h3><ul id="72e6228e-12ba-4993-bd4e-4f7bf746fe5e" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>：将SQL节点转换为关系表达式节点（RelNode），进行查询优化和计划生成。</li></ul><ul id="4c713bca-90e1-4b73-b047-163f0c00e8c6" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>：优化后的逻辑计划和物理计划。</li></ul><ul id="264ccb9d-b41b-4c05-b22d-1fd4a9d15e7e" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>：<ul id="a8053abb-555e-4d4f-ad7e-ca74ccaaf25c" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] DEBUG org.apache.calcite.sql2rel 628 - Plan after converting SqlNode to RelNode LogicalProject...</code></li></ul><ul id="55d417b5-ff96-44dc-a604-e131a3074d3a" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] DEBUG org.apache.calcite.plan.RelOptPlanner 380 - For final plan, using rel#143:LogicalProject...</code></li></ul></li></ul><h3 id="de7e42d8-e3df-4ace-80e6-3919dc6dea4c" class="">语义解析模块：<code>c.t.s.h.c.t.c.sql.node.SemanticNode</code></h3><ul id="0a5813c6-a173-4c3a-9691-40e5e1731209" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>：对SQL进行语义解析，优化SQL执行逻辑。</li></ul><ul id="52a33520-25fb-409a-a6da-10635e388641" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>：优化后的SQL执行计划。</li></ul><ul id="2c5762f4-3c70-4035-9d71-d749aac4e762" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>：<ul id="e09fdb50-d639-4547-99fa-f6aea091ee1c" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] DEBUG c.t.s.h.c.t.c.sql.node.SemanticNode 423 - RelNode optimize SELECT...</code></li></ul></li></ul><h3 id="04b30989-d531-446e-b98e-f29fcf526407" class="">SQL执行规则汇总模块：<code>o.a.c.p.A.rule_execution_summary</code></h3><ul id="21ac6428-207f-46c7-8b28-763a8f05b217" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>：记录SQL优化过程中各规则的应用尝试和执行时间。</li></ul><ul id="4014dc58-0399-4250-9537-3fbf869c08fd" class="bulleted-list"><li style="list-style-type:disc"><strong>输出结果</strong>：规则应用次数和执行时间汇总。</li></ul><ul id="f2cd4b90-3ec5-4818-9320-9e4eb56a26fc" class="bulleted-list"><li style="list-style-type:disc"><strong>日志示例</strong>：<ul id="98ace246-9a33-4d90-ba34-8a7d1a9cde0e" class="bulleted-list"><li style="list-style-type:circle"><code>14:57:22 [http-nio-9080-exec-2] DEBUG o.a.c.p.A.rule_execution_summary 300 - Rule Attempts Info for HepPlanner...</code></li></ul></li></ul><p id="b19f10dc-e1ef-4e4f-81cb-cda6a7d15127" class="">
+</p><h1 id="1f4074f1-73d6-47f1-b0db-babbc8b44735" class="">待分析模块（非关键模块）</h1><p id="657bf0bc-9d60-4d1b-babc-2bf3b293f46b" class="">c.t.s.h.s.p.m.T.getTagDOList </p><p id="6d692802-533d-496f-b1af-6c90f2d7a428" class="">c.t.s.h.s.p.m.TermMapper.selectList</p><p id="1b85d13a-32e9-4469-8953-899064c50663" class=""> c.t.s.h.s.p.m.M.query</p><p id="8a22f4ef-d81c-4aba-a46d-3a5fe118e70f" class="">c.t.s.h.s.p.m.T.queryTagRespList</p><p id="c1e4d16b-abfe-4804-8d53-c0238e54617b" class="">c.t.s.h.s.p.m.M.selectById</p><p id="f09445a1-b04d-4455-be39-4a8c11ae39e7" class="">c.t.s.c.s.p.m.C.batchSaveParseInfo</p><p id="b4c85ff9-ebf5-46b8-a7cb-1dd2a5d5813c" class="">c.t.s.c.s.p.m.C.update</p><p id="3510c65a-79ca-4c6d-a564-8ba083d09529" class="">c.t.s.c.s.p.m.C.getParseInfo</p><p id="76774c9f-7c04-4662-a323-6c5e2e9a141b" class="">c.t.s.h.s.p.m.C.getContextByChatId</p><p id="863434a1-1f61-4475-a438-d1e3eb9380f5" class="">c.t.s.c.s.p.m.C.insert</p><p id="538dd358-1e7a-4ac3-a3ed-39a2a029d9d0" class="">c.t.s.a.a.p.m.U.selectByExample</p><p id="6d1a4a9a-7e7f-4357-9f79-2cffbd3ed798" class=""><mark class="highlight-default">c.t.s.h.c.mapper.BaseMatchStrategy</mark></p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

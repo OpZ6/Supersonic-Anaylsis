@@ -1,0 +1,722 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>DefaultDimValueConverter</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="788cfa28-68de-480b-b887-72d8eeb2f4f8" class="page sans"><header><h1 class="page-title">DefaultDimValueConverter</h1><p class="page-description"></p></header><div class="page-body"><p id="1cfa2da7-a61d-4ad2-a47f-c1136aebddcc" class="">负责将查询语句中的维度默认值添加到 SQL 语句的 <code>WHERE</code> 子句中。以下是代码的详细分析：</p><h3 id="9841ed74-562f-4e8e-adf6-9e044bfa0e9f" class="">类的基本结构</h3><ol type="1" id="7aad5081-ca9e-4d3f-a7de-c3736288861f" class="numbered-list" start="1"><li><code><strong>@Slf4j</strong></code>:<ul id="6658cc78-6c92-49b1-9815-8571aebdc6e4" class="bulleted-list"><li style="list-style-type:disc">这是一个 Lombok 注解，用于自动生成日志记录器对象 <code>log</code>，可以通过 <code>log.info()</code>, <code>log.error()</code> 等方法进行日志记录。</li></ul></li></ol><ol type="1" id="3e942448-b14b-4edf-b336-e932a8b3c866" class="numbered-list" start="2"><li><code><strong>@Component(&quot;DefaultDimValueConverter&quot;)</strong></code>:<ul id="e550fadf-d5cc-4c19-9a38-2aa9a0f013e0" class="bulleted-list"><li style="list-style-type:disc">这是一个 Spring 注解，用于将这个类注册为 Spring 的组件，并指定组件的名称为 <code>&quot;DefaultDimValueConverter&quot;</code>。这样可以通过这个名称在 Spring 容器中引用这个组件。</li></ul></li></ol><ol type="1" id="aea5bc13-e3c0-49f8-aa97-f2230a01cf6b" class="numbered-list" start="3"><li><strong>实现 </strong><code><strong>QueryConverter</strong></code><strong> 接口</strong>:<ul id="29b1d6eb-05a6-4dd2-a7c0-3c3665214881" class="bulleted-list"><li style="list-style-type:disc">这个类实现了 <code>QueryConverter</code> 接口，因此必须提供 <code>accept</code> 和 <code>convert</code> 两个方法的实现。</li></ul></li></ol><h3 id="f16e0862-40aa-423d-85a2-4c2d8e6ac952" class=""><code>accept</code> 方法</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4c0a50e4-a8b5-4c04-8aaa-e737cfe49172" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">@Override
+public boolean accept(QueryStatement queryStatement) {
+    return !Objects.isNull(queryStatement.getDataSetQueryParam())
+            &amp;&amp; !StringUtils.isBlank(queryStatement.getDataSetQueryParam().getSql());
+}</code></pre><ul id="a0b457f0-f674-4641-823d-f8d598dd9db4" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>:<ul id="1338191f-3f9b-4e14-aa47-edd952574a41" class="bulleted-list"><li style="list-style-type:circle">这个方法用于判断当前转换器是否应该处理传入的 <code>queryStatement</code>。如果 <code>queryStatement</code> 中的 <code>DataSetQueryParam</code> 为空，或者 <code>SQL</code> 为空，则返回 <code>false</code>，表示不处理该查询语句。否则，返回 <code>true</code>，表示该转换器可以处理该查询语句。</li></ul></li></ul><ul id="1cc91729-68b3-48be-9328-e3d47cce0c72" class="bulleted-list"><li style="list-style-type:disc"><strong>逻辑</strong>:<ul id="7ac093d7-2558-4dff-a47d-31bf6ee2c38f" class="bulleted-list"><li style="list-style-type:circle"><code>queryStatement.getDataSetQueryParam()</code> 用于获取数据集查询参数，如果查询参数为空，说明没有要处理的数据集查询参数。</li></ul><ul id="abb7a201-8915-44ee-886f-50b9d845bea0" class="bulleted-list"><li style="list-style-type:circle"><code>queryStatement.getDataSetQueryParam().getSql()</code> 获取 SQL 查询字符串，如果为空，说明没有可处理的 SQL。</li></ul></li></ul><h3 id="50ae4872-235e-4a72-a100-2ad36234a3c5" class=""><code>convert</code> 方法</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="299ae2aa-c58c-4c90-bbc1-efeb2a26074d" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">@Override
+public void convert(QueryStatement queryStatement) {
+    List&lt;Dimension&gt; dimensions = queryStatement.getSemanticModel().getDimensions().stream()
+            .filter(dimension -&gt; !CollectionUtils.isEmpty(dimension.getDefaultValues()))
+            .collect(Collectors.toList());
+    if (CollectionUtils.isEmpty(dimensions)) {
+        return;
+    }
+    String sql = queryStatement.getDataSetQueryParam().getSql();
+    List&lt;String&gt; whereFields = SqlSelectHelper.getWhereFields(sql)
+            .stream().filter(field -&gt; !TimeDimensionEnum.containsTimeDimension(field))
+            .collect(Collectors.toList());
+    if (!CollectionUtils.isEmpty(whereFields)) {
+        return;
+    }
+    MetricTable metricTable = queryStatement.getDataSetQueryParam()
+            .getTables().stream().findFirst().orElse(null);
+    List&lt;Expression&gt; expressions = Lists.newArrayList();
+    for (Dimension dimension : dimensions) {
+        ExpressionList expressionList = new ExpressionList();
+        List&lt;Expression&gt; exprs = new ArrayList&lt;&gt;();
+        dimension.getDefaultValues().forEach(value -&gt; exprs.add(new StringValue(value)));
+        expressionList.setExpressions(exprs);
+        InExpression inExpression = new InExpression();
+        inExpression.setLeftExpression(new Column(dimension.getBizName()));
+        inExpression.setRightExpression(expressionList);
+        expressions.add(inExpression);
+        if (metricTable != null) {
+            metricTable.getDimensions().add(dimension.getBizName());
+        }
+    }
+    sql = SqlAddHelper.addWhere(sql, expressions);
+    queryStatement.getDataSetQueryParam().setSql(sql);
+}</code></pre><ul id="9cd5781a-b8e5-4aa9-9d10-ed4c50338833" class="bulleted-list"><li style="list-style-type:disc"><strong>作用</strong>:<ul id="88324f1e-0eb5-45e9-bdcf-621dd755692f" class="bulleted-list"><li style="list-style-type:circle">这个方法负责将维度的默认值添加到 SQL 查询的 <code>WHERE</code> 子句中。如果查询语句中的维度具有默认值，并且这些维度没有被 <code>WHERE</code> 子句覆盖，则这些默认值将被添加到 SQL 中。</li></ul></li></ul><ul id="cb34c193-4019-434e-a49a-430d24a9d165" class="bulleted-list"><li style="list-style-type:disc"><strong>具体逻辑</strong>:<ol type="1" id="372d8995-e080-42f8-8fac-5cd37cf522c2" class="numbered-list" start="1"><li><strong>获取带有默认值的维度列表</strong>:<ul id="d12a0d51-c08f-4a00-b5b1-a7ff0071dac4" class="bulleted-list"><li style="list-style-type:disc"><code>List&lt;Dimension&gt; dimensions = queryStatement.getSemanticModel().getDimensions().stream().filter(dimension -&gt; !CollectionUtils.isEmpty(dimension.getDefaultValues())).collect(Collectors.toList());</code></li></ul><ul id="4687bcc4-f9d3-4214-ad4e-c34dc867c23d" class="bulleted-list"><li style="list-style-type:disc">从查询语句的语义模型中获取所有维度，并过滤出那些具有默认值的维度。</li></ul></li></ol><ol type="1" id="396ba7d8-04e1-4a0c-8313-bf6352870674" class="numbered-list" start="2"><li><strong>检查维度列表是否为空</strong>:<ul id="ac59256d-bfcc-46b8-81b9-72e4742b88b8" class="bulleted-list"><li style="list-style-type:disc"><code>if (CollectionUtils.isEmpty(dimensions)) { return; }</code></li></ul><ul id="27bd3aaf-13cc-4c63-b3a2-895032441b3c" class="bulleted-list"><li style="list-style-type:disc">如果没有任何维度具有默认值，直接返回，不做进一步处理。</li></ul></li></ol><ol type="1" id="6c6cc801-9c9b-4968-9339-9df09fbf2ad1" class="numbered-list" start="3"><li><strong>获取 SQL 查询字符串</strong>:<ul id="c94ec30e-b181-4929-b6a4-a8b3f0da0970" class="bulleted-list"><li style="list-style-type:disc"><code>String sql = queryStatement.getDataSetQueryParam().getSql();</code></li></ul><ul id="fb8efa59-413b-40e5-b4ab-e906d79db10e" class="bulleted-list"><li style="list-style-type:disc">获取当前的 SQL 查询字符串。</li></ul></li></ol><ol type="1" id="03aa4b50-833a-429b-99d7-496c745f1930" class="numbered-list" start="4"><li><strong>获取并过滤 </strong><code><strong>WHERE</strong></code><strong> 子句中的字段</strong>:<ul id="b188f19d-871e-4438-b7c2-e8b951bad546" class="bulleted-list"><li style="list-style-type:disc"><code>List&lt;String&gt; whereFields = SqlSelectHelper.getWhereFields(sql).stream().filter(field -&gt; !TimeDimensionEnum.containsTimeDimension(field)).collect(Collectors.toList());</code></li></ul><ul id="6ca6846b-454d-42b7-b9ef-2a2d7ec7f560" class="bulleted-list"><li style="list-style-type:disc">从 SQL 查询中提取 <code>WHERE</code> 子句中的字段，并过滤掉时间维度的字段。这里使用了 <code>TimeDimensionEnum.containsTimeDimension(field)</code> 来检查字段是否是时间维度。</li></ul></li></ol><ol type="1" id="01b397d8-997c-4ea1-9e51-3be8a712da42" class="numbered-list" start="5"><li><strong>检查 </strong><code><strong>WHERE</strong></code><strong> 子句中的字段是否为空</strong>:<ul id="19fcc963-2085-424a-b064-adc89644db43" class="bulleted-list"><li style="list-style-type:disc"><code>if (!CollectionUtils.isEmpty(whereFields)) { return; }</code></li></ul><ul id="32463c8d-3019-44b5-a507-a164bd2ad6e1" class="bulleted-list"><li style="list-style-type:disc">如果 <code>WHERE</code> 子句中已经包含了需要的字段，直接返回，不做进一步处理。</li></ul></li></ol><ol type="1" id="19e4d912-8059-4d72-90c2-12951b971f1d" class="numbered-list" start="6"><li><strong>获取 </strong><code><strong>MetricTable</strong></code><strong> 对象</strong>:<ul id="35f1d5f1-fd38-4e1d-8617-a762e24530fb" class="bulleted-list"><li style="list-style-type:disc"><code>MetricTable metricTable = queryStatement.getDataSetQueryParam().getTables().stream().findFirst().orElse(null);</code></li></ul><ul id="1ea4b799-cfd0-4d14-8244-49e39a769a59" class="bulleted-list"><li style="list-style-type:disc">从查询语句中获取 <code>MetricTable</code> 对象，这个对象包含了查询中涉及的度量和维度。</li></ul></li></ol><ol type="1" id="5d00ebff-de10-48ae-b6f2-d4e485892148" class="numbered-list" start="7"><li><strong>创建并添加 </strong><code><strong>InExpression</strong></code><strong> 表达式</strong>:<ul id="f602088a-1ea1-4370-b5fe-c1ddc005d574" class="bulleted-list"><li style="list-style-type:disc">遍历所有带有默认值的维度，为每个维度创建一个 <code>InExpression</code> 表达式，这个表达式用于将默认值作为过滤条件添加到 SQL 查询的 <code>WHERE</code> 子句中。</li></ul><ul id="ec8104d4-b4ef-46fe-8599-1a0dfc0c6161" class="bulleted-list"><li style="list-style-type:disc"><code>InExpression inExpression = new InExpression();</code> 用于创建一个 SQL <code>IN</code> 表达式。</li></ul><ul id="67768d30-3805-4ade-9364-926168561925" class="bulleted-list"><li style="list-style-type:disc"><code>inExpression.setLeftExpression(new Column(dimension.getBizName()));</code> 设置 <code>IN</code> 表达式的左侧字段名为维度的业务名。</li></ul><ul id="187235bf-24f0-41f7-9fba-9fa7eceb9252" class="bulleted-list"><li style="list-style-type:disc"><code>inExpression.setRightExpression(expressionList);</code> 设置 <code>IN</code> 表达式的右侧为包含所有默认值的表达式列表。</li></ul><ul id="774abc7e-9cbf-4949-94f7-bf0bcd485888" class="bulleted-list"><li style="list-style-type:disc"><code>expressions.add(inExpression);</code> 将这个 <code>IN</code> 表达式添加到表达式列表中。</li></ul><ul id="01f91569-6633-4d78-8966-a51de9fba405" class="bulleted-list"><li style="list-style-type:disc">如果 <code>MetricTable</code> 对象不为空，更新表中的维度信息。</li></ul></li></ol><ol type="1" id="c1e716c6-88c8-4bae-8336-ab1f9af94982" class="numbered-list" start="8"><li><strong>将新的表达式添加到 SQL 查询中</strong>:<ul id="821d0782-080c-4b18-a56f-99ebe2f41018" class="bulleted-list"><li style="list-style-type:disc"><code>sql = SqlAddHelper.addWhere(sql, expressions);</code> 使用 <code>SqlAddHelper</code> 工具类将表达式添加到 SQL 查询的 <code>WHERE</code> 子句中。</li></ul><ul id="fe893732-6611-4cfd-af87-90e3cf3cc2db" class="bulleted-list"><li style="list-style-type:disc"><code>queryStatement.getDataSetQueryParam().setSql(sql);</code> 更新查询语句中的 SQL 查询。</li></ul></li></ol></li></ul><h3 id="380b22f6-79ca-4f29-abeb-e83f5d6d3b74" class="">总结</h3><ul id="7df0a80e-0cca-49f6-86c5-391a4b658323" class="bulleted-list"><li style="list-style-type:disc"><strong>整体流程</strong>:<ol type="1" id="e00bc1a4-6a38-4027-8a97-c11e3f68259f" class="numbered-list" start="1"><li>检查查询语句是否包含数据集查询参数和 SQL 查询字符串。</li></ol><ol type="1" id="6d34eb91-668a-45ea-b9c3-0513bda55a45" class="numbered-list" start="2"><li>从语义模型中提取所有具有默认值的维度。</li></ol><ol type="1" id="76e67179-9b34-496d-b9d5-7d85884df889" class="numbered-list" start="3"><li>如果 SQL 查询中没有针对这些维度的过滤条件，将默认值作为过滤条件添加到 SQL 查询中。</li></ol><ol type="1" id="c209f51a-2cac-4723-873e-ea03923baff3" class="numbered-list" start="4"><li>更新查询语句中的 SQL 查询字符串。</li></ol></li></ul><ul id="4f2a5757-dbc0-4491-a024-693c09bf3f1b" class="bulleted-list"><li style="list-style-type:disc"><strong>用途</strong>:<ul id="efcd6a0b-9e18-44c6-8276-6c7f64d0715e" class="bulleted-list"><li style="list-style-type:circle">该转换器在查询过程中自动处理维度的默认值，并将这些默认值添加到 SQL 查询的 <code>WHERE</code> 子句中。这对于确保查询的完整性和正确性非常重要，特别是在用户未指定某些维度的情况下，系统能够使用预定义的默认值来生成 SQL 查询。</li></ul></li></ul><p id="c3085d7b-22d2-4aad-b1ab-c0779d8d1844" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

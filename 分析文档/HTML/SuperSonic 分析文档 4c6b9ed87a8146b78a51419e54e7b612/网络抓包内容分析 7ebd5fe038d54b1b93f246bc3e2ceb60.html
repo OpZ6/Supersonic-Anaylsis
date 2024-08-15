@@ -1,0 +1,1699 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>网络抓包内容分析</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="7ebd5fe0-38d5-4b1b-93f2-46bc3e2ceb60" class="page sans"><header><h1 class="page-title">网络抓包内容分析</h1><p class="page-description"></p></header><div class="page-body"><nav id="b0479f5c-b938-4ef5-ad9e-fa7b32f3bf10" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e4dc7dd1-03bc-4ee9-a4b7-97976ab236dd">1. 解析请求 (<code>parse</code>)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8f338706-000e-4113-ab85-60a0de2b9f19">请求头信息</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#2cfd8564-fff5-4588-af8f-631852201a51">请求体内容</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#785138fe-d155-411d-be5c-971629f3bc9e">2. 执行请求 (<code>execute</code>)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e817851b-04aa-416b-9e68-dc766deaea90">请求头信息</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e65061d4-3efe-4640-b5bd-2f9f4374b75f">请求体内容</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c3302007-38d9-461c-88be-3b6a97da4730">3. 查询维度值请求 (<code>queryDimensionValue</code>)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ba1417b5-5439-486d-9e79-c68668d83829">请求头信息</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d3353bdf-e02d-4626-a95d-edb74011e1fb">请求体内容</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8ebf5820-f142-4520-bd64-7a8530a8c290">4. 获取所有会话 (<code>getAll</code>)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3d77759f-f471-4016-ac42-e7f04f74272e">请求头信息</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#9b58beb3-75e8-4fce-b9f7-f92873158b7b">请求体内容</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a2ac0b05-3a3d-4c17-b9ab-019db6f24303">整理流程分析</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#19ba6f5e-6440-4890-a202-beddfff76ff3">生成和处理查询的每个步骤详细分析</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#dab3cdbf-a671-4595-b8d7-a13e1e07d9ff">总结</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#29c26e68-06ba-4749-9e3f-62dbc4ef8a82">JSON详尽展开分析</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6c5af8d2-ffd0-4f7a-82ae-3983cdf1473b">1. parse</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#36089197-ce82-4f31-b98b-e53ae180fdac">顶层结构</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#ca4e91e8-f6dd-4dc7-b55e-d202f3c21c3e"><code>data</code> 部分的详细解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1df69137-e250-45a1-9555-239eb4d1995b"><code>selectedParses</code> 数组中的项（解析后的结果）</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#0ed19af6-af73-4447-b2cb-27bd672e136c"><code>dataSet</code> 对象详细解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a07b78ef-f85b-4bf1-9c67-787916b690bc"><code>metrics</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a6cf6559-9b1c-4647-8af9-f8eedcca80f9"><code>dimensionFilters</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#2613c416-038c-439e-bb57-be4d26b729a2"><code>dateInfo</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1dca7470-4bfe-4600-bb0b-9fe9871093c3"><code>elementMatches</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#9908a650-fa92-4577-aabb-f5c6f5de47ce"><code>properties</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#fdf0bd49-84cc-44da-a15c-a17bc83ec8b9"><code>sqlInfo</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#fa629e34-d9f9-474a-87b8-33161b3a15e1"><code>parseTimeCost</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ed185d5f-0e5e-4f03-8ed3-7c5d19dff7c4">2. execute</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#2fcfea29-aad6-47c7-b8db-eb39ed376da2">顶层结构</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#704c6eea-1720-4d4b-893d-948f4c7fb6f8"><code>data</code> 部分的详细解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#45279ea4-483f-4b92-9d44-6882864e6553"><code>queryColumns</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#0ad900a4-b2bf-4d61-9b9e-a162c5c02e02"><code>chatContext</code> 对象的详细解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f52c0de9-ba3f-4623-9e3c-a754ac999a02"><code>dataSet</code> 对象详细解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a9c9ad12-23f5-4e49-8fd1-5b42dd3a103b"><code>metrics</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#6df0b7ac-f933-46e0-b84b-71765681042b"><code>dimensionFilters</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#7052ddde-7c91-4a44-8fa0-f062ca449e35"><code>dateInfo</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#e25b1146-e219-4326-bb97-d65260879356"><code>elementMatches</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#10624f7e-9ef6-41e2-ad75-49208f364bbd"><code>properties</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#56597f4c-3fba-4052-baf0-7858f30cfbb5"><code>sqlInfo</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#8513d4a4-d574-4e21-8109-c2175b3e2230"><code>queryResults</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#b97af29b-a185-43e6-9ea1-eafefd6ee881"><code>textResult</code> 字段</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#300b26b1-8a27-49c9-b0b8-d34213108989"><code>recommendedDimensions</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d715d6d4-9a8f-4d27-910a-24a274487c4e"><code>aggregateInfo</code> 对象</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b3da8d31-50d6-484c-b147-a5eda9b59401">3. QueryDimensionValue</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#c05c7aee-5561-4443-a096-12ec688afa8f">顶层结构</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#fe78b8d1-7c8b-4cd4-b0e3-974f11605529"><code>data</code> 部分的详细解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#53860140-8574-44ba-9c18-208a52a3c0ce"><code>resultList</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f0e8b7f8-1a84-47be-9cc4-3b45e0c70cc2"><code>columns</code> 数组中的项</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#0bd4f0ab-334f-4ba2-bd54-001e43ba171b"><code>dimensionColumns</code> 数组中的项（与 <code>columns</code> 数组中的项相同）</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#ab8ce0ee-caa0-4005-973f-b28fdb9a8152">总结</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0e7c9628-e193-4bca-96ed-7f4e063372b8">4. getAll</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#435bec7d-6eb9-4b00-b273-45ff40d41214">顶层结构</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#62ffdfac-6c21-4927-b089-ce8b38520c53"><code>data</code> 部分的详细解释</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#63999ae7-3734-47ab-abf3-c21a3d6c432b">总结</a></div></nav><h3 id="e4dc7dd1-03bc-4ee9-a4b7-97976ab236dd" class="">1. 解析请求 (<code>parse</code>)</h3><h3 id="8f338706-000e-4113-ab85-60a0de2b9f19" class="">请求头信息</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a210f011-5d93-4521-8511-2d0904c6c401" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Request URL: http://localhost:9080/api/chat/query/parse
+Request Method: POST
+Status Code: 200 OK</code></pre><h3 id="2cfd8564-fff5-4588-af8f-631852201a51" class="">请求体内容</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5ce11231-1b0a-4ca9-b485-ccebf8ebe01f" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: {
+        &quot;chatId&quot;: 1,
+        &quot;queryText&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+        &quot;queryId&quot;: 78,
+        &quot;state&quot;: &quot;COMPLETED&quot;,
+        &quot;selectedParses&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;queryMode&quot;: &quot;LLM_S2SQL&quot;,
+                &quot;dataSet&quot;: {
+                    &quot;dataSet&quot;: 1,
+                    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                    &quot;model&quot;: null,
+                    &quot;id&quot;: 1,
+                    &quot;name&quot;: &quot;超音数数据集&quot;,
+                    &quot;bizName&quot;: &quot;s2&quot;,
+                    &quot;useCnt&quot;: null,
+                    &quot;type&quot;: &quot;DATASET&quot;,
+                    &quot;alias&quot;: null,
+                    &quot;schemaValueMaps&quot;: null,
+                    &quot;relatedSchemaElements&quot;: null,
+                    &quot;defaultAgg&quot;: null,
+                    &quot;dataFormatType&quot;: null,
+                    &quot;order&quot;: 0.0,
+                    &quot;isTag&quot;: 0,
+                    &quot;description&quot;: null},
+                &quot;metrics&quot;: [
+                    {
+                        &quot;dataSet&quot;: 1,
+                        &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                        &quot;model&quot;: 2,
+                        &quot;id&quot;: 1,
+                        &quot;name&quot;: &quot;访问次数&quot;,
+                        &quot;bizName&quot;: &quot;pv&quot;,
+                        &quot;useCnt&quot;: 0,
+                        &quot;type&quot;: &quot;METRIC&quot;,
+                        &quot;alias&quot;: [],
+                        &quot;schemaValueMaps&quot;: null,
+                        &quot;relatedSchemaElements&quot;: [
+                            {
+                                &quot;dimensionId&quot;: 1,
+                                &quot;necessary&quot;: false},
+                            {
+                                &quot;dimensionId&quot;: 2,
+                                &quot;necessary&quot;: false}
+                        ],
+                        &quot;defaultAgg&quot;: &quot;SUM&quot;,
+                        &quot;dataFormatType&quot;: null,
+                        &quot;order&quot;: 0.0,
+                        &quot;isTag&quot;: 0,
+                        &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;
+                    }
+                ],
+                &quot;dimensions&quot;: [],
+                &quot;entity&quot;: null,
+                &quot;aggType&quot;: &quot;NONE&quot;,
+                &quot;filterType&quot;: &quot;AND&quot;,
+                &quot;dimensionFilters&quot;: [
+                    {
+                        &quot;bizName&quot;: &quot;department&quot;,
+                        &quot;name&quot;: &quot;部门&quot;,
+                        &quot;operator&quot;: &quot;=&quot;,
+                        &quot;value&quot;: &quot;hr&quot;,
+                        &quot;elementID&quot;: 1,
+                        &quot;function&quot;: null}
+                ],
+                &quot;metricFilters&quot;: [],
+                &quot;orders&quot;: [],
+                &quot;dateInfo&quot;: {
+                    &quot;dateMode&quot;: &quot;BETWEEN&quot;,
+                    &quot;startDate&quot;: &quot;2024-01-01&quot;,
+                    &quot;endDate&quot;: &quot;2024-08-01&quot;,
+                    &quot;dateList&quot;: [],
+                    &quot;unit&quot;: 1,
+                    &quot;period&quot;: &quot;DAY&quot;,
+                    &quot;detectWord&quot;: null,
+                    &quot;groupByDate&quot;: false,
+                    &quot;inherited&quot;: false,
+                    &quot;groupByTimeDimension&quot;: &quot;sys_imp_date&quot;
+                },
+                &quot;limit&quot;: null,
+                &quot;score&quot;: 30.0,
+                &quot;elementMatches&quot;: [
+                    {
+                        &quot;element&quot;: {
+                            &quot;dataSet&quot;: 1,
+                            &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                            &quot;model&quot;: 2,
+                            &quot;id&quot;: 1,
+                            &quot;name&quot;: &quot;访问次数&quot;,
+                            &quot;bizName&quot;: &quot;pv&quot;,
+                            &quot;useCnt&quot;: 0,
+                            &quot;type&quot;: &quot;METRIC&quot;,
+                            &quot;alias&quot;: [],
+                            &quot;schemaValueMaps&quot;: null,
+                            &quot;relatedSchemaElements&quot;: [
+                                {
+                                    &quot;dimensionId&quot;: 1,
+                                    &quot;necessary&quot;: false},
+                                {
+                                    &quot;dimensionId&quot;: 2,
+                                    &quot;necessary&quot;: false}
+                            ],
+                            &quot;defaultAgg&quot;: &quot;SUM&quot;,
+                            &quot;dataFormatType&quot;: null,
+                            &quot;order&quot;: 0.0,
+                            &quot;isTag&quot;: 0,
+                            &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;
+                        },
+                        &quot;similarity&quot;: 1.0,
+                        &quot;detectWord&quot;: &quot;访问次数&quot;,
+                        &quot;word&quot;: &quot;访问次数&quot;,
+                        &quot;frequency&quot;: 100000,
+                        &quot;inherited&quot;: false}
+                ],
+                &quot;properties&quot;: {
+                    &quot;type&quot;: &quot;internal&quot;,
+                    &quot;CONTEXT&quot;: {
+                        &quot;dataSetId&quot;: 1,
+                        &quot;llmReq&quot;: {
+                            &quot;queryText&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+                            &quot;filterCondition&quot;: {
+                                &quot;tableName&quot;: null},
+                            &quot;schema&quot;: {
+                                &quot;domainName&quot;: &quot;超音数数据集&quot;,
+                                &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                                &quot;dataSetId&quot;: 1,
+                                &quot;fieldNameList&quot;: [
+                                    &quot;访问用户数&quot;,
+                                    &quot;用户&quot;,
+                                    &quot;部门&quot;,
+                                    &quot;访问次数&quot;,
+                                    &quot;人均访问次数&quot;,
+                                    &quot;停留时长&quot;,
+                                    &quot;页面&quot;,
+                                    &quot;数据日期&quot;
+                                ],
+                                &quot;metrics&quot;: [
+                                    {
+                                        &quot;dataSet&quot;: 1,
+                                        &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                                        &quot;model&quot;: 2,
+                                        &quot;id&quot;: 1,
+                                        &quot;name&quot;: &quot;访问次数&quot;,
+                                        &quot;bizName&quot;: &quot;pv&quot;,
+                                        &quot;useCnt&quot;: 0,
+                                        &quot;type&quot;: &quot;METRIC&quot;,
+                                        &quot;alias&quot;: [],
+                                        &quot;schemaValueMaps&quot;: null,
+                                        &quot;relatedSchemaElements&quot;: [
+                                            {
+                                                &quot;dimensionId&quot;: 1,
+                                                &quot;necessary&quot;: false},
+                                            {
+                                                &quot;dimensionId&quot;: 2,
+                                                &quot;necessary&quot;: false}
+                                        ],
+                                        &quot;defaultAgg&quot;: &quot;SUM&quot;,
+                                        &quot;dataFormatType&quot;: null,
+                                        &quot;order&quot;: 0.0,
+                                        &quot;isTag&quot;: 0,
+                                        &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;
+                                    }
+                                ],
+                                &quot;dimensions&quot;: [
+                                    {
+                                        &quot;dataSet&quot;: 1,
+                                        &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                                        &quot;model&quot;: 1,
+                                        &quot;id&quot;: 1,
+                                        &quot;name&quot;: &quot;部门&quot;,
+                                        &quot;bizName&quot;: &quot;department&quot;,
+                                        &quot;useCnt&quot;: 0,
+                                        &quot;type&quot;: &quot;DIMENSION&quot;,
+                                        &quot;alias&quot;: [],
+                                        &quot;schemaValueMaps&quot;: [],
+                                        &quot;relatedSchemaElements&quot;: null,
+                                        &quot;defaultAgg&quot;: null,
+                                        &quot;dataFormatType&quot;: null,
+                                        &quot;order&quot;: 0.0,
+                                        &quot;isTag&quot;: 1,
+                                        &quot;description&quot;: &quot;&quot;
+                                    }
+                                ],
+                                &quot;terms&quot;: []
+                            },
+                            &quot;linking&quot;: [
+                                {
+                                    &quot;fieldName&quot;: &quot;部门&quot;,
+                                    &quot;fieldValue&quot;: &quot;hr&quot;
+                                }
+                            ],
+                            &quot;currentDate&quot;: &quot;2024-08-01&quot;,
+                            &quot;priorExts&quot;: &quot;&quot;,
+                            &quot;sqlGenType&quot;: &quot;1_pass_self_consistency&quot;,
+                            &quot;llmConfig&quot;: {
+                                &quot;provider&quot;: &quot;OPEN_AI&quot;,
+                                &quot;baseUrl&quot;: &quot;https://api.openai.com/v1&quot;,
+                                &quot;apiKey&quot;: &quot;kGA4i6jY7QqG5xH+S0N++SzVWVKyAHesOq7NpoFVI7pgU14eb1AM296OFiLJTNtDVfpWDpfu7o4vDG2C2yWiSA==&quot;,
+                                &quot;modelName&quot;: &quot;gpt-3.5-turbo&quot;,
+                                &quot;temperature&quot;: 0.0,
+                                &quot;timeOut&quot;: 60
+                            },
+                            &quot;exemplars&quot;: []
+                        },
+                        &quot;llmResp&quot;: {
+                            &quot;query&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+                            &quot;modelName&quot;: &quot;超音数数据集&quot;,
+                            &quot;dbSchema&quot;: &quot;Table: 超音数数据集, Metrics: [访问次数 COMMENT &#x27;一段时间内用户的访问次数&#x27; AGGREGATE &#x27;SUM&#x27;,访问用户数 COMMENT &#x27;访问的用户个数&#x27; AGGREGATE &#x27;COUNT&#x27;,人均访问次数 COMMENT &#x27;每个用户平均访问的次数&#x27;,], Dimensions: [部门,]&quot;,
+                            &quot;sqlOutput&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;,
+                            &quot;fields&quot;: null,
+                            &quot;sqlRespMap&quot;: {
+                                &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;: {
+                                    &quot;sqlWeight&quot;: 1.0,
+                                    &quot;fewShots&quot;: [
+                                        {
+                                            &quot;question&quot;: &quot;今年以来发行的歌曲中，有哪些在近7天播放超过一千万的 (补充信息:。当前的日期是2023-08-12) &quot;,
+                                            &quot;dbSchema&quot;: &quot;Table: 歌曲库, Columns = [\&quot;发行日期\&quot;, \&quot;歌曲语言\&quot;, \&quot;歌曲来源\&quot;, \&quot;歌曲流派\&quot;, \&quot;歌曲名\&quot;, \&quot;歌曲版本\&quot;, \&quot;歌曲类型\&quot;, \&quot;发行时间\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                            &quot;sql&quot;: &quot;SELECT 歌曲名 FROM 歌曲库 WHERE datediff(&#x27;year&#x27;, 发行日期, &#x27;2023-08-12&#x27;) &lt;= 0 AND datediff(&#x27;day&#x27;, 数据日期, &#x27;2023-08-12&#x27;) &lt;= 7 AND 结算播放量 &gt; 10000000&quot;
+                                        },
+                                        {
+                                            &quot;question&quot;: &quot;超音数pv最高的用户有哪些 (补充信息:。当前的日期是2023-08-31) &quot;,
+                                            &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;用户名\&quot;, \&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;访问时长\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                            &quot;sql&quot;: &quot;SELECT 用户名 FROM 超音数产品 ORDER BY 访问次数 DESC LIMIT 1&quot;
+                                        },
+                                        {
+                                            &quot;question&quot;: &quot;超音数访问时长小于1小时，且来自美术部的用户是哪些 (补充信息:’&#x27;美术部&#x27;‘是一个’部门‘。当前的日期是2023-07-31) &quot;,
+                                            &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;用户名\&quot;, \&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;访问时长\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                            &quot;sql&quot;: &quot;SELECT 用户名 FROM 超音数产品 WHERE 部门 = &#x27;美术部&#x27; AND 访问时长 &lt; 1&quot;
+                                        },
+                                        {
+                                            &quot;question&quot;: &quot;超音数访问次数大于1k的部门是哪些 (补充信息:。当前的日期是2023-09-14) &quot;,
+                                            &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;用户名\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;访问时长\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                            &quot;sql&quot;: &quot;SELECT 部门 FROM 超音数产品 WHERE 访问次数 &gt; 1000&quot;
+                                        },
+                                        {
+                                            &quot;question&quot;: &quot;超音数近30天访问次数的平均数 (补充信息:。当前的日期是2023-09-04) &quot;,
+                                            &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;用户名\&quot;, \&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;访问时长\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                            &quot;sql&quot;: &quot;SELECT AVG(访问次数) FROM 超音数产品 WHERE datediff(&#x27;day&#x27;, 数据日期, &#x27;2023-09-04&#x27;) &lt;= 30 &quot;
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        &quot;request&quot;: null,
+                        &quot;linkingValues&quot;: [
+                            {
+                                &quot;fieldName&quot;: &quot;部门&quot;,
+                                &quot;fieldValue&quot;: &quot;hr&quot;
+                            }
+                        ]
+                    }
+                },
+                &quot;sqlInfo&quot;: {
+                    &quot;s2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;,
+                    &quot;correctS2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;hr&#x27; AND (数据日期 &gt;= &#x27;2024-01-01&#x27; AND 数据日期 &lt;= &#x27;2024-08-01&#x27;)&quot;,
+                    &quot;querySQL&quot;: &quot;with t_1 as (SELECT `t3`.`sys_imp_date`, `t2`.`department`, `t3`.`s2_pv_uv_statis_pv` AS `pv` FROM (SELECT `user_name`, `department` FROM s2_user_department) AS `t2` LEFT JOIN (SELECT 1 AS `s2_pv_uv_statis_pv`, `imp_date` AS `sys_imp_date`, `user_name`, `imp_date` FROM s2_pv_uv_statis) AS `t3` ON `t2`.`user_name` = `t3`.`user_name`) SELECT SUM(pv) FROM t_1 WHERE department = &#x27;hr&#x27; AND (sys_imp_date &gt;= &#x27;2024-01-01&#x27; AND sys_imp_date &lt;= &#x27;2024-08-01&#x27;) limit 1000&quot;,
+                    &quot;sourceId&quot;: &quot;1&quot;
+                },
+                &quot;sqlEvaluation&quot;: {
+                    &quot;isValidated&quot;: null,
+                    &quot;validateMsg&quot;: null},
+                &quot;queryType&quot;: &quot;METRIC&quot;,
+                &quot;entityInfo&quot;: null,
+                &quot;textInfo&quot;: &quot;**数据集:** 超音数数据集 **指标:** 访问次数 \n\n**筛选条件:** \n**数据时间:** 2024-01-01~2024-08-01 **部门** = hr &quot;,
+                &quot;dataSetId&quot;: 1
+            }
+        ],
+        &quot;parseTimeCost&quot;: {
+            &quot;parseStartTime&quot;: 1722493837296,
+            &quot;parseTime&quot;: 3136,
+            &quot;sqlTime&quot;: 333
+        }
+    },
+    &quot;timestamp&quot;: 1722493840845,
+    &quot;traceId&quot;: &quot;supersonic_5e99ec990ccb486485b39726e3ac30dc&quot;
+}</code></pre><h3 id="785138fe-d155-411d-be5c-971629f3bc9e" class="">2. 执行请求 (<code>execute</code>)</h3><h3 id="e817851b-04aa-416b-9e68-dc766deaea90" class="">请求头信息</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d06391a1-fe2e-443d-beb9-a7cbd8ad6da8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Request URL: http://localhost:9080/api/chat/query/execute
+Request Method: POST
+Status Code: 200 OK</code></pre><h3 id="e65061d4-3efe-4640-b5bd-2f9f4374b75f" class="">请求体内容</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dbbd0454-6d6e-4a75-9f25-c7aef28ee012" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: {
+        &quot;queryId&quot;: null,
+        &quot;queryMode&quot;: &quot;LLM_S2SQL&quot;,
+        &quot;querySql&quot;: &quot;with t_1 as (SELECT `t3`.`sys_imp_date`, `t2`.`department`, `t3`.`s2_pv_uv_statis_pv` AS `pv` FROM (SELECT `user_name`, `department` FROM s2_user_department) AS `t2` LEFT JOIN (SELECT 1 AS `s2_pv_uv_statis_pv`, `imp_date` AS `sys_imp_date`, `user_name`, `imp_date` FROM s2_pv_uv_statis) AS `t3` ON `t2`.`user_name` = `t3`.`user_name`) SELECT SUM(pv) FROM t_1 WHERE department = &#x27;hr&#x27; AND (sys_imp_date &gt;= &#x27;2024-01-01&#x27; AND sys_imp_date &lt;= &#x27;2024-08-01&#x27;) limit 1000&quot;,
+        &quot;queryState&quot;: &quot;SUCCESS&quot;,
+        &quot;queryColumns&quot;: [
+            {
+                &quot;name&quot;: &quot;访问次数&quot;,
+                &quot;type&quot;: &quot;DECIMAL&quot;,
+                &quot;nameEn&quot;: &quot;SUM(pv)&quot;,
+                &quot;showType&quot;: &quot;NUMBER&quot;,
+                &quot;authorized&quot;: true,
+                &quot;dataFormatType&quot;: null,
+                &quot;dataFormat&quot;: null,
+                &quot;comment&quot;: null}
+        ],
+        &quot;queryAuthorization&quot;: null,
+        &quot;chatContext&quot;: {
+            &quot;id&quot;: 1,
+            &quot;queryMode&quot;: &quot;LLM_S2SQL&quot;,
+            &quot;dataSet&quot;: {
+                &quot;dataSet&quot;: 1,
+                &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                &quot;model&quot;: null,
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;超音数数据集&quot;,
+                &quot;bizName&quot;: &quot;s2&quot;,
+                &quot;useCnt&quot;: null,
+                &quot;type&quot;: &quot;DATASET&quot;,
+                &quot;alias&quot;: null,
+                &quot;schemaValueMaps&quot;: null,
+                &quot;relatedSchemaElements&quot;: null,
+                &quot;defaultAgg&quot;: null,
+                &quot;dataFormatType&quot;: null,
+                &quot;order&quot;: 0.0,
+                &quot;isTag&quot;: 0,
+                &quot;description&quot;: null},
+            &quot;metrics&quot;: [
+                {
+                    &quot;dataSet&quot;: 1,
+                    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                    &quot;model&quot;: 2,
+                    &quot;id&quot;: 1,
+                    &quot;name&quot;: &quot;访问次数&quot;,
+                    &quot;bizName&quot;: &quot;pv&quot;,
+                    &quot;useCnt&quot;: 0,
+                    &quot;type&quot;: &quot;METRIC&quot;,
+                    &quot;alias&quot;: [],
+                    &quot;schemaValueMaps&quot;: null,
+                    &quot;relatedSchemaElements&quot;: [
+                        {
+                            &quot;dimensionId&quot;: 1,
+                            &quot;necessary&quot;: false},
+                        {
+                            &quot;dimensionId&quot;: 2,
+                            &quot;necessary&quot;: false}
+                    ],
+                    &quot;defaultAgg&quot;: &quot;SUM&quot;,
+                    &quot;dataFormatType&quot;: null,
+                    &quot;order&quot;: 0.0,
+                    &quot;isTag&quot;: 0,
+                    &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;
+                }
+            ],
+            &quot;dimensions&quot;: [],
+            &quot;entity&quot;: null,
+            &quot;aggType&quot;: &quot;NONE&quot;,
+            &quot;filterType&quot;: &quot;AND&quot;,
+            &quot;dimensionFilters&quot;: [
+                {
+                    &quot;bizName&quot;: &quot;department&quot;,
+                    &quot;name&quot;: &quot;部门&quot;,
+                    &quot;operator&quot;: &quot;=&quot;,
+                    &quot;value&quot;: &quot;hr&quot;,
+                    &quot;elementID&quot;: 1,
+                    &quot;function&quot;: null}
+            ],
+            &quot;metricFilters&quot;: [],
+            &quot;orders&quot;: [],
+            &quot;dateInfo&quot;: {
+                &quot;dateMode&quot;: &quot;BETWEEN&quot;,
+                &quot;startDate&quot;: &quot;2024-01-01&quot;,
+                &quot;endDate&quot;: &quot;2024-08-01&quot;,
+                &quot;dateList&quot;: [],
+                &quot;unit&quot;: 1,
+                &quot;period&quot;: &quot;DAY&quot;,
+                &quot;detectWord&quot;: null,
+                &quot;groupByDate&quot;: false,
+                &quot;inherited&quot;: false,
+                &quot;groupByTimeDimension&quot;: &quot;sys_imp_date&quot;
+            },
+            &quot;limit&quot;: null,
+            &quot;score&quot;: 30.0,
+            &quot;elementMatches&quot;: [
+                {
+                    &quot;element&quot;: {
+                        &quot;dataSet&quot;: 1,
+                        &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                        &quot;model&quot;: 2,
+                        &quot;id&quot;: 1,
+                        &quot;name&quot;: &quot;访问次数&quot;,
+                        &quot;bizName&quot;: &quot;pv&quot;,
+                        &quot;useCnt&quot;: 0,
+                        &quot;type&quot;: &quot;METRIC&quot;,
+                        &quot;alias&quot;: [],
+                        &quot;schemaValueMaps&quot;: null,
+                        &quot;relatedSchemaElements&quot;: [
+                            {
+                                &quot;dimensionId&quot;: 1,
+                                &quot;necessary&quot;: false},
+                            {
+                                &quot;dimensionId&quot;: 2,
+                                &quot;necessary&quot;: false}
+                        ],
+                        &quot;defaultAgg&quot;: &quot;SUM&quot;,
+                        &quot;dataFormatType&quot;: null,
+                        &quot;order&quot;: 0.0,
+                        &quot;isTag&quot;: 0,
+                        &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;
+                    },
+                    &quot;similarity&quot;: 1.0,
+                    &quot;detectWord&quot;: &quot;访问次数&quot;,
+                    &quot;word&quot;: &quot;访问次数&quot;,
+                    &quot;frequency&quot;: 100000,
+                    &quot;inherited&quot;: false}
+            ],
+            &quot;properties&quot;: {
+                &quot;type&quot;: &quot;internal&quot;,
+                &quot;CONTEXT&quot;: {
+                    &quot;llmReq&quot;: {
+                        &quot;schema&quot;: {
+                            &quot;dataSetId&quot;: 1,
+                            &quot;terms&quot;: [],
+                            &quot;domainName&quot;: &quot;超音数数据集&quot;,
+                            &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                            &quot;metrics&quot;: [
+                                {
+                                    &quot;relatedSchemaElements&quot;: [
+                                        {
+                                            &quot;dimensionId&quot;: 1,
+                                            &quot;necessary&quot;: false},
+                                        {
+                                            &quot;dimensionId&quot;: 2,
+                                            &quot;necessary&quot;: false}
+                                    ],
+                                    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                                    &quot;useCnt&quot;: 0,
+                                    &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;,
+                                    &quot;type&quot;: &quot;METRIC&quot;,
+                                    &quot;isTag&quot;: 0,
+                                    &quot;defaultAgg&quot;: &quot;SUM&quot;,
+                                    &quot;bizName&quot;: &quot;pv&quot;,
+                                    &quot;name&quot;: &quot;访问次数&quot;,
+                                    &quot;alias&quot;: [],
+                                    &quot;model&quot;: 2,
+                                    &quot;id&quot;: 1,
+                                    &quot;dataSet&quot;: 1,
+                                    &quot;order&quot;: 0.0
+                                }
+                            ],
+                            &quot;fieldNameList&quot;: [
+                                &quot;访问用户数&quot;,
+                                &quot;用户&quot;,
+                                &quot;部门&quot;,
+                                &quot;访问次数&quot;,
+                                &quot;人均访问次数&quot;,
+                                &quot;停留时长&quot;,
+                                &quot;页面&quot;,
+                                &quot;数据日期&quot;
+                            ],
+                            &quot;dimensions&quot;: [
+                                {
+                                    &quot;schemaValueMaps&quot;: [],
+                                    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                                    &quot;useCnt&quot;: 0,
+                                    &quot;description&quot;: &quot;&quot;,
+                                    &quot;type&quot;: &quot;DIMENSION&quot;,
+                                    &quot;isTag&quot;: 1,
+                                    &quot;bizName&quot;: &quot;department&quot;,
+                                    &quot;name&quot;: &quot;部门&quot;,
+                                    &quot;alias&quot;: [],
+                                    &quot;model&quot;: 1,
+                                    &quot;id&quot;: 1,
+                                    &quot;dataSet&quot;: 1,
+                                    &quot;order&quot;: 0.0
+                                }
+                            ]
+                        },
+                        &quot;exemplars&quot;: [],
+                        &quot;linking&quot;: [
+                            {
+                                &quot;fieldName&quot;: &quot;部门&quot;,
+                                &quot;fieldValue&quot;: &quot;hr&quot;
+                            }
+                        ],
+                        &quot;llmConfig&quot;: {
+                            &quot;modelName&quot;: &quot;gpt-3.5-turbo&quot;,
+                            &quot;baseUrl&quot;: &quot;https://api.openai.com/v1&quot;,
+                            &quot;apiKey&quot;: &quot;kGA4i6jY7QqG5xH+S0N++SzVWVKyAHesOq7NpoFVI7pgU14eb1AM296OFiLJTNtDVfpWDpfu7o4vDG2C2yWiSA==&quot;,
+                            &quot;provider&quot;: &quot;OPEN_AI&quot;,
+                            &quot;temperature&quot;: 0.0,
+                            &quot;timeOut&quot;: 60
+                        },
+                        &quot;filterCondition&quot;: {},
+                        &quot;sqlGenType&quot;: &quot;1_pass_self_consistency&quot;,
+                        &quot;queryText&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+                        &quot;currentDate&quot;: &quot;2024-08-01&quot;,
+                        &quot;priorExts&quot;: &quot;&quot;
+                    },
+                    &quot;linkingValues&quot;: [
+                        {
+                            &quot;fieldName&quot;: &quot;部门&quot;,
+                            &quot;fieldValue&quot;: &quot;hr&quot;
+                        }
+                    ],
+                    &quot;dataSetId&quot;: 1,
+                    &quot;llmResp&quot;: {
+                        &quot;modelName&quot;: &quot;超音数数据集&quot;,
+                        &quot;dbSchema&quot;: &quot;Table: 超音数数据集, Metrics: [访问次数 COMMENT &#x27;一段时间内用户的访问次数&#x27; AGGREGATE &#x27;SUM&#x27;,访问用户数 COMMENT &#x27;访问的用户个数&#x27; AGGREGATE &#x27;COUNT&#x27;,人均访问次数 COMMENT &#x27;每个用户平均访问的次数&#x27;,], Dimensions: [部门,]&quot;,
+                        &quot;sqlOutput&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;,
+                        &quot;query&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+                        &quot;sqlRespMap&quot;: {
+                            &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;: {
+                                &quot;fewShots&quot;: [
+                                    {
+                                        &quot;dbSchema&quot;: &quot;Table: 歌曲库, Columns = [\&quot;发行日期\&quot;, \&quot;歌曲语言\&quot;, \&quot;歌曲来源\&quot;, \&quot;歌曲流派\&quot;, \&quot;歌曲名\&quot;, \&quot;歌曲版本\&quot;, \&quot;歌曲类型\&quot;, \&quot;发行时间\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                        &quot;question&quot;: &quot;今年以来发行的歌曲中，有哪些在近7天播放超过一千万的 (补充信息:。当前的日期是2023-08-12) &quot;,
+                                        &quot;sql&quot;: &quot;SELECT 歌曲名 FROM 歌曲库 WHERE datediff(&#x27;year&#x27;, 发行日期, &#x27;2023-08-12&#x27;) &lt;= 0 AND datediff(&#x27;day&#x27;, 数据日期, &#x27;2023-08-12&#x27;) &lt;= 7 AND 结算播放量 &gt; 10000000&quot;
+                                    },
+                                    {
+                                        &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;用户名\&quot;, \&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;访问时长\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                        &quot;question&quot;: &quot;超音数pv最高的用户有哪些 (补充信息:。当前的日期是2023-08-31) &quot;,
+                                        &quot;sql&quot;: &quot;SELECT 用户名 FROM 超音数产品 ORDER BY 访问次数 DESC LIMIT 1&quot;
+                                    },
+                                    {
+                                        &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;用户名\&quot;, \&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;访问时长\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                        &quot;question&quot;: &quot;超音数访问时长小于1小时，且来自美术部的用户是哪些 (补充信息:’&#x27;美术部&#x27;‘是一个’部门‘。当前的日期是2023-07-31) &quot;,
+                                        &quot;sql&quot;: &quot;SELECT 用户名 FROM 超音数产品 WHERE 部门 = &#x27;美术部&#x27; AND 访问时长 &lt; 1&quot;
+                                    },
+                                    {
+                                        &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;用户名\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;访问时长\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                        &quot;question&quot;: &quot;超音数访问次数大于1k的部门是哪些 (补充信息:。当前的日期是2023-09-14) &quot;,
+                                        &quot;sql&quot;: &quot;SELECT 部门 FROM 超音数产品 WHERE 访问次数 &gt; 1000&quot;
+                                    },
+                                    {
+                                        &quot;dbSchema&quot;: &quot;Table: 超音数产品, Columns = [\&quot;用户名\&quot;, \&quot;部门\&quot;, \&quot;模块\&quot;, \&quot;访问时长\&quot;, \&quot;访问次数\&quot;, \&quot;访问人数\&quot;, \&quot;数据日期\&quot;]&quot;,
+                                        &quot;question&quot;: &quot;超音数近30天访问次数的平均数 (补充信息:。当前的日期是2023-09-04) &quot;,
+                                        &quot;sql&quot;: &quot;SELECT AVG(访问次数) FROM 超音数产品 WHERE datediff(&#x27;day&#x27;, 数据日期, &#x27;2023-09-04&#x27;) &lt;= 30 &quot;
+                                    }
+                                ],
+                                &quot;sqlWeight&quot;: 1.0
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;sqlInfo&quot;: {
+                &quot;s2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;,
+                &quot;correctS2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;hr&#x27; AND (数据日期 &gt;= &#x27;2024-01-01&#x27; AND 数据日期 &lt;= &#x27;2024-08-01&#x27;)&quot;,
+                &quot;querySQL&quot;: &quot;with t_1 as (SELECT `t3`.`sys_imp_date`, `t2`.`department`, `t3`.`s2_pv_uv_statis_pv` AS `pv` FROM (SELECT `user_name`, `department` FROM s2_user_department) AS `t2` LEFT JOIN (SELECT 1 AS `s2_pv_uv_statis_pv`, `imp_date` AS `sys_imp_date`, `user_name`, `imp_date` FROM s2_pv_uv_statis) AS `t3` ON `t2`.`user_name` = `t3`.`user_name`) SELECT SUM(pv) FROM t_1 WHERE department = &#x27;hr&#x27; AND (sys_imp_date &gt;= &#x27;2024-01-01&#x27; AND sys_imp_date &lt;= &#x27;2024-08-01&#x27;) limit 1000&quot;,
+                &quot;sourceId&quot;: &quot;1&quot;
+            },
+            &quot;sqlEvaluation&quot;: {
+                &quot;isValidated&quot;: null,
+                &quot;validateMsg&quot;: null},
+            &quot;queryType&quot;: &quot;METRIC&quot;,
+            &quot;entityInfo&quot;: null,
+            &quot;textInfo&quot;: &quot;**数据集:** 超音数数据集 **指标:** 访问次数 \n\n**筛选条件:** \n**数据时间:** 2024-01-01~2024-08-01 **部门** = hr &quot;,
+            &quot;dataSetId&quot;: 1
+        },
+        &quot;response&quot;: null,
+        &quot;queryResults&quot;: [
+            {
+                &quot;SUM(pv)&quot;: 80
+            }
+        ],
+        &quot;textResult&quot;: &quot;| 访问次数 |\n|:---:|\n| 80 |\n&quot;,
+        &quot;queryTimeCost&quot;: 60,
+        &quot;entityInfo&quot;: null,
+        &quot;recommendedDimensions&quot;: [
+            {
+                &quot;dataSet&quot;: 1,
+                &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                &quot;model&quot;: 1,
+                &quot;id&quot;: 2,
+                &quot;name&quot;: &quot;用户&quot;,
+                &quot;bizName&quot;: &quot;user_name&quot;,
+                &quot;useCnt&quot;: 0,
+                &quot;type&quot;: &quot;DIMENSION&quot;,
+                &quot;alias&quot;: [],
+                &quot;schemaValueMaps&quot;: [],
+                &quot;relatedSchemaElements&quot;: null,
+                &quot;defaultAgg&quot;: null,
+                &quot;dataFormatType&quot;: null,
+                &quot;order&quot;: 0.0,
+                &quot;isTag&quot;: 0,
+                &quot;description&quot;: &quot;用户&quot;
+            },
+            {
+                &quot;dataSet&quot;: 1,
+                &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+                &quot;model&quot;: 1,
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;部门&quot;,
+                &quot;bizName&quot;: &quot;department&quot;,
+                &quot;useCnt&quot;: 0,
+                &quot;type&quot;: &quot;DIMENSION&quot;,
+                &quot;alias&quot;: [],
+                &quot;schemaValueMaps&quot;: [],
+                &quot;relatedSchemaElements&quot;: null,
+                &quot;defaultAgg&quot;: null,
+                &quot;dataFormatType&quot;: null,
+                &quot;order&quot;: 0.0,
+                &quot;isTag&quot;: 1,
+                &quot;description&quot;: &quot;&quot;
+            }
+        ],
+        &quot;aggregateInfo&quot;: {
+            &quot;metricInfos&quot;: []
+        }
+    },
+    &quot;timestamp&quot;: 1722493841046,
+    &quot;traceId&quot;: &quot;supersonic_f65e5039aafb41d389e396be2d051b89&quot;
+}</code></pre><h3 id="c3302007-38d9-461c-88be-3b6a97da4730" class="">3. 查询维度值请求 (<code>queryDimensionValue</code>)</h3><h3 id="ba1417b5-5439-486d-9e79-c68668d83829" class="">请求头信息</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="76fa4229-b9df-41b9-b1ba-ad6f17c489bc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Request URL: http://localhost:9080/api/chat/query/queryDimensionValue
+Request Method: POST
+Status Code: 200 OK</code></pre><h3 id="d3353bdf-e02d-4626-a95d-edb74011e1fb" class="">请求体内容</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="32c88439-16c7-42b3-a3e5-02e840b1c4b5" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: {
+        &quot;pageNo&quot;: -1,
+        &quot;pageSize&quot;: -1,
+        &quot;totalCount&quot;: -1,
+        &quot;resultList&quot;: [
+            {
+                &quot;department&quot;: &quot;hr&quot;
+            },
+            {
+                &quot;department&quot;: &quot;sales&quot;
+            },
+            {
+                &quot;department&quot;: &quot;marketing&quot;
+            },
+            {
+                &quot;department&quot;: &quot;strategy&quot;
+            }
+        ],
+        &quot;columns&quot;: [
+            {
+                &quot;name&quot;: null,
+                &quot;type&quot;: &quot;CHAR&quot;,
+                &quot;nameEn&quot;: &quot;department&quot;,
+                &quot;showType&quot;: &quot;CATEGORY&quot;,
+                &quot;authorized&quot;: true,
+                &quot;dataFormatType&quot;: null,
+                &quot;dataFormat&quot;: null,
+                &quot;comment&quot;: null}
+        ],
+        &quot;sql&quot;: null,
+        &quot;queryAuthorization&quot;: null,
+        &quot;useCache&quot;: false,
+        &quot;metricColumns&quot;: [],
+        &quot;dimensionColumns&quot;: [
+            {
+                &quot;name&quot;: null,
+                &quot;type&quot;: &quot;CHAR&quot;,
+                &quot;nameEn&quot;: &quot;department&quot;,
+                &quot;showType&quot;: &quot;CATEGORY&quot;,
+                &quot;authorized&quot;: true,
+                &quot;dataFormatType&quot;: null,
+                &quot;dataFormat&quot;: null,
+                &quot;comment&quot;: null}
+        ]
+    },
+    &quot;timestamp&quot;: 1722493840902,
+    &quot;traceId&quot;: &quot;supersonic_c4d4049b73a2466fb79c3e4074d7d679&quot;
+}
+
+</code></pre><h3 id="8ebf5820-f142-4520-bd64-7a8530a8c290" class="">4. 获取所有会话 (<code>getAll</code>)</h3><h3 id="3d77759f-f471-4016-ac42-e7f04f74272e" class="">请求头信息</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9bbc0ef3-a5f1-4890-ba70-8eda32476724" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Request URL: http://localhost:9080/api/chat/manage/getAll?agentId=1
+Request Method: GET
+Status Code: 200 OK</code></pre><h3 id="9b58beb3-75e8-4fce-b9f7-f92873158b7b" class="">请求体内容</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c6c98b4-6088-4a38-96a0-4bc659673dbb" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: [
+        {
+            &quot;chatId&quot;: 1,
+            &quot;agentId&quot;: 1,
+            &quot;chatName&quot;: &quot;样例对话1&quot;,
+            &quot;createTime&quot;: &quot;2024-07-08 14:43:03&quot;,
+            &quot;lastTime&quot;: &quot;2024-08-01 14:30:41&quot;,
+            &quot;creator&quot;: &quot;admin&quot;,
+            &quot;lastQuestion&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+            &quot;isDelete&quot;: 0,
+            &quot;isTop&quot;: 0
+        }
+    ],
+    &quot;timestamp&quot;: 1722493841065,
+    &quot;traceId&quot;: &quot;supersonic_fbff187c0e0141fc87cc367bf8cf9a95&quot;
+}</code></pre><h1 id="a2ac0b05-3a3d-4c17-b9ab-019db6f24303" class="">整理流程分析</h1><h3 id="19ba6f5e-6440-4890-a202-beddfff76ff3" class="">生成和处理查询的每个步骤详细分析</h3><ol type="1" id="0e65319b-1e21-4bf7-8d5b-2e6fda585376" class="numbered-list" start="1"><li><strong>输入自然语言查询</strong><ul id="be953718-33fa-450c-b6ca-070a9483a68d" class="bulleted-list"><li style="list-style-type:disc">用户在前端输入查询：“超音速在今年的HR部门访问次数”。</li></ul></li></ol><ol type="1" id="460bfb09-648b-4716-ab36-68ede17b63d8" class="numbered-list" start="2"><li><code><strong>parse</strong></code><strong> 请求：解析自然语言查询</strong><ul id="19efa20f-1dd2-4d94-a3a0-9fb9bc44a447" class="bulleted-list"><li style="list-style-type:disc"><strong>调用 LLM 模型</strong>：将自然语言查询传递给 LLM 模型进行解析，生成初步的 SQL 查询。</li></ul><ul id="278af849-4b2f-4845-b5ea-88acbc5f7741" class="bulleted-list"><li style="list-style-type:disc"><strong>数据集映射</strong>：识别相关的数据集（如 &quot;超音数数据集&quot;）和字段（如 &quot;访问次数&quot;、&quot;部门&quot;）。</li></ul><ul id="509de3c3-c98e-4edb-a162-dcfb1c239560" class="bulleted-list"><li style="list-style-type:disc"><strong>生成 SQL 语句</strong>：LLM 模型根据解析结果生成初步 SQL 语句：</li></ul></li></ol><ol type="1" id="9b356fec-e26a-457b-bc3d-8e42fa123fca" class="numbered-list" start="3"><li><code><strong>execute</strong></code><strong> 请求：执行生成的 SQL 查询</strong><ul id="79b6a9b4-f287-42a3-9d0b-3e4ac451caa1" class="bulleted-list"><li style="list-style-type:disc"><strong>SQL 语句校正</strong>：对生成的 SQL 语句进行校正，确保符合数据库的实际结构和语法：</li></ul><ul id="48e2d81d-5deb-4f8c-968d-c93af4d25c71" class="bulleted-list"><li style="list-style-type:disc"><strong>执行查询</strong>：在数据库中执行校正后的 SQL 语句，返回查询结果。</li></ul></li></ol><ol type="1" id="6f1b8d2c-94ce-4e16-be29-1a93cccb95a7" class="numbered-list" start="4"><li><code><strong>queryDimensionValue</strong></code><strong> 请求：查询维度值</strong><ul id="a20093df-f088-445b-a03d-83600fd622e4" class="bulleted-list"><li style="list-style-type:disc"><strong>获取维度值</strong>：从数据库中获取相关维度值，以便前端展示和选择（如 &quot;hr&quot;, &quot;sales&quot;, &quot;marketing&quot;, &quot;strategy&quot;）。</li></ul></li></ol><ol type="1" id="2d11cd23-4d6f-4d9f-ab71-5f3da9a5a189" class="numbered-list" start="5"><li><code><strong>getAll</strong></code><strong> 请求：获取会话历史</strong><ul id="0809081d-9a4c-487b-beae-a9046091330d" class="bulleted-list"><li style="list-style-type:disc"><strong>查询会话</strong>：获取所有会话的历史记录，显示在前端界面中供用户参考。</li></ul></li></ol><h3 id="dab3cdbf-a671-4595-b8d7-a13e1e07d9ff" class="">总结</h3><p id="d1820ab5-44f3-4420-b952-0bf8999aa3d4" class="">每个步骤的具体实现如下：</p><ol type="1" id="0d3b0067-d1be-4ee5-8250-d580292c95d0" class="numbered-list" start="1"><li><strong>自然语言解析</strong>：使用 LLM 模型将用户输入的自然语言查询转换为 SQL 语句。</li></ol><ol type="1" id="5bf9a556-2bef-4647-91f6-50df0d940b7d" class="numbered-list" start="2"><li><strong>数据集映射和校正</strong>：识别和映射相关的数据集和字段，校正生成的 SQL 语句。</li></ol><ol type="1" id="c0845c15-b2e5-463a-9c94-292e86731e00" class="numbered-list" start="3"><li><strong>查询执行和结果返回</strong>：执行校正后的 SQL 语句，并将查询结果返回给前端展示。</li></ol><ol type="1" id="94e37cda-e8b4-4fbe-addb-4cee0a5b1701" class="numbered-list" start="4"><li><strong>维度值查询</strong>：获取相关维度值供用户选择和过滤。</li></ol><ol type="1" id="b025336d-79f0-4de7-8ea4-d67525f9fe0e" class="numbered-list" start="5"><li><strong>会话管理</strong>：管理和展示用户的会话历史记录。</li></ol><p id="7a521c96-c257-4e69-b945-e888c0ac65b4" class="">
+</p><h1 id="29c26e68-06ba-4749-9e3f-62dbc4ef8a82" class="">JSON详尽展开分析</h1><h2 id="6c5af8d2-ffd0-4f7a-82ae-3983cdf1473b" class="">1. parse</h2><h3 id="36089197-ce82-4f31-b98b-e53ae180fdac" class="">顶层结构</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a23b699b-d9c3-4ff1-b415-47723b1cf685" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: {...},
+    &quot;timestamp&quot;: 1722493840845,
+    &quot;traceId&quot;: &quot;supersonic_5e99ec990ccb486485b39726e3ac30dc&quot;
+}</code></pre><ol type="1" id="d5c3bc48-d3ea-4d87-a6a3-42102cf08b58" class="numbered-list" start="1"><li><code><strong>code</strong></code><strong>:</strong> <code>200</code> 表示请求成功，这个状态码常见于HTTP协议中，表示请求已经成功处理。</li></ol><ol type="1" id="9a50d5eb-2300-4a87-9d61-229bf1fdef56" class="numbered-list" start="2"><li><code><strong>msg</strong></code><strong>:</strong> <code>&quot;success&quot;</code> 表示请求处理成功。</li></ol><ol type="1" id="67e37795-e0f6-4fc4-86e1-53ce843e7ad2" class="numbered-list" start="3"><li><code><strong>data</strong></code><strong>:</strong> 这是响应的主要数据部分，里面包含了更多详细的信息。</li></ol><ol type="1" id="5f1c98e8-71f5-43d9-b471-64246143d9e7" class="numbered-list" start="4"><li><code><strong>timestamp</strong></code><strong>:</strong> <code>1722493840845</code> 是一个时间戳，表示生成这个响应的时间，通常是以毫秒为单位的自1970年1月1日以来的时间。</li></ol><ol type="1" id="7d139ce2-c3bf-49a0-bbe9-c8d665338117" class="numbered-list" start="5"><li><code><strong>traceId</strong></code><strong>:</strong> <code>&quot;supersonic_5e99ec990ccb486485b39726e3ac30dc&quot;</code> 是一个唯一标识符，用来追踪这个请求的执行过程。</li></ol><h3 id="ca4e91e8-f6dd-4dc7-b55e-d202f3c21c3e" class=""><code>data</code> 部分的详细解释</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="82025cba-a35f-4758-a3f0-f6a2d868a925" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;data&quot;: {
+    &quot;chatId&quot;: 1,
+    &quot;queryText&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+    &quot;queryId&quot;: 78,
+    &quot;state&quot;: &quot;COMPLETED&quot;,
+    &quot;selectedParses&quot;: [...]
+}</code></pre><ol type="1" id="17ac377d-934d-4f4a-ab27-b71b823d33cd" class="numbered-list" start="1"><li><code><strong>chatId</strong></code><strong>:</strong> <code>1</code> 表示这个查询关联的会话ID。</li></ol><ol type="1" id="653d3d1a-9ec5-442c-baca-b90a09372ab5" class="numbered-list" start="2"><li><code><strong>queryText</strong></code><strong>:</strong> <code>&quot;超音速在今年的HR部门访问次数&quot;</code> 是用户提交的查询文本，询问关于超音速在今年HR部门的访问次数。</li></ol><ol type="1" id="e47cd522-1347-4f53-b6ad-ad7e19a94fe8" class="numbered-list" start="3"><li><code><strong>queryId</strong></code><strong>:</strong> <code>78</code> 是这个查询的唯一标识符。</li></ol><ol type="1" id="90c1803f-832d-48bc-bf8e-674f3b458513" class="numbered-list" start="4"><li><code><strong>state</strong></code><strong>:</strong> <code>&quot;COMPLETED&quot;</code> 表示查询已经完成。</li></ol><ol type="1" id="545c1b9e-f789-4569-a812-54b1fdf14c00" class="numbered-list" start="5"><li><code><strong>selectedParses</strong></code><strong>:</strong> 这是一个数组，包含解析查询的不同方法或结果。</li></ol><h3 id="1df69137-e250-45a1-9555-239eb4d1995b" class=""><code>selectedParses</code> 数组中的项（解析后的结果）</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="eb23b256-12e1-41f5-9cc3-ea7ce8a1a2be" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;id&quot;: 1,
+    &quot;queryMode&quot;: &quot;LLM_S2SQL&quot;,
+    &quot;dataSet&quot;: {...},
+    &quot;metrics&quot;: [...],
+    &quot;dimensions&quot;: [],
+    &quot;entity&quot;: null,
+    &quot;aggType&quot;: &quot;NONE&quot;,
+    &quot;filterType&quot;: &quot;AND&quot;,
+    &quot;dimensionFilters&quot;: [...],
+    &quot;metricFilters&quot;: [],
+    &quot;orders&quot;: [],
+    &quot;dateInfo&quot;: {...},
+    &quot;limit&quot;: null,
+    &quot;score&quot;: 30.0,
+    &quot;elementMatches&quot;: [...],
+    &quot;properties&quot;: {...},
+    &quot;sqlInfo&quot;: {...},
+    &quot;sqlEvaluation&quot;: {...},
+    &quot;queryType&quot;: &quot;METRIC&quot;,
+    &quot;entityInfo&quot;: null,
+    &quot;textInfo&quot;: &quot;**数据集:** 超音数数据集 **指标:** 访问次数 \n\n**筛选条件:** \n**数据时间:** 2024-01-01~2024-08-01 **部门** = hr &quot;,
+    &quot;dataSetId&quot;: 1
+}</code></pre><ol type="1" id="62bc1d1e-2270-4bce-ac42-7e7174f516f7" class="numbered-list" start="1"><li><code><strong>id</strong></code><strong>:</strong> <code>1</code> 是解析的唯一标识符。</li></ol><ol type="1" id="60fe36f5-a1ff-4d99-86b5-8e7a9ceb6f20" class="numbered-list" start="2"><li><code><strong>queryMode</strong></code><strong>:</strong> <code>&quot;LLM_S2SQL&quot;</code> 说明查询是通过大语言模型（LLM）生成的SQL语句来执行的。</li></ol><ol type="1" id="fda4b845-1d2a-4322-ad8d-221c5c916320" class="numbered-list" start="3"><li><code><strong>dataSet</strong></code><strong>:</strong> 这是查询所使用的数据集的描述，下有详细解释。</li></ol><ol type="1" id="baf92050-1685-4848-8490-6c5d623d4c42" class="numbered-list" start="4"><li><code><strong>metrics</strong></code><strong>:</strong> 这是一个数组，列出所有的指标（metrics），在这个案例中主要关注访问次数。</li></ol><ol type="1" id="dbfb69c5-3f1a-48da-9610-fcf55910c665" class="numbered-list" start="5"><li><code><strong>dimensions</strong></code><strong>:</strong> 这个字段为空数组，表示没有维度信息。</li></ol><ol type="1" id="2d328b05-c35f-4da8-9826-54dcb323fc55" class="numbered-list" start="6"><li><code><strong>entity</strong></code><strong>:</strong> <code>null</code> 表示没有指定的实体。</li></ol><ol type="1" id="87a9ab53-a21e-48a0-8cbe-813f07c8962e" class="numbered-list" start="7"><li><code><strong>aggType</strong></code><strong>:</strong> <code>&quot;NONE&quot;</code> 表示没有进行任何聚合操作。</li></ol><ol type="1" id="762a2d70-8be8-4534-a967-68a2ef22b01b" class="numbered-list" start="8"><li><code><strong>filterType</strong></code><strong>:</strong> <code>&quot;AND&quot;</code> 表示查询使用了AND逻辑进行过滤。</li></ol><ol type="1" id="b312b16a-a0e1-4620-bcf6-74ae7a097050" class="numbered-list" start="9"><li><code><strong>dimensionFilters</strong></code><strong>:</strong> 这是一个数组，包含了基于维度的过滤条件，比如这里基于“部门”字段过滤HR部门的数据。</li></ol><ol type="1" id="9005fa3d-7e58-4b83-8872-9ab7ed8ead02" class="numbered-list" start="10"><li><code><strong>metricFilters</strong></code><strong>:</strong> 这个字段为空，表示没有针对指标的额外过滤条件。</li></ol><ol type="1" id="f4dd9b95-320b-40aa-8977-fecebe26a850" class="numbered-list" start="11"><li><code><strong>orders</strong></code><strong>:</strong> 这个字段为空，表示没有特定的排序要求。</li></ol><ol type="1" id="e19a135a-1635-4c80-8cd4-6fc98d359dba" class="numbered-list" start="12"><li><code><strong>dateInfo</strong></code><strong>:</strong> 这是一个包含日期信息的对象，用于过滤数据的时间范围。</li></ol><ol type="1" id="1f1ce64f-7889-4134-ad3f-40d1d99bbb2c" class="numbered-list" start="13"><li><code><strong>limit</strong></code><strong>:</strong> <code>null</code> 表示没有结果数量的限制。</li></ol><ol type="1" id="3c1f98bd-1c8b-400e-a8bc-43ddea5b81ac" class="numbered-list" start="14"><li><code><strong>score</strong></code><strong>:</strong> <code>30.0</code> 是这次解析的评分，用于衡量解析结果的相关性。</li></ol><ol type="1" id="2da77581-1935-48b4-8dcb-bffabf84ba4c" class="numbered-list" start="15"><li><code><strong>elementMatches</strong></code><strong>:</strong> 这是一个数组，列出查询中匹配到的元素。</li></ol><ol type="1" id="f56d88cd-69cb-4d05-9ca6-e08678d71267" class="numbered-list" start="16"><li><code><strong>properties</strong></code><strong>:</strong> 这是一个包含额外属性的对象，描述了与解析相关的上下文信息。</li></ol><ol type="1" id="5aaea53a-7e58-49b0-8dd0-496942866679" class="numbered-list" start="17"><li><code><strong>sqlInfo</strong></code><strong>:</strong> 这是生成的SQL查询信息，包含了SQL语句及其相关内容。</li></ol><ol type="1" id="1afffbf9-b140-49f0-a465-599fca1401f9" class="numbered-list" start="18"><li><code><strong>sqlEvaluation</strong></code><strong>:</strong> 这是对生成的SQL进行评估的结果。</li></ol><ol type="1" id="b71b469c-79ba-4006-bc5a-629ef8ce5455" class="numbered-list" start="19"><li><code><strong>queryType</strong></code><strong>:</strong> <code>&quot;METRIC&quot;</code> 表示查询类型为指标查询。</li></ol><ol type="1" id="3c555623-ce28-4f64-9735-5fb0fc365ddd" class="numbered-list" start="20"><li><code><strong>entityInfo</strong></code><strong>:</strong> <code>null</code> 表示没有额外的实体信息。</li></ol><ol type="1" id="1ae79e48-9795-4459-affe-1cd6ce339c3b" class="numbered-list" start="21"><li><code><strong>textInfo</strong></code><strong>:</strong> 这是对查询的简要说明，包括所用的数据集、指标和筛选条件的描述。</li></ol><ol type="1" id="a987b7c7-14a2-4aae-8f9b-8f9536938190" class="numbered-list" start="22"><li><code><strong>dataSetId</strong></code><strong>:</strong> <code>1</code> 是所用数据集的ID。</li></ol><h3 id="0ed19af6-af73-4447-b2cb-27bd672e136c" class=""><code>dataSet</code> 对象详细解释</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="42cfb524-1faf-456a-8e49-e493b89da158" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;dataSet&quot;: {
+    &quot;dataSet&quot;: 1,
+    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+    &quot;model&quot;: null,
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;超音数数据集&quot;,
+    &quot;bizName&quot;: &quot;s2&quot;,
+    &quot;useCnt&quot;: null,
+    &quot;type&quot;: &quot;DATASET&quot;,
+    &quot;alias&quot;: null,
+    &quot;schemaValueMaps&quot;: null,
+    &quot;relatedSchemaElements&quot;: null,
+    &quot;defaultAgg&quot;: null,
+    &quot;dataFormatType&quot;: null,
+    &quot;order&quot;: 0.0,
+    &quot;isTag&quot;: 0,
+    &quot;description&quot;: null}</code></pre><ol type="1" id="1a2a5280-e9af-4c3c-9c44-9284fbb8aacd" class="numbered-list" start="1"><li><code><strong>dataSet</strong></code><strong>:</strong> <code>1</code> 是数据集的唯一标识符。</li></ol><ol type="1" id="38ee4d11-1579-4cee-bb0a-70546247725a" class="numbered-list" start="2"><li><code><strong>dataSetName</strong></code><strong>:</strong> <code>&quot;超音数数据集&quot;</code> 是数据集的名称。</li></ol><ol type="1" id="920547db-13ac-4094-ac56-32e9c67ede62" class="numbered-list" start="3"><li><code><strong>model</strong></code><strong>:</strong> <code>null</code> 表示没有特定的模型关联到这个数据集。</li></ol><ol type="1" id="816bcd91-4e7b-4046-a272-a17e76695c1a" class="numbered-list" start="4"><li><code><strong>id</strong></code><strong>:</strong> <code>1</code> 这个字段重复了数据集的ID。</li></ol><ol type="1" id="a406fc46-0380-4dbf-b643-307c8e92ec84" class="numbered-list" start="5"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;超音数数据集&quot;</code> 是数据集的名称，和<code>dataSetName</code>相同。</li></ol><ol type="1" id="68c70395-a89a-4146-886a-f77a0586cd55" class="numbered-list" start="6"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;s2&quot;</code> 是数据集的业务名称。</li></ol><ol type="1" id="8cb4edf2-48a9-4211-bd30-5dbd738213ee" class="numbered-list" start="7"><li><code><strong>useCnt</strong></code><strong>:</strong> <code>null</code> 表示没有使用计数信息。</li></ol><ol type="1" id="3f7df310-c011-4ed8-9fb6-5e490f65f188" class="numbered-list" start="8"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;DATASET&quot;</code> 表示这个对象类型是数据集。</li></ol><ol type="1" id="a4e3722d-108a-4db5-8117-40a9faa53112" class="numbered-list" start="9"><li><code><strong>alias</strong></code><strong>:</strong> <code>null</code> 表示没有别名。</li></ol><ol type="1" id="36c2280d-8b18-49a5-8ab4-9f14c65aa5c0" class="numbered-list" start="10"><li><code><strong>schemaValueMaps</strong></code><strong>:</strong> <code>null</code> 表示没有模式值映射。</li></ol><ol type="1" id="e675e1bd-f3c6-469b-98b1-8e88adca421d" class="numbered-list" start="11"><li><code><strong>relatedSchemaElements</strong></code><strong>:</strong> <code>null</code> 表示没有关联的模式元素。</li></ol><ol type="1" id="419a8326-5165-4b75-bb09-535cce1038c9" class="numbered-list" start="12"><li><code><strong>defaultAgg</strong></code><strong>:</strong> <code>null</code> 表示没有默认的聚合方式。</li></ol><ol type="1" id="4e82e072-714e-4684-9cc7-044fe1296917" class="numbered-list" start="13"><li><code><strong>dataFormatType</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式类型。</li></ol><ol type="1" id="4e9c4169-c49e-4148-8385-26237e122544" class="numbered-list" start="14"><li><code><strong>order</strong></code><strong>:</strong> <code>0.0</code> 表示在排序中没有优先级。</li></ol><ol type="1" id="dba5f570-29a4-4d73-9cb2-141d926f2f32" class="numbered-list" start="15"><li><code><strong>isTag</strong></code><strong>:</strong> <code>0</code> 表示这不是一个标签类型的数据集。</li></ol><ol type="1" id="0a4f5cb0-dbb3-473d-9652-27b146718011" class="numbered-list" start="16"><li><code><strong>description</strong></code><strong>:</strong> <code>null</code> 表示没有描述信息。</li></ol><h3 id="a07b78ef-f85b-4bf1-9c67-787916b690bc" class=""><code>metrics</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c9ee2021-7e8e-40b7-8893-ab5b425aa990" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;dataSet&quot;: 1,
+    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+    &quot;model&quot;: 2,
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;访问次数&quot;,
+    &quot;bizName&quot;: &quot;pv&quot;,
+    &quot;useCnt&quot;: 0,
+    &quot;type&quot;: &quot;METRIC&quot;,
+    &quot;alias&quot;: [],
+    &quot;schemaValueMaps&quot;: null,
+    &quot;relatedSchemaElements&quot;: [...],
+    &quot;defaultAgg&quot;: &quot;SUM&quot;,
+    &quot;dataFormatType&quot;: null,
+    &quot;order&quot;: 0.0,
+    &quot;isTag&quot;: 0,
+    &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;
+}</code></pre><ol type="1" id="f6f0a6d6-c8d7-4f66-a5da-b55f20a636cd" class="numbered-list" start="1"><li><code><strong>dataSet</strong></code><strong>:</strong> <code>1</code> 表示关联的数据集ID。</li></ol><ol type="1" id="1fd15f64-671e-46fb-8c7a-219a600bbe01" class="numbered-list" start="2"><li><code><strong>dataSetName</strong></code><strong>:</strong> <code>&quot;超音数数据集&quot;</code> 表示数据集的名称。</li></ol><ol type="1" id="67f7ba95-19da-4640-ba7e-502b80519f57" class="numbered-list" start="3"><li><code><strong>model</strong></code><strong>:</strong> <code>2</code> 表示使用的模型ID。</li></ol><ol type="1" id="417a9b33-81a1-4706-b4f6-99a38c7aa4b9" class="numbered-list" start="4"><li><code><strong>id</strong></code><strong>:</strong> <code>1</code> 是指标的唯一标识符。</li></ol><ol type="1" id="bd88edc3-2bfd-404a-9ab3-9806c5eadead" class="numbered-list" start="5"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;访问次数&quot;</code> 是指标的名称。</li></ol><ol type="1" id="288c29a4-e6ca-481a-ae51-c477e13933bf" class="numbered-list" start="6"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;pv&quot;</code> 是指标的业务名称。</li></ol><ol type="1" id="633f31f8-4388-4614-9453-1317217a0762" class="numbered-list" start="7"><li><code><strong>useCnt</strong></code><strong>:</strong> <code>0</code> 表示没有使用计数信息。</li></ol><ol type="1" id="d978cda6-d0ea-4974-b477-dfa91f130a0c" class="numbered-list" start="8"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;METRIC&quot;</code> 表示这是一个指标。</li></ol><ol type="1" id="3a4ef36c-2a82-4607-9158-36c8c7d4d517" class="numbered-list" start="9"><li><code><strong>alias</strong></code><strong>:</strong> <code>[]</code> 表示没有别名。</li></ol><ol type="1" id="6f26c44f-8495-4459-87e1-25d2b36decff" class="numbered-list" start="10"><li><code><strong>schemaValueMaps</strong></code><strong>:</strong> <code>null</code> 表示没有模式值映射。</li></ol><ol type="1" id="7d0cf154-6601-47c4-a0f4-82382facc961" class="numbered-list" start="11"><li><code><strong>relatedSchemaElements</strong></code><strong>:</strong> 这是一个数组，列出了与这个指标关联的模式元素。</li></ol><ol type="1" id="4fed993a-5b31-4302-b417-f17dd478a4f8" class="numbered-list" start="12"><li><code><strong>defaultAgg</strong></code><strong>:</strong> <code>&quot;SUM&quot;</code> 表示默认的聚合方式是求和。</li></ol><ol type="1" id="e0a678fc-ae5e-4bcf-b748-e7e3ab6828e7" class="numbered-list" start="13"><li><code><strong>dataFormatType</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式类型。</li></ol><ol type="1" id="aad65707-46ed-40c5-8cf3-e8401b05515c" class="numbered-list" start="14"><li><code><strong>order</strong></code><strong>:</strong> <code>0.0</code> 表示在排序中没有优先级。</li></ol><ol type="1" id="7c531024-8e0c-46cd-ad01-f99d19aa1970" class="numbered-list" start="15"><li><code><strong>isTag</strong></code><strong>:</strong> <code>0</code> 表示这不是一个标签类型的指标。</li></ol><ol type="1" id="4a6cd50a-3292-4f7c-8c69-37a0cd610ceb" class="numbered-list" start="16"><li><code><strong>description</strong></code><strong>:</strong> <code>&quot;一段时间内用户的访问次数&quot;</code> 是对这个指标的描述。</li></ol><h3 id="a6cf6559-9b1c-4647-8af9-f8eedcca80f9" class=""><code>dimensionFilters</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4fb4d8f3-ea97-4494-8ebf-704ff905dfb2" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;bizName&quot;: &quot;department&quot;,
+    &quot;name&quot;: &quot;部门&quot;,
+    &quot;operator&quot;: &quot;=&quot;,
+    &quot;value&quot;: &quot;hr&quot;,
+    &quot;elementID&quot;: 1,
+    &quot;function&quot;: null}</code></pre><ol type="1" id="78b830f6-72bf-44d5-8f69-8253592f7984" class="numbered-list" start="1"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;department&quot;</code> 是维度的业务名称。</li></ol><ol type="1" id="9d475ce8-8d52-4f83-9d9b-b741cefd17d8" class="numbered-list" start="2"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;部门&quot;</code> 是维度的名称。</li></ol><ol type="1" id="49e399d0-07f2-4d02-95a2-f6c60d057ef4" class="numbered-list" start="3"><li><code><strong>operator</strong></code><strong>:</strong> <code>&quot;=&quot;</code> 表示使用等于操作符来过滤数据。</li></ol><ol type="1" id="365c24d0-e242-4937-ab70-db6e5a7cbfa7" class="numbered-list" start="4"><li><code><strong>value</strong></code><strong>:</strong> <code>&quot;hr&quot;</code> 是过滤的值，即部门名称。</li></ol><ol type="1" id="babb847a-97ce-4b09-8d36-5482a0a87c37" class="numbered-list" start="5"><li><code><strong>elementID</strong></code><strong>:</strong> <code>1</code> 是这个元素的唯一标识符。</li></ol><ol type="1" id="b5255ec0-be3b-44a5-ab27-51e4c930a834" class="numbered-list" start="6"><li><code><strong>function</strong></code><strong>:</strong> <code>null</code> 表示没有指定的函数或操作。</li></ol><h3 id="2613c416-038c-439e-bb57-be4d26b729a2" class=""><code>dateInfo</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="839fc873-a553-4849-8c2e-b5709cd73097" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;dateMode&quot;: &quot;BETWEEN&quot;,
+    &quot;startDate&quot;: &quot;2024-01-01&quot;,
+    &quot;endDate&quot;: &quot;2024-08-01&quot;,
+    &quot;dateList&quot;: [],
+    &quot;unit&quot;: 1,
+    &quot;period&quot;: &quot;DAY&quot;,
+    &quot;detectWord&quot;: null,
+    &quot;groupByDate&quot;: false,
+    &quot;inherited&quot;: false,
+    &quot;groupByTimeDimension&quot;: &quot;sys_imp_date&quot;
+}</code></pre><ol type="1" id="c6ae4b40-8af8-4a8b-9dbb-0f56876d4b26" class="numbered-list" start="1"><li><code><strong>dateMode</strong></code><strong>:</strong> <code>&quot;BETWEEN&quot;</code> 表示日期范围模式。</li></ol><ol type="1" id="8c6cee96-d036-481d-bd3d-24ac45453302" class="numbered-list" start="2"><li><code><strong>startDate</strong></code><strong>:</strong> <code>&quot;2024-01-01&quot;</code> 是起始日期。</li></ol><ol type="1" id="b035881c-3a9b-4cd7-9892-838d2e9d5769" class="numbered-list" start="3"><li><code><strong>endDate</strong></code><strong>:</strong> <code>&quot;2024-08-01&quot;</code> 是结束日期。</li></ol><ol type="1" id="dac81105-b809-4ea1-8720-6a1ebfb2c8d1" class="numbered-list" start="4"><li><code><strong>dateList</strong></code><strong>:</strong> <code>[]</code> 表示没有指定的具体日期列表。</li></ol><ol type="1" id="73057ebe-5cc7-4a97-a7cf-b1124060ef3c" class="numbered-list" start="5"><li><code><strong>unit</strong></code><strong>:</strong> <code>1</code> 表示日期单位为天。</li></ol><ol type="1" id="e5a6a635-ea9b-44bb-b0fc-bdc185a00a93" class="numbered-list" start="6"><li><code><strong>period</strong></code><strong>:</strong> <code>&quot;DAY&quot;</code> 表示按天计算的周期。</li></ol><ol type="1" id="c31d2770-e98f-42a7-8554-798f38b50e68" class="numbered-list" start="7"><li><code><strong>detectWord</strong></code><strong>:</strong> <code>null</code> 表示没有检测到的关键字。</li></ol><ol type="1" id="85f0e552-9983-409c-a64d-6fe38002c308" class="numbered-list" start="8"><li><code><strong>groupByDate</strong></code><strong>:</strong> <code>false</code> 表示没有按日期分组。</li></ol><ol type="1" id="f7882452-5882-4b7f-b16d-2b01c4eaa6aa" class="numbered-list" start="9"><li><code><strong>inherited</strong></code><strong>:</strong> <code>false</code> 表示这个设置没有继承自其他地方。</li></ol><ol type="1" id="8452acbe-8052-484b-b586-3dc98f08d9ef" class="numbered-list" start="10"><li><code><strong>groupByTimeDimension</strong></code><strong>:</strong> <code>&quot;sys_imp_date&quot;</code> 是时间维度的分组依据。</li></ol><h3 id="1dca7470-4bfe-4600-bb0b-9fe9871093c3" class=""><code>elementMatches</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f49c83eb-37d5-4d1e-8937-2bdc925f5428" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;element&quot;: {...},
+    &quot;similarity&quot;: 1.0,
+    &quot;detectWord&quot;: &quot;访问次数&quot;,
+    &quot;word&quot;: &quot;访问次数&quot;,
+    &quot;frequency&quot;: 100000,
+    &quot;inherited&quot;: false}</code></pre><ol type="1" id="5c92a340-ef0a-4ca0-9891-b06eff14ee7d" class="numbered-list" start="1"><li><code><strong>element</strong></code><strong>:</strong> 这是一个包含匹配元素详细信息的对象。</li></ol><ol type="1" id="25757cd5-27cc-40b5-95e7-db1780fdd004" class="numbered-list" start="2"><li><code><strong>similarity</strong></code><strong>:</strong> <code>1.0</code> 表示这个匹配的相似度。</li></ol><ol type="1" id="a7573c16-a352-439a-8e39-acf785214edb" class="numbered-list" start="3"><li><code><strong>detectWord</strong></code><strong>:</strong> <code>&quot;访问次数&quot;</code> 是检测到的词语。</li></ol><ol type="1" id="fea63daa-6435-4d6c-b6ee-cfb6e6e1575a" class="numbered-list" start="4"><li><code><strong>word</strong></code><strong>:</strong> <code>&quot;访问次数&quot;</code> 是用户查询中的词语。</li></ol><ol type="1" id="dbe44132-568d-4666-9de8-602cd569688a" class="numbered-list" start="5"><li><code><strong>frequency</strong></code><strong>:</strong> <code>100000</code> 表示这个词语的出现频率。</li></ol><ol type="1" id="4f2044bd-3f6f-40f8-aaea-0371c558c8cf" class="numbered-list" start="6"><li><code><strong>inherited</strong></code><strong>:</strong> <code>false</code> 表示这个匹配不是继承的。</li></ol><h3 id="9908a650-fa92-4577-aabb-f5c6f5de47ce" class=""><code>properties</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="63c7443f-86d2-4437-8036-02fe209454c1" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;type&quot;: &quot;internal&quot;,
+    &quot;CONTEXT&quot;: {...}
+}</code></pre><ol type="1" id="b6f04cd0-0b7c-4e1f-aa0b-12e9ea98bc55" class="numbered-list" start="1"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;internal&quot;</code> 表示这是内部属性。</li></ol><ol type="1" id="4f75c026-6c07-46cc-b379-d78755706c19" class="numbered-list" start="2"><li><code><strong>CONTEXT</strong></code><strong>:</strong> 这是一个包含上下文信息的对象。</li></ol><h3 id="fdf0bd49-84cc-44da-a15c-a17bc83ec8b9" class=""><code>sqlInfo</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b63f3977-da86-4829-ae96-a2f8e6a78202" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;s2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;,
+    &quot;correctS2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;hr&#x27; AND (数据日期 &gt;= &#x27;2024-01-01&#x27; AND 数据日期 &lt;= &#x27;2024-08-01&#x27;)&quot;,
+    &quot;querySQL&quot;: &quot;...&quot;,
+    &quot;sourceId&quot;: &quot;1&quot;
+}</code></pre><ol type="1" id="2d8729ba-296e-465e-a1da-376a6fb4652f" class="numbered-list" start="1"><li><code><strong>s2SQL</strong></code><strong>:</strong> <code>&quot;SELECT SUM(访问次数)...&quot;</code> 是初步生成的SQL查询语句。</li></ol><ol type="1" id="4a0b337f-28b6-459d-8156-fdf5c46e94ad" class="numbered-list" start="2"><li><code><strong>correctS2SQL</strong></code><strong>:</strong> <code>&quot;SELECT SUM(访问次数)...&quot;</code> 是修正后的SQL查询语句。</li></ol><ol type="1" id="d5c1c540-8fbd-4b0f-af04-d13a27489811" class="numbered-list" start="3"><li><code><strong>querySQL</strong></code><strong>:</strong> 是最终用于执行查询的SQL语句。</li></ol><ol type="1" id="f213b46a-0d2f-4abc-8059-cb94bcb542a0" class="numbered-list" start="4"><li><code><strong>sourceId</strong></code><strong>:</strong> <code>&quot;1&quot;</code> 是SQL语句的来源ID。</li></ol><h3 id="fa629e34-d9f9-474a-87b8-33161b3a15e1" class=""><code>parseTimeCost</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="78454c16-7018-4b41-9741-670c8a74b746" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;parseTimeCost&quot;: {
+    &quot;parseStartTime&quot;: 1722493837296,
+    &quot;parseTime&quot;: 3136,
+    &quot;sqlTime&quot;: 333
+}</code></pre><ol type="1" id="0b5b3c93-c9aa-42ab-8996-aa59e93ebc54" class="numbered-list" start="1"><li><code><strong>parseStartTime</strong></code><strong>:</strong> <code>1722493837296</code> 是解析开始的时间戳。</li></ol><ol type="1" id="99aa5966-6b8c-4ec9-9b22-1efe7d031ca3" class="numbered-list" start="2"><li><code><strong>parseTime</strong></code><strong>:</strong> <code>3136</code> 表示解析所花费的时间，单位为毫秒。</li></ol><ol type="1" id="b597d8cc-bbcb-43d1-9b72-0fbd36963573" class="numbered-list" start="3"><li><code><strong>sqlTime</strong></code><strong>:</strong> <code>333</code> 表示生成SQL所花费的时间，单位为毫秒。</li></ol><h2 id="ed185d5f-0e5e-4f03-8ed3-7c5d19dff7c4" class="">2. execute</h2><h3 id="2fcfea29-aad6-47c7-b8db-eb39ed376da2" class="">顶层结构</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="10d2ad93-1d4e-4fcc-a04a-eaf77cc592d0" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: {...},
+    &quot;timestamp&quot;: 1722493841046,
+    &quot;traceId&quot;: &quot;supersonic_f65e5039aafb41d389e396be2d051b89&quot;
+}</code></pre><ol type="1" id="335b195e-5397-48c1-b420-6042f077e1aa" class="numbered-list" start="1"><li><code><strong>code</strong></code><strong>:</strong> <code>200</code> 表示请求成功处理。</li></ol><ol type="1" id="2d978d74-c245-454e-8c35-b949945403b0" class="numbered-list" start="2"><li><code><strong>msg</strong></code><strong>:</strong> <code>&quot;success&quot;</code> 表示请求处理成功。</li></ol><ol type="1" id="eabcc822-c253-4b4c-9ced-b1a37892c374" class="numbered-list" start="3"><li><code><strong>data</strong></code><strong>:</strong> 这是响应的主要数据部分，里面包含详细的信息。</li></ol><ol type="1" id="af966f28-6061-4353-b75c-e1c03873b4cf" class="numbered-list" start="4"><li><code><strong>timestamp</strong></code><strong>:</strong> <code>1722493841046</code> 是一个时间戳，表示生成这个响应的时间，通常是以毫秒为单位的自1970年1月1日以来的时间。</li></ol><ol type="1" id="c0bbed44-b609-4417-8000-ee788fbbb5b6" class="numbered-list" start="5"><li><code><strong>traceId</strong></code><strong>:</strong> <code>&quot;supersonic_f65e5039aafb41d389e396be2d051b89&quot;</code> 是一个唯一标识符，用来追踪这个请求的执行过程。</li></ol><h3 id="704c6eea-1720-4d4b-893d-948f4c7fb6f8" class=""><code>data</code> 部分的详细解释</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c32f8f03-36d8-4b25-80e5-94ec2aa909ae" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;data&quot;: {
+    &quot;queryId&quot;: null,
+    &quot;queryMode&quot;: &quot;LLM_S2SQL&quot;,
+    &quot;querySql&quot;: &quot;with t_1 as (SELECT `t3`.`sys_imp_date`, `t2`.`department`, `t3`.`s2_pv_uv_statis_pv` AS `pv` FROM (SELECT `user_name`, `department` FROM s2_user_department) AS `t2` LEFT JOIN (SELECT 1 AS `s2_pv_uv_statis_pv`, `imp_date` AS `sys_imp_date`, `user_name`, `imp_date` FROM s2_pv_uv_statis) AS `t3` ON `t2`.`user_name` = `t3`.`user_name`) SELECT SUM(pv) FROM t_1 WHERE department = &#x27;hr&#x27; AND (sys_imp_date &gt;= &#x27;2024-01-01&#x27; AND sys_imp_date &lt;= &#x27;2024-08-01&#x27;) limit 1000&quot;,
+    &quot;queryState&quot;: &quot;SUCCESS&quot;,
+    &quot;queryColumns&quot;: [...],
+    &quot;queryAuthorization&quot;: null,
+    &quot;chatContext&quot;: {...},
+    &quot;sqlInfo&quot;: {...},
+    &quot;sqlEvaluation&quot;: {...},
+    &quot;queryType&quot;: &quot;METRIC&quot;,
+    &quot;entityInfo&quot;: null,
+    &quot;textInfo&quot;: &quot;**数据集:** 超音数数据集 **指标:** 访问次数 \n\n**筛选条件:** \n**数据时间:** 2024-01-01~2024-08-01 **部门** = hr &quot;,
+    &quot;response&quot;: null,
+    &quot;queryResults&quot;: [...],
+    &quot;textResult&quot;: &quot;| 访问次数 |\n|:---:|\n| 80 |\n&quot;,
+    &quot;queryTimeCost&quot;: 60,
+    &quot;entityInfo&quot;: null,
+    &quot;recommendedDimensions&quot;: [...],
+    &quot;aggregateInfo&quot;: {...}
+}</code></pre><ol type="1" id="dd2c6293-f7fd-46c0-b5d0-0fa960cb0826" class="numbered-list" start="1"><li><code><strong>queryId</strong></code><strong>:</strong> <code>null</code> 表示没有指定查询ID，可能是因为这是一个即时查询。</li></ol><ol type="1" id="5821c81a-ec38-4c2f-a6f2-7f55057bd6ce" class="numbered-list" start="2"><li><code><strong>queryMode</strong></code><strong>:</strong> <code>&quot;LLM_S2SQL&quot;</code> 表示查询是通过大语言模型（LLM）生成SQL语句的模式。</li></ol><ol type="1" id="c629919f-e0e4-4d1c-8d1b-3e82e06b07f9" class="numbered-list" start="3"><li><code><strong>querySql</strong></code><strong>:</strong> 生成的SQL查询语句，负责从数据库中获取指定的数据。</li></ol><ol type="1" id="b1eb00c6-8592-4794-a49c-c5dabf8f8567" class="numbered-list" start="4"><li><code><strong>queryState</strong></code><strong>:</strong> <code>&quot;SUCCESS&quot;</code> 表示查询成功执行。</li></ol><ol type="1" id="129ee993-6588-466c-b54a-967c4e8e35b7" class="numbered-list" start="5"><li><code><strong>queryColumns</strong></code><strong>:</strong> 这是一个数组，包含查询返回的列信息。</li></ol><ol type="1" id="0a16c163-6901-4e6e-9cc3-479f2e3764e7" class="numbered-list" start="6"><li><code><strong>queryAuthorization</strong></code><strong>:</strong> <code>null</code> 表示没有特别的授权信息。</li></ol><ol type="1" id="c5cde765-6439-4bad-a506-4ed03c2fb233" class="numbered-list" start="7"><li><code><strong>chatContext</strong></code><strong>:</strong> 这是一个对象，包含与查询相关的上下文信息，详细解释见下文。</li></ol><ol type="1" id="ff8c68a2-fa5b-42ac-953b-059aa56cac8b" class="numbered-list" start="8"><li><code><strong>sqlInfo</strong></code><strong>:</strong> 这是生成的SQL查询信息，包含SQL语句及其相关内容。</li></ol><ol type="1" id="b1c27587-ece8-4e08-8033-7240189f1d78" class="numbered-list" start="9"><li><code><strong>sqlEvaluation</strong></code><strong>:</strong> 这是对生成的SQL进行评估的结果。</li></ol><ol type="1" id="ce560649-87ae-4cf6-9ae3-e92040234142" class="numbered-list" start="10"><li><code><strong>queryType</strong></code><strong>:</strong> <code>&quot;METRIC&quot;</code> 表示查询类型为指标查询。</li></ol><ol type="1" id="631b7d30-46b6-409d-aecb-3c8c08318b0f" class="numbered-list" start="11"><li><code><strong>entityInfo</strong></code><strong>:</strong> <code>null</code> 表示没有额外的实体信息。</li></ol><ol type="1" id="ef9ce60a-0186-461f-8a88-c5b99218dca8" class="numbered-list" start="12"><li><code><strong>textInfo</strong></code><strong>:</strong> 这是对查询的简要说明，包括所用的数据集、指标和筛选条件的描述。</li></ol><ol type="1" id="d994944e-1648-4b70-8ef9-05126b905df5" class="numbered-list" start="13"><li><code><strong>response</strong></code><strong>:</strong> <code>null</code> 表示没有额外的响应信息。</li></ol><ol type="1" id="5228992d-0ef0-4315-a8de-826bfc929499" class="numbered-list" start="14"><li><code><strong>queryResults</strong></code><strong>:</strong> 这是一个数组，包含查询返回的结果数据。</li></ol><ol type="1" id="75f81742-f3ba-4742-bf07-6f1232481cdc" class="numbered-list" start="15"><li><code><strong>textResult</strong></code><strong>:</strong> 格式化的文本结果，以表格形式显示查询的结果。</li></ol><ol type="1" id="aa707c83-e938-4f74-9069-5ded5ddd1377" class="numbered-list" start="16"><li><code><strong>queryTimeCost</strong></code><strong>:</strong> <code>60</code> 表示查询执行所花费的时间，单位为毫秒。</li></ol><ol type="1" id="836418b2-4af9-4004-8c0e-0cab9468e6ef" class="numbered-list" start="17"><li><code><strong>entityInfo</strong></code><strong>:</strong> <code>null</code> 表示没有额外的实体信息。</li></ol><ol type="1" id="41dfb9a7-4cc4-4989-9bba-1d1c417e564b" class="numbered-list" start="18"><li><code><strong>recommendedDimensions</strong></code><strong>:</strong> 这是一个数组，包含推荐的维度信息，用于可能的进一步查询。</li></ol><ol type="1" id="65af0124-fe15-45a3-b738-73f7f6dbccd7" class="numbered-list" start="19"><li><code><strong>aggregateInfo</strong></code><strong>:</strong> 这是一个对象，包含与聚合相关的信息。</li></ol><h3 id="45279ea4-483f-4b92-9d44-6882864e6553" class=""><code>queryColumns</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="84594d4b-b3a0-4d50-8a16-4da70870fce1" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;name&quot;: &quot;访问次数&quot;,
+    &quot;type&quot;: &quot;DECIMAL&quot;,
+    &quot;nameEn&quot;: &quot;SUM(pv)&quot;,
+    &quot;showType&quot;: &quot;NUMBER&quot;,
+    &quot;authorized&quot;: true,
+    &quot;dataFormatType&quot;: null,
+    &quot;dataFormat&quot;: null,
+    &quot;comment&quot;: null}</code></pre><ol type="1" id="c66c5312-35b2-4f03-816b-3e885f0a8223" class="numbered-list" start="1"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;访问次数&quot;</code> 是返回结果列的名称。</li></ol><ol type="1" id="06bdbd2a-e047-4d17-bd02-9083a9baf7e4" class="numbered-list" start="2"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;DECIMAL&quot;</code> 表示列的数据类型是小数。</li></ol><ol type="1" id="e4f7ea4d-2b3a-4145-9f1e-c53a1d55501a" class="numbered-list" start="3"><li><code><strong>nameEn</strong></code><strong>:</strong> <code>&quot;SUM(pv)&quot;</code> 是列的英文名称，通常用于SQL语句中的列别名。</li></ol><ol type="1" id="78a6aa90-2bfc-4395-b23d-d6641a8791bd" class="numbered-list" start="4"><li><code><strong>showType</strong></code><strong>:</strong> <code>&quot;NUMBER&quot;</code> 表示显示类型为数字。</li></ol><ol type="1" id="424cbbba-6101-4b57-8dec-e013098c1f31" class="numbered-list" start="5"><li><code><strong>authorized</strong></code><strong>:</strong> <code>true</code> 表示用户有权访问此数据。</li></ol><ol type="1" id="601d3e36-f95b-4bb2-9ce7-3f3fb7297254" class="numbered-list" start="6"><li><code><strong>dataFormatType</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式类型。</li></ol><ol type="1" id="a55e9d7c-21a4-4b15-a398-1f39f0480a38" class="numbered-list" start="7"><li><code><strong>dataFormat</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式。</li></ol><ol type="1" id="730942f6-408d-49a9-8ee0-ed242e2b1577" class="numbered-list" start="8"><li><code><strong>comment</strong></code><strong>:</strong> <code>null</code> 表示没有额外的注释。</li></ol><h3 id="0ad900a4-b2bf-4d61-9b9e-a162c5c02e02" class=""><code>chatContext</code> 对象的详细解释</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="89a00ce4-c610-4339-8b65-e98bbf45377c" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;chatContext&quot;: {
+    &quot;id&quot;: 1,
+    &quot;queryMode&quot;: &quot;LLM_S2SQL&quot;,
+    &quot;dataSet&quot;: {...},
+    &quot;metrics&quot;: [...],
+    &quot;dimensions&quot;: [],
+    &quot;entity&quot;: null,
+    &quot;aggType&quot;: &quot;NONE&quot;,
+    &quot;filterType&quot;: &quot;AND&quot;,
+    &quot;dimensionFilters&quot;: [...],
+    &quot;metricFilters&quot;: [],
+    &quot;orders&quot;: [],
+    &quot;dateInfo&quot;: {...},
+    &quot;limit&quot;: null,
+    &quot;score&quot;: 30.0,
+    &quot;elementMatches&quot;: [...],
+    &quot;properties&quot;: {...}
+}</code></pre><ol type="1" id="51afca05-f26e-467d-8144-dbf5d0562e1c" class="numbered-list" start="1"><li><code><strong>id</strong></code><strong>:</strong> <code>1</code> 表示上下文的唯一标识符。</li></ol><ol type="1" id="e8182d45-62ed-475b-b435-28422951a433" class="numbered-list" start="2"><li><code><strong>queryMode</strong></code><strong>:</strong> <code>&quot;LLM_S2SQL&quot;</code> 表示查询模式为通过大语言模型生成SQL。</li></ol><ol type="1" id="484c15f7-8716-4897-bc21-2f2b18320b3f" class="numbered-list" start="3"><li><code><strong>dataSet</strong></code><strong>:</strong> 这是查询所使用的数据集的描述，详细解释见下文。</li></ol><ol type="1" id="3924162e-4709-494b-8ea0-61fe83c44435" class="numbered-list" start="4"><li><code><strong>metrics</strong></code><strong>:</strong> 这是一个数组，列出所有的指标信息。</li></ol><ol type="1" id="cf26a5dc-584d-41e5-b2b7-f14f99e8f749" class="numbered-list" start="5"><li><code><strong>dimensions</strong></code><strong>:</strong> 这是一个空数组，表示没有维度信息。</li></ol><ol type="1" id="f4dd8fdd-611f-4ca1-89d4-ba793483bc1b" class="numbered-list" start="6"><li><code><strong>entity</strong></code><strong>:</strong> <code>null</code> 表示没有指定的实体。</li></ol><ol type="1" id="d9b62fa7-64fe-48e4-b6c3-88ea5bd9b23e" class="numbered-list" start="7"><li><code><strong>aggType</strong></code><strong>:</strong> <code>&quot;NONE&quot;</code> 表示没有进行任何聚合操作。</li></ol><ol type="1" id="0e41b55a-34de-4f2b-b6e3-f02cf93cb40c" class="numbered-list" start="8"><li><code><strong>filterType</strong></code><strong>:</strong> <code>&quot;AND&quot;</code> 表示查询使用了AND逻辑进行过滤。</li></ol><ol type="1" id="e5a535e6-8b4c-48d1-be5f-069a03b71975" class="numbered-list" start="9"><li><code><strong>dimensionFilters</strong></code><strong>:</strong> 这是一个数组，包含基于维度的过滤条件。</li></ol><ol type="1" id="850e9894-936c-4070-810b-bc1637ebd92e" class="numbered-list" start="10"><li><code><strong>metricFilters</strong></code><strong>:</strong> 这是一个空数组，表示没有针对指标的额外过滤条件。</li></ol><ol type="1" id="c87aa89f-4081-4318-88de-e8bef2e4b120" class="numbered-list" start="11"><li><code><strong>orders</strong></code><strong>:</strong> 这是一个空数组，表示没有特定的排序要求。</li></ol><ol type="1" id="59e92021-089c-4074-9d6d-c2ffad707ae6" class="numbered-list" start="12"><li><code><strong>dateInfo</strong></code><strong>:</strong> 这是一个包含日期信息的对象，用于过滤数据的时间范围。</li></ol><ol type="1" id="a6f7efbb-c171-4da8-ae43-b2506e244738" class="numbered-list" start="13"><li><code><strong>limit</strong></code><strong>:</strong> <code>null</code> 表示没有结果数量的限制。</li></ol><ol type="1" id="ecf2ddc3-578c-4943-b408-6b2fad08aab7" class="numbered-list" start="14"><li><code><strong>score</strong></code><strong>:</strong> <code>30.0</code> 是这次解析的评分，用于衡量解析结果的相关性。</li></ol><ol type="1" id="efcc9473-b149-44d6-8e7a-8328a96af38a" class="numbered-list" start="15"><li><code><strong>elementMatches</strong></code><strong>:</strong> 这是一个数组，列出查询中匹配到的元素。</li></ol><ol type="1" id="86f49b86-5028-415c-8696-21917b916a29" class="numbered-list" start="16"><li><code><strong>properties</strong></code><strong>:</strong> 这是一个包含额外属性的对象，描述了与解析相关的上下文信息。</li></ol><h3 id="f52c0de9-ba3f-4623-9e3c-a754ac999a02" class=""><code>dataSet</code> 对象详细解释</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3bde9938-ca89-4829-94e3-d8e79240e147" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;dataSet&quot;: {
+    &quot;dataSet&quot;: 1,
+    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+    &quot;model&quot;: null,
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;超音数数据集&quot;,
+    &quot;bizName&quot;: &quot;s2&quot;,
+    &quot;useCnt&quot;: null,
+    &quot;type&quot;: &quot;DATASET&quot;,
+    &quot;alias&quot;: null,
+    &quot;schemaValueMaps&quot;: null,
+    &quot;relatedSchemaElements&quot;: null,
+    &quot;defaultAgg&quot;: null,
+    &quot;dataFormatType&quot;: null,
+    &quot;order&quot;: 0.0,
+    &quot;isTag&quot;: 0,
+    &quot;description&quot;: null}</code></pre><ol type="1" id="e8450a06-97ff-46e2-936e-a3c3a58a564c" class="numbered-list" start="1"><li><code><strong>dataSet</strong></code><strong>:</strong> <code>1</code> 是数据集的唯一标识符。</li></ol><ol type="1" id="88b4ac3c-cc13-4e2b-aa60-438924974a7a" class="numbered-list" start="2"><li><code><strong>dataSetName</strong></code><strong>:</strong> <code>&quot;超音数数据集&quot;</code> 是数据集的名称。</li></ol><ol type="1" id="93ab81d6-c1bc-4cb9-b518-662145048f7b" class="numbered-list" start="3"><li><code><strong>model</strong></code><strong>:</strong> <code>null</code> 表示没有特定的模型关联到这个数据集。</li></ol><ol type="1" id="899ff288-b81d-4587-aed6-50247b155f7c" class="numbered-list" start="4"><li><code><strong>id</strong></code><strong>:</strong> <code>1</code> 这个字段重复了数据集的ID。</li></ol><ol type="1" id="75d93b78-57eb-451a-be1f-3d61b4914ac3" class="numbered-list" start="5"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;超音数数据集&quot;</code> 是数据集的名称，和<code>dataSetName</code>相同。</li></ol><ol type="1" id="60c6fda2-e92d-4998-954b-688c76aea7f7" class="numbered-list" start="6"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;s2&quot;</code> 是数据集的业务名称。</li></ol><ol type="1" id="fee1428e-6afe-4a0f-b99e-c9a09e28df86" class="numbered-list" start="7"><li><code><strong>useCnt</strong></code><strong>:</strong> <code>null</code> 表示没有使用计数信息。</li></ol><ol type="1" id="4f95e966-0647-4b2e-9199-bdbadc3f35e1" class="numbered-list" start="8"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;DATASET&quot;</code> 表示这个对象类型是数据集。</li></ol><ol type="1" id="bc9d74e5-f999-4a9d-a4db-2ef9c8aa6bc5" class="numbered-list" start="9"><li><code><strong>alias</strong></code><strong>:</strong> <code>null</code> 表示没有别名。</li></ol><ol type="1" id="07e0a968-b52a-4755-a15a-21a5cd03ced1" class="numbered-list" start="10"><li><code><strong>schemaValueMaps</strong></code><strong>:</strong> <code>null</code> 表示没有模式值映射。</li></ol><ol type="1" id="eee10380-fb02-4130-93a3-4896473cda21" class="numbered-list" start="11"><li><code><strong>relatedSchemaElements</strong></code><strong>:</strong> <code>null</code> 表示没有关联的模式元素。</li></ol><ol type="1" id="77595aa2-0c99-4b63-85fd-6349d2fbb6f9" class="numbered-list" start="12"><li><code><strong>defaultAgg</strong></code><strong>:</strong> <code>null</code> 表示没有默认的聚合方式。</li></ol><ol type="1" id="6e674e5f-4096-46e7-a3db-ddcfd1be17e9" class="numbered-list" start="13"><li><code><strong>dataFormatType</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式类型。</li></ol><ol type="1" id="aeef0054-2b32-4725-863f-e12240ea2530" class="numbered-list" start="14"><li><code><strong>order</strong></code><strong>:</strong> <code>0.0</code> 表示在排序中没有优先级。</li></ol><ol type="1" id="a23679c1-35c2-443f-9447-4a36c79f4b0d" class="numbered-list" start="15"><li><code><strong>isTag</strong></code><strong>:</strong> <code>0</code> 表示这不是一个标签类型的数据集。</li></ol><ol type="1" id="ea68f304-4dbb-485b-b127-ed2d2533f351" class="numbered-list" start="16"><li><code><strong>description</strong></code><strong>:</strong> <code>null</code> 表示没有描述信息。</li></ol><h3 id="a9c9ad12-23f5-4e49-8fd1-5b42dd3a103b" class=""><code>metrics</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="774e4db9-55bf-46bc-8ecf-cbf2c0742c60" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;dataSet&quot;: 1,
+    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+    &quot;model&quot;: 2,
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;访问次数&quot;,
+    &quot;bizName&quot;: &quot;pv&quot;,
+    &quot;useCnt&quot;: 0,
+    &quot;type&quot;: &quot;METRIC&quot;,
+    &quot;alias&quot;: [],
+    &quot;schemaValueMaps&quot;: null,
+    &quot;relatedSchemaElements&quot;: [
+        {
+            &quot;dimensionId&quot;: 1,
+            &quot;necessary&quot;: false},
+        {
+            &quot;dimensionId&quot;: 2,
+            &quot;necessary&quot;: false}
+    ],
+    &quot;defaultAgg&quot;: &quot;SUM&quot;,
+    &quot;dataFormatType&quot;: null,
+    &quot;order&quot;: 0.0,
+    &quot;isTag&quot;: 0,
+    &quot;description&quot;: &quot;一段时间内用户的访问次数&quot;
+}</code></pre><ol type="1" id="25bf41a5-06fa-4c64-9d7e-50408228cadb" class="numbered-list" start="1"><li><code><strong>dataSet</strong></code><strong>:</strong> <code>1</code> 表示关联的数据集ID。</li></ol><ol type="1" id="03819e98-7684-4ca8-a985-25ecb554f4d6" class="numbered-list" start="2"><li><code><strong>dataSetName</strong></code><strong>:</strong> <code>&quot;超音数数据集&quot;</code> 表示数据集的名称。</li></ol><ol type="1" id="69627f59-0b03-4186-881b-9893e59c3707" class="numbered-list" start="3"><li><code><strong>model</strong></code><strong>:</strong> <code>2</code> 表示使用的模型ID。</li></ol><ol type="1" id="1b7e9d74-9104-4b8c-b97a-5506d6c75ca4" class="numbered-list" start="4"><li><code><strong>id</strong></code><strong>:</strong> <code>1</code> 是指标的唯一标识符。</li></ol><ol type="1" id="aa76cb20-6292-4066-8b13-09d6c63efa02" class="numbered-list" start="5"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;访问次数&quot;</code> 是指标的名称。</li></ol><ol type="1" id="8bf6f1c9-1ab7-4b35-a133-e88332da3b76" class="numbered-list" start="6"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;pv&quot;</code> 是指标的业务名称。</li></ol><ol type="1" id="0e5ade2c-1361-4026-9c35-6c214dd2b189" class="numbered-list" start="7"><li><code><strong>useCnt</strong></code><strong>:</strong> <code>0</code> 表示没有使用计数信息。</li></ol><ol type="1" id="f4f2bfa9-37dc-4362-82ad-33271ddd8180" class="numbered-list" start="8"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;METRIC&quot;</code> 表示这是一个指标。</li></ol><ol type="1" id="2dd9bb18-9a9a-427b-9d7f-d2d55e401cff" class="numbered-list" start="9"><li><code><strong>alias</strong></code><strong>:</strong> <code>[]</code> 表示没有别名。</li></ol><ol type="1" id="dec61320-c9f7-480a-8ee3-766e9571d26a" class="numbered-list" start="10"><li><code><strong>schemaValueMaps</strong></code><strong>:</strong> <code>null</code> 表示没有模式值映射。</li></ol><ol type="1" id="2f81667a-719f-4f04-ae7a-6f3ca3b56eaa" class="numbered-list" start="11"><li><code><strong>relatedSchemaElements</strong></code><strong>:</strong> 这是一个数组，列出了与这个指标关联的模式元素。</li></ol><ol type="1" id="dda31c39-f215-42a2-9f78-bceb90f1fe8f" class="numbered-list" start="12"><li><code><strong>defaultAgg</strong></code><strong>:</strong> <code>&quot;SUM&quot;</code> 表示默认的聚合方式是求和。</li></ol><ol type="1" id="e0a807a7-8ffc-40a7-98f0-250b1ba643f0" class="numbered-list" start="13"><li><code><strong>dataFormatType</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式类型。</li></ol><ol type="1" id="7ae1fb13-47ed-4405-87ac-2c412dfdefd4" class="numbered-list" start="14"><li><code><strong>order</strong></code><strong>:</strong> <code>0.0</code> 表示在排序中没有优先级。</li></ol><ol type="1" id="e37970ee-43d2-4320-bcc3-18cf6bdfd9ac" class="numbered-list" start="15"><li><code><strong>isTag</strong></code><strong>:</strong> <code>0</code> 表示这不是一个标签类型的指标。</li></ol><ol type="1" id="3e07e372-edb2-4ace-adbf-956e8f885af4" class="numbered-list" start="16"><li><code><strong>description</strong></code><strong>:</strong> <code>&quot;一段时间内用户的访问次数&quot;</code> 是对这个指标的描述。</li></ol><h3 id="6df0b7ac-f933-46e0-b84b-71765681042b" class=""><code>dimensionFilters</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="545191d8-a14e-4fc8-9fd3-df2c0aa7cc42" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;bizName&quot;: &quot;department&quot;,
+    &quot;name&quot;: &quot;部门&quot;,
+    &quot;operator&quot;: &quot;=&quot;,
+    &quot;value&quot;: &quot;hr&quot;,
+    &quot;elementID&quot;: 1,
+    &quot;function&quot;: null
+}</code></pre><ol type="1" id="3f224120-fbb7-498c-a939-0f1e0bec236d" class="numbered-list" start="1"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;department&quot;</code> 是维度的业务名称。</li></ol><ol type="1" id="ef2cdbef-49a6-4902-ab7e-705b05c104d3" class="numbered-list" start="2"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;部门&quot;</code> 是维度的名称。</li></ol><ol type="1" id="fca2ccd7-ecce-4ba8-805c-f6ed246b2668" class="numbered-list" start="3"><li><code><strong>operator</strong></code><strong>:</strong> <code>&quot;=&quot;</code> 表示使用等于操作符来过滤数据。</li></ol><ol type="1" id="943f2fea-c281-4041-a62f-ffa20e25d48e" class="numbered-list" start="4"><li><code><strong>value</strong></code><strong>:</strong> <code>&quot;hr&quot;</code> 是过滤的值，即部门名称。</li></ol><ol type="1" id="96a4a9c2-ad62-4cf8-984a-cf43d476602f" class="numbered-list" start="5"><li><code><strong>elementID</strong></code><strong>:</strong> <code>1</code> 是这个元素的唯一标识符。</li></ol><ol type="1" id="c71cc0f4-8031-41f6-9d59-7e23e94bcf19" class="numbered-list" start="6"><li><code><strong>function</strong></code><strong>:</strong> <code>null</code> 表示没有指定的函数或操作。</li></ol><h3 id="7052ddde-7c91-4a44-8fa0-f062ca449e35" class=""><code>dateInfo</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9a924f5f-2195-466e-a564-b49886e131ef" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;dateMode&quot;: &quot;BETWEEN&quot;,
+    &quot;startDate&quot;: &quot;2024-01-01&quot;,
+    &quot;endDate&quot;: &quot;2024-08-01&quot;,
+    &quot;dateList&quot;: [],
+    &quot;unit&quot;: 1,
+    &quot;period&quot;: &quot;DAY&quot;,
+    &quot;detectWord&quot;: null,
+    &quot;groupByDate&quot;: false,
+    &quot;inherited&quot;: false,
+    &quot;groupByTimeDimension&quot;: &quot;sys_imp_date&quot;
+}
+
+</code></pre><ol type="1" id="0bfb927b-0e56-4353-bb89-05e1d6802955" class="numbered-list" start="1"><li><code><strong>dateMode</strong></code><strong>:</strong> <code>&quot;BETWEEN&quot;</code> 表示日期范围模式。</li></ol><ol type="1" id="c84b615b-0654-4193-a256-86599b16917a" class="numbered-list" start="2"><li><code><strong>startDate</strong></code><strong>:</strong> <code>&quot;2024-01-01&quot;</code> 是起始日期。</li></ol><ol type="1" id="59771fe9-a900-46de-a6e9-9ab7732b1981" class="numbered-list" start="3"><li><code><strong>endDate</strong></code><strong>:</strong> <code>&quot;2024-08-01&quot;</code> 是结束日期。</li></ol><ol type="1" id="c58194dd-e36b-4a62-a94c-346d7440241d" class="numbered-list" start="4"><li><code><strong>dateList</strong></code><strong>:</strong> <code>[]</code> 表示没有指定的具体日期列表。</li></ol><ol type="1" id="618b711c-a6fd-4617-82e2-1e98642d2e77" class="numbered-list" start="5"><li><code><strong>unit</strong></code><strong>:</strong> <code>1</code> 表示日期单位为天。</li></ol><ol type="1" id="0adf7a0a-37c4-44bc-b937-bd26b9de5f41" class="numbered-list" start="6"><li><code><strong>period</strong></code><strong>:</strong> <code>&quot;DAY&quot;</code> 表示按天计算的周期。</li></ol><ol type="1" id="78053cfb-f52f-4460-8d08-89d7a8acdaa2" class="numbered-list" start="7"><li><code><strong>detectWord</strong></code><strong>:</strong> <code>null</code> 表示没有检测到的关键字。</li></ol><ol type="1" id="cce00611-7eab-47f5-a164-cb583cc5ecc4" class="numbered-list" start="8"><li><code><strong>groupByDate</strong></code><strong>:</strong> <code>false</code> 表示没有按日期分组。</li></ol><ol type="1" id="3a33b110-ddab-4102-befa-b8d53408cca1" class="numbered-list" start="9"><li><code><strong>inherited</strong></code><strong>:</strong> <code>false</code> 表示这个设置没有继承自其他地方。</li></ol><ol type="1" id="8078cb3a-745d-46e7-8942-57ee305eb1a8" class="numbered-list" start="10"><li><code><strong>groupByTimeDimension</strong></code><strong>:</strong> <code>&quot;sys_imp_date&quot;</code> 是时间维度的分组依据。</li></ol><h3 id="e25b1146-e219-4326-bb97-d65260879356" class=""><code>elementMatches</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6887957a-be3d-4723-9831-37c013573324" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;element&quot;: {...},
+    &quot;similarity&quot;: 1.0,
+    &quot;detectWord&quot;: &quot;访问次数&quot;,
+    &quot;word&quot;: &quot;访问次数&quot;,
+    &quot;frequency&quot;: 100000,
+    &quot;inherited&quot;: false
+}</code></pre><ol type="1" id="10d2292f-49fe-4f27-a86a-d93da694ded9" class="numbered-list" start="1"><li><code><strong>element</strong></code><strong>:</strong> 这是一个包含匹配元素详细信息的对象。</li></ol><ol type="1" id="8fa3d20e-4d93-4fc9-b7e6-882c0e402a5d" class="numbered-list" start="2"><li><code><strong>similarity</strong></code><strong>:</strong> <code>1.0</code> 表示这个匹配的相似度。</li></ol><ol type="1" id="5203e227-58c6-43e0-b820-98ae12aceceb" class="numbered-list" start="3"><li><code><strong>detectWord</strong></code><strong>:</strong> <code>&quot;访问次数&quot;</code> 是检测到的词语。</li></ol><ol type="1" id="0858c369-473c-4ae9-86df-8c29b36df9b6" class="numbered-list" start="4"><li><code><strong>word</strong></code><strong>:</strong> <code>&quot;访问次数&quot;</code> 是用户查询中的词语。</li></ol><ol type="1" id="2d26ead3-59a2-460b-afe7-ff0012623498" class="numbered-list" start="5"><li><code><strong>frequency</strong></code><strong>:</strong> <code>100000</code> 表示这个词语的出现频率。</li></ol><ol type="1" id="9b66b198-0d7c-4458-883f-724648693144" class="numbered-list" start="6"><li><code><strong>inherited</strong></code><strong>:</strong> <code>false</code> 表示这个匹配不是继承的。</li></ol><h3 id="10624f7e-9ef6-41e2-ad75-49208f364bbd" class=""><code>properties</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="958ea7f7-51f9-47bf-bcb8-2a8f6068149f" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;type&quot;: &quot;internal&quot;,
+    &quot;CONTEXT&quot;: {...}
+}</code></pre><ol type="1" id="0e38fc72-8011-4d18-a8d0-1cb4c6468338" class="numbered-list" start="1"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;internal&quot;</code> 表示这是内部属性。</li></ol><ol type="1" id="1a92d840-020e-46e0-8654-e6831e59d2ab" class="numbered-list" start="2"><li><code><strong>CONTEXT</strong></code><strong>:</strong> 这是一个包含上下文信息的对象。</li></ol><h3 id="56597f4c-3fba-4052-baf0-7858f30cfbb5" class=""><code>sqlInfo</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e3cb4199-23ef-4d50-89ef-de08bce27690" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;s2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;HR&#x27; AND datediff(&#x27;year&#x27;, 数据日期, &#x27;2024-08-01&#x27;) = 0&quot;,
+    &quot;correctS2SQL&quot;: &quot;SELECT SUM(访问次数) FROM 超音数数据集 WHERE 部门 = &#x27;hr&#x27; AND (数据日期 &gt;= &#x27;2024-01-01&#x27; AND 数据日期 &lt;= &#x27;2024-08-01&#x27;)&quot;,
+    &quot;querySQL&quot;: &quot;with t_1 as (SELECT `t3`.`sys_imp_date`, `t2`.`department`, `t3`.`s2_pv_uv_statis_pv` AS `pv` FROM (SELECT `user_name`, `department` FROM s2_user_department) AS `t2` LEFT JOIN (SELECT 1 AS `s2_pv_uv_statis_pv`, `imp_date` AS `sys_imp_date`, `user_name`, `imp_date` FROM s2_pv_uv_statis) AS `t3` ON `t2`.`user_name` = `t3`.`user_name`) SELECT SUM(pv) FROM t_1 WHERE department = &#x27;hr&#x27; AND (sys_imp_date &gt;= &#x27;2024-01-01&#x27; AND sys_imp_date &lt;= &#x27;2024-08-01&#x27;) limit 1000&quot;,
+    &quot;sourceId&quot;: &quot;1&quot;
+}</code></pre><ol type="1" id="411aedda-8273-4a9c-a513-4c85ad06bb04" class="numbered-list" start="1"><li><code><strong>s2SQL</strong></code><strong>:</strong> <code>&quot;SELECT SUM(访问次数)...&quot;</code> 是初步生成的SQL查询语句。</li></ol><ol type="1" id="90bed4d4-d466-4443-9c1b-023ec2547b0b" class="numbered-list" start="2"><li><code><strong>correctS2SQL</strong></code><strong>:</strong> <code>&quot;SELECT SUM(访问次数)...&quot;</code> 是修正后的SQL查询语句。</li></ol><ol type="1" id="f4840e29-1f2e-47eb-aa07-1e0807ecca00" class="numbered-list" start="3"><li><code><strong>querySQL</strong></code><strong>:</strong> 是最终用于执行查询的SQL语句。</li></ol><ol type="1" id="04cb1ee5-5198-450d-b7af-255a13dec58b" class="numbered-list" start="4"><li><code><strong>sourceId</strong></code><strong>:</strong> <code>&quot;1&quot;</code> 是SQL语句的来源ID。</li></ol><h3 id="8513d4a4-d574-4e21-8109-c2175b3e2230" class=""><code>queryResults</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c5cb7a48-d6c9-4950-8dc9-e6feab01b21d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;SUM(pv)&quot;: 80
+}</code></pre><ol type="1" id="aba84c87-7d55-4ad5-801b-d1c1a3c802eb" class="numbered-list" start="1"><li><code><strong>SUM(pv)</strong></code><strong>:</strong> <code>80</code> 表示查询返回的结果，<code>pv</code>的总和为80。</li></ol><h3 id="b97af29b-a185-43e6-9ea1-eafefd6ee881" class=""><code>textResult</code> 字段</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d8b59e84-efab-4c4b-8b58-c084396d0337" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;textResult&quot;: &quot;| 访问次数 |\n|:---:|\n| 80 |\n&quot;</code></pre><ol type="1" id="3356ee04-184b-4e82-9315-b2896df9d293" class="numbered-list" start="1"><li><code><strong>textResult</strong></code><strong>:</strong> 这是查询结果的文本格式表示，以表格形式显示了访问次数的结果。</li></ol><h3 id="300b26b1-8a27-49c9-b0b8-d34213108989" class=""><code>recommendedDimensions</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5c8194b0-25f9-40ca-8b89-6c7bf2031e4c" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;dataSet&quot;: 1,
+    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+    &quot;model&quot;: 1,
+    &quot;id&quot;: 2,
+    &quot;name&quot;: &quot;用户&quot;,
+    &quot;bizName&quot;: &quot;user_name&quot;,
+    &quot;useCnt&quot;: 0,
+    &quot;type&quot;: &quot;DIMENSION&quot;,
+    &quot;alias&quot;: [],
+    &quot;schemaValueMaps&quot;: [],
+    &quot;relatedSchemaElements&quot;: null,
+    &quot;defaultAgg&quot;: null,
+    &quot;dataFormatType&quot;: null,
+    &quot;order&quot;: 0.0,
+    &quot;isTag&quot;: 0,
+    &quot;description&quot;: &quot;用户&quot;
+}</code></pre><ol type="1" id="9457025e-774b-4e8c-b1a2-196b2a7b13da" class="numbered-list" start="1"><li><code><strong>dataSet</strong></code><strong>:</strong> <code>1</code> 表示关联的数据集ID。</li></ol><ol type="1" id="b366c99d-101e-4b38-9d1d-015a933afb1e" class="numbered-list" start="2"><li><code><strong>dataSetName</strong></code><strong>:</strong> <code>&quot;超音数数据集&quot;</code> 表示数据集的名称。</li></ol><ol type="1" id="072f2dd6-3ce5-4689-8f40-35746462941f" class="numbered-list" start="3"><li><code><strong>model</strong></code><strong>:</strong> <code>1</code> 表示使用的模型ID。</li></ol><ol type="1" id="5e112093-3f95-4397-b58e-8476ac45f359" class="numbered-list" start="4"><li><code><strong>id</strong></code><strong>:</strong> <code>2</code> 是维度的唯一标识符。</li></ol><ol type="1" id="ad268eee-e061-45fb-affd-9630e531beab" class="numbered-list" start="5"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;用户&quot;</code> 是维度的名称。</li></ol><ol type="1" id="37e5ed02-6545-4ccc-9ba8-c2d839a2810e" class="numbered-list" start="6"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;user_name&quot;</code> 是维度的业务名称。</li></ol><ol type="1" id="073a72ef-66fa-4538-84fc-a201ac990796" class="numbered-list" start="7"><li><code><strong>useCnt</strong></code><strong>:</strong> <code>0</code> 表示没有使用计数信息。</li></ol><ol type="1" id="23a43796-15d2-4b86-9170-d3055c786360" class="numbered-list" start="8"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;DIMENSION&quot;</code> 表示这是一个维度。</li></ol><ol type="1" id="e306a7fe-d8b7-4f5d-b679-165f81dafcaa" class="numbered-list" start="9"><li><code><strong>alias</strong></code><strong>:</strong> <code>[]</code> 表示没有别名。</li></ol><ol type="1" id="42c6b201-8189-4c14-8224-ff77d576d8ce" class="numbered-list" start="10"><li><code><strong>schemaValueMaps</strong></code><strong>:</strong> <code>[]</code> 表示没有模式值映射。</li></ol><ol type="1" id="563f5c37-e87e-4a7a-a129-9d19b71a1710" class="numbered-list" start="11"><li><code><strong>relatedSchemaElements</strong></code><strong>:</strong> <code>null</code> 表示没有关联的模式元素。</li></ol><ol type="1" id="1da3a40d-438e-48a7-8161-3439800117c8" class="numbered-list" start="12"><li><code><strong>defaultAgg</strong></code><strong>:</strong> <code>null</code> 表示没有默认的聚合方式。</li></ol><ol type="1" id="402467c0-cdf1-4f77-8953-67c60f48e2a7" class="numbered-list" start="13"><li><code><strong>dataFormatType</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式类型。</li></ol><ol type="1" id="824238cd-007a-4941-9fea-29a197d69ade" class="numbered-list" start="14"><li><code><strong>order</strong></code><strong>:</strong> <code>0.0</code> 表示在排序中没有优先级。</li></ol><ol type="1" id="c82c1333-bf11-4b9c-8961-481db4a5d0fd" class="numbered-list" start="15"><li><code><strong>isTag</strong></code><strong>:</strong> <code>0</code> 表示这不是一个标签类型的维度。</li></ol><ol type="1" id="0b5438e6-1b62-44b3-ba19-709a7dd296aa" class="numbered-list" start="16"><li><code><strong>description</strong></code><strong>:</strong> <code>&quot;用户&quot;</code> 是对这个维度的描述。</li></ol><p id="1c70a58d-1bf9-4639-a1b8-d727c812df40" class="">第二个推荐的维度项类似：</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3e6bf1e0-b443-4ac5-8382-dadad694db53" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;dataSet&quot;: 1,
+    &quot;dataSetName&quot;: &quot;超音数数据集&quot;,
+    &quot;model&quot;: 1,
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;部门&quot;,
+    &quot;bizName&quot;: &quot;department&quot;,
+    &quot;useCnt&quot;: 0,
+    &quot;type&quot;: &quot;DIMENSION&quot;,
+    &quot;alias&quot;: [],
+    &quot;schemaValueMaps&quot;: [],
+    &quot;relatedSchemaElements&quot;: null,
+    &quot;defaultAgg&quot;: null,
+    &quot;dataFormatType&quot;: null,
+    &quot;order&quot;: 0.0,
+    &quot;isTag&quot;: 1,
+    &quot;description&quot;: &quot;&quot;
+}</code></pre><ol type="1" id="858f45e7-3d0a-435f-a615-092469330383" class="numbered-list" start="1"><li><code><strong>name</strong></code><strong>:</strong> <code>&quot;部门&quot;</code> 是维度的名称。</li></ol><ol type="1" id="64949672-b786-4ba7-b1e8-6ad15671b19a" class="numbered-list" start="2"><li><code><strong>bizName</strong></code><strong>:</strong> <code>&quot;department&quot;</code> 是维度的业务名称。</li></ol><h3 id="d715d6d4-9a8f-4d27-910a-24a274487c4e" class=""><code>aggregateInfo</code> 对象</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3678c33f-9e22-4796-b4aa-4f246fe46448" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;aggregateInfo&quot;: {
+    &quot;metricInfos&quot;: []
+}</code></pre><ol type="1" id="11aebb01-5f66-46f0-9c0b-3a3b20c625d0" class="numbered-list" start="1"><li><code><strong>metricInfos</strong></code><strong>:</strong> 这是一个空数组，表示没有额外的指标信息。</li></ol><h2 id="b3da8d31-50d6-484c-b147-a5eda9b59401" class="">3. QueryDimensionValue</h2><h3 id="c05c7aee-5561-4443-a096-12ec688afa8f" class="">顶层结构</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="79617258-d102-45e0-b74e-94c58762ea96" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: {...},
+    &quot;timestamp&quot;: 1722493840902,
+    &quot;traceId&quot;: &quot;supersonic_c4d4049b73a2466fb79c3e4074d7d679&quot;
+}</code></pre><ol type="1" id="afe32f79-3c40-4575-95d4-a17d27bde07c" class="numbered-list" start="1"><li><code><strong>code</strong></code><strong>:</strong> <code>200</code> 表示请求成功处理。</li></ol><ol type="1" id="9380e1e4-c150-4307-af39-2362be24bb95" class="numbered-list" start="2"><li><code><strong>msg</strong></code><strong>:</strong> <code>&quot;success&quot;</code> 表示请求处理成功。</li></ol><ol type="1" id="f1498a21-8e2c-4906-ada5-aafb9cd41dc6" class="numbered-list" start="3"><li><code><strong>data</strong></code><strong>:</strong> 响应的主要数据部分，里面包含了详细的信息。</li></ol><ol type="1" id="0d5c2f11-5265-4c12-b355-1216ac3cffbe" class="numbered-list" start="4"><li><code><strong>timestamp</strong></code><strong>:</strong> <code>1722493840902</code> 是一个时间戳，表示生成这个响应的时间，通常是以毫秒为单位的自1970年1月1日以来的时间。</li></ol><ol type="1" id="272cf2b1-8caf-43ea-ba93-444d07cf294f" class="numbered-list" start="5"><li><code><strong>traceId</strong></code><strong>:</strong> <code>&quot;supersonic_c4d4049b73a2466fb79c3e4074d7d679&quot;</code> 是一个唯一标识符，用来追踪这个请求的执行过程。</li></ol><h3 id="fe78b8d1-7c8b-4cd4-b0e3-974f11605529" class=""><code>data</code> 部分的详细解释</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b65547a0-1ee9-4e28-b01d-9a70241aece8" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;data&quot;: {
+    &quot;pageNo&quot;: -1,
+    &quot;pageSize&quot;: -1,
+    &quot;totalCount&quot;: -1,
+    &quot;resultList&quot;: [...],
+    &quot;columns&quot;: [...],
+    &quot;sql&quot;: null,
+    &quot;queryAuthorization&quot;: null,
+    &quot;useCache&quot;: false,
+    &quot;metricColumns&quot;: [],
+    &quot;dimensionColumns&quot;: [...]
+}</code></pre><ol type="1" id="584bf3b1-19e7-402e-a06d-bce5e563409c" class="numbered-list" start="1"><li><code><strong>pageNo</strong></code><strong>:</strong> <code>1</code> 表示没有分页，或分页信息不可用。</li></ol><ol type="1" id="67a4fc87-4f2e-4e40-98ce-8de056ff1ede" class="numbered-list" start="2"><li><code><strong>pageSize</strong></code><strong>:</strong> <code>1</code> 表示没有指定每页显示的结果数量，或者没有分页。</li></ol><ol type="1" id="e0a90b52-b09b-4a08-b0e2-f23999a14580" class="numbered-list" start="3"><li><code><strong>totalCount</strong></code><strong>:</strong> <code>1</code> 表示总结果数不可用，或未被指定。</li></ol><ol type="1" id="df0ef45d-9a74-4e91-9b88-bbe168622b0a" class="numbered-list" start="4"><li><code><strong>resultList</strong></code><strong>:</strong> 这是一个数组，包含查询返回的结果，详细解释见下文。</li></ol><ol type="1" id="d28e46be-ea7b-4a46-bb3f-d3bac3bd6aa5" class="numbered-list" start="5"><li><code><strong>columns</strong></code><strong>:</strong> 这是一个数组，包含结果列的定义，详细解释见下文。</li></ol><ol type="1" id="d93b7098-3551-4682-b7c2-733bf3bd0aa3" class="numbered-list" start="6"><li><code><strong>sql</strong></code><strong>:</strong> <code>null</code> 表示没有提供SQL查询语句，可能是因为这是直接返回的结果。</li></ol><ol type="1" id="81d9c589-af95-4a32-b16a-f4d126cda0f7" class="numbered-list" start="7"><li><code><strong>queryAuthorization</strong></code><strong>:</strong> <code>null</code> 表示没有特别的授权信息。</li></ol><ol type="1" id="845b71c2-7edb-472b-9499-71c5e594beee" class="numbered-list" start="8"><li><code><strong>useCache</strong></code><strong>:</strong> <code>false</code> 表示未使用缓存。</li></ol><ol type="1" id="a559f89b-6ef4-4952-84ff-422bf40a3ea7" class="numbered-list" start="9"><li><code><strong>metricColumns</strong></code><strong>:</strong> 这是一个空数组，表示没有指标列。</li></ol><ol type="1" id="7dcfdaec-7342-433c-896c-0003b5169741" class="numbered-list" start="10"><li><code><strong>dimensionColumns</strong></code><strong>:</strong> 这是一个数组，包含维度列的定义，详细解释见下文。</li></ol><h3 id="53860140-8574-44ba-9c18-208a52a3c0ce" class=""><code>resultList</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="287f0e2c-34b5-4734-bfc0-47a48c50cca5" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;department&quot;: &quot;hr&quot;
+},
+{
+    &quot;department&quot;: &quot;sales&quot;
+},
+{
+    &quot;department&quot;: &quot;marketing&quot;
+},
+{
+    &quot;department&quot;: &quot;strategy&quot;
+}</code></pre><ol type="1" id="5c26bb72-a910-49b4-b8a2-48a5a01ea3f6" class="numbered-list" start="1"><li><code><strong>department</strong></code><strong>:</strong> 这是查询返回的每个结果中的字段，表示部门的名称，如<code>&quot;hr&quot;</code>、<code>&quot;sales&quot;</code>、<code>&quot;marketing&quot;</code>、<code>&quot;strategy&quot;</code>。</li></ol><h3 id="f0e8b7f8-1a84-47be-9cc4-3b45e0c70cc2" class=""><code>columns</code> 数组中的项</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="16b3dbd4-b193-4ed6-b6cb-0810d37be4e5" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;name&quot;: null,
+    &quot;type&quot;: &quot;CHAR&quot;,
+    &quot;nameEn&quot;: &quot;department&quot;,
+    &quot;showType&quot;: &quot;CATEGORY&quot;,
+    &quot;authorized&quot;: true,
+    &quot;dataFormatType&quot;: null,
+    &quot;dataFormat&quot;: null,
+    &quot;comment&quot;: null
+}</code></pre><ol type="1" id="52ceedfb-8cac-45ab-9f40-db368e216e36" class="numbered-list" start="1"><li><code><strong>name</strong></code><strong>:</strong> <code>null</code> 表示没有指定列的名称，可能是因为直接使用了英文名称。</li></ol><ol type="1" id="3f9772fa-af48-4a82-b779-116e3f4cd8e5" class="numbered-list" start="2"><li><code><strong>type</strong></code><strong>:</strong> <code>&quot;CHAR&quot;</code> 表示列的数据类型是字符类型。</li></ol><ol type="1" id="c4446012-8bf7-481f-9537-22bfa467930d" class="numbered-list" start="3"><li><code><strong>nameEn</strong></code><strong>:</strong> <code>&quot;department&quot;</code> 表示列的英文名称。</li></ol><ol type="1" id="9a01080e-8942-447e-ae74-0f6732623c86" class="numbered-list" start="4"><li><code><strong>showType</strong></code><strong>:</strong> <code>&quot;CATEGORY&quot;</code> 表示显示类型为类别。</li></ol><ol type="1" id="70143c8d-acfb-4e29-a6cf-4f63af9d07e7" class="numbered-list" start="5"><li><code><strong>authorized</strong></code><strong>:</strong> <code>true</code> 表示用户有权访问此数据。</li></ol><ol type="1" id="7701490c-46dd-4507-a743-50e3efb28415" class="numbered-list" start="6"><li><code><strong>dataFormatType</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式类型。</li></ol><ol type="1" id="d71333d1-81d9-4cda-b839-e6096376280f" class="numbered-list" start="7"><li><code><strong>dataFormat</strong></code><strong>:</strong> <code>null</code> 表示没有指定的数据格式。</li></ol><ol type="1" id="fc557d17-a0d2-450a-a040-693281dff2b0" class="numbered-list" start="8"><li><code><strong>comment</strong></code><strong>:</strong> <code>null</code> 表示没有额外的注释。</li></ol><h3 id="0bd4f0ab-334f-4ba2-bd54-001e43ba171b" class=""><code>dimensionColumns</code> 数组中的项（与 <code>columns</code> 数组中的项相同）</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ab1dbd22-0e90-44ae-afbd-90794ced09dd" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;name&quot;: null,
+    &quot;type&quot;: &quot;CHAR&quot;,
+    &quot;nameEn&quot;: &quot;department&quot;,
+    &quot;showType&quot;: &quot;CATEGORY&quot;,
+    &quot;authorized&quot;: true,
+    &quot;dataFormatType&quot;: null,
+    &quot;dataFormat&quot;: null,
+    &quot;comment&quot;: null
+}</code></pre><p id="8dc52831-766a-46b7-a185-2230b79175ad" class=""><code>dimensionColumns</code> 与 <code>columns</code> 的定义一致，表示查询返回的数据字段都是维度类型。</p><h3 id="ab8ce0ee-caa0-4005-973f-b28fdb9a8152" class="">总结</h3><p id="66343ac4-a3dd-46d4-b69b-8fee3641c554" class="">这个JSON数据包主要包含了一个查询结果集的详细信息，包括：</p><ul id="0d9e4190-f7b6-476f-832b-455be6363a93" class="bulleted-list"><li style="list-style-type:disc"><strong>分页信息</strong>（虽然在此例中未被使用或不可用）。</li></ul><ul id="0cb126cd-4665-4b91-92ef-441fe1e54671" class="bulleted-list"><li style="list-style-type:disc"><strong>结果列表</strong> (<code>resultList</code>) 包含部门名称的多个记录。</li></ul><ul id="bf6bb9c6-f19a-45f9-be0c-bf1aefcb57a1" class="bulleted-list"><li style="list-style-type:disc"><strong>列定义</strong> (<code>columns</code> 和 <code>dimensionColumns</code>) 用于描述结果中每个字段的属性。</li></ul><ul id="939953d8-7607-48f8-b4e6-994f61ae69ef" class="bulleted-list"><li style="list-style-type:disc"><strong>缓存使用</strong> (<code>useCache</code>: <code>false</code>) 表示未使用缓存。</li></ul><h2 id="0e7c9628-e193-4bca-96ed-7f4e063372b8" class="">4. getAll</h2><h3 id="435bec7d-6eb9-4b00-b273-45ff40d41214" class="">顶层结构</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="64cffd46-ea04-4f48-9703-03c24f29046d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;success&quot;,
+    &quot;data&quot;: [...],
+    &quot;timestamp&quot;: 1722493841065,
+    &quot;traceId&quot;: &quot;supersonic_fbff187c0e0141fc87cc367bf8cf9a95&quot;
+}</code></pre><ol type="1" id="56fd1186-d7c0-487c-a4af-bf5f1b138346" class="numbered-list" start="1"><li><code><strong>code</strong></code><strong>:</strong> <code>200</code> 表示请求成功处理。</li></ol><ol type="1" id="2ff7655f-96f5-4835-8c2e-813d6b5a1f64" class="numbered-list" start="2"><li><code><strong>msg</strong></code><strong>:</strong> <code>&quot;success&quot;</code> 表示请求处理成功。</li></ol><ol type="1" id="f1da26fd-0cb0-49f6-9df8-d639cd597012" class="numbered-list" start="3"><li><code><strong>data</strong></code><strong>:</strong> 响应的主要数据部分，里面包含了一个对话的详细信息。</li></ol><ol type="1" id="9f5f7b73-45f5-47ec-b4b1-257b84b88693" class="numbered-list" start="4"><li><code><strong>timestamp</strong></code><strong>:</strong> <code>1722493841065</code> 是一个时间戳，表示生成这个响应的时间，通常是以毫秒为单位的自1970年1月1日以来的时间。</li></ol><ol type="1" id="8947a159-ada1-4884-80b8-bffda2c787ba" class="numbered-list" start="5"><li><code><strong>traceId</strong></code><strong>:</strong> <code>&quot;supersonic_fbff187c0e0141fc87cc367bf8cf9a95&quot;</code> 是一个唯一标识符，用来追踪这个请求的执行过程。</li></ol><h3 id="62ffdfac-6c21-4927-b089-ce8b38520c53" class=""><code>data</code> 部分的详细解释</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bae889fd-8aad-4bf2-9a4a-002d597033d0" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;data&quot;: [
+    {
+        &quot;chatId&quot;: 1,
+        &quot;agentId&quot;: 1,
+        &quot;chatName&quot;: &quot;样例对话1&quot;,
+        &quot;createTime&quot;: &quot;2024-07-08 14:43:03&quot;,
+        &quot;lastTime&quot;: &quot;2024-08-01 14:30:41&quot;,
+        &quot;creator&quot;: &quot;admin&quot;,
+        &quot;lastQuestion&quot;: &quot;超音速在今年的HR部门访问次数&quot;,
+        &quot;isDelete&quot;: 0,
+        &quot;isTop&quot;: 0
+    }
+]</code></pre><ol type="1" id="1022cc82-4fd3-46e4-b718-ec39c97a1584" class="numbered-list" start="1"><li><code><strong>chatId</strong></code><strong>:</strong> <code>1</code> 表示对话的唯一标识符。</li></ol><ol type="1" id="01cbbd9e-5d81-403a-8f72-7b9368d76781" class="numbered-list" start="2"><li><code><strong>agentId</strong></code><strong>:</strong> <code>1</code> 表示关联的代理（可能是某个系统组件）的唯一标识符。</li></ol><ol type="1" id="8b51678c-8066-4a41-9f14-6f00e3ea5145" class="numbered-list" start="3"><li><code><strong>chatName</strong></code><strong>:</strong> <code>&quot;样例对话1&quot;</code> 是对话的名称，通常是用户定义的。</li></ol><ol type="1" id="69304845-8018-4d72-b81c-610e224a77de" class="numbered-list" start="4"><li><code><strong>createTime</strong></code><strong>:</strong> <code>&quot;2024-07-08 14:43:03&quot;</code> 表示创建对话的时间。</li></ol><ol type="1" id="5b4318fe-30d2-461e-b6e1-5430fb65ccb9" class="numbered-list" start="5"><li><code><strong>lastTime</strong></code><strong>:</strong> <code>&quot;2024-08-01 14:30:41&quot;</code> 表示对话中最后一次活动的时间。</li></ol><ol type="1" id="ca9ff4af-548e-4ee8-8b39-213dd14778e2" class="numbered-list" start="6"><li><code><strong>creator</strong></code><strong>:</strong> <code>&quot;admin&quot;</code> 表示创建对话的用户或系统的名称。</li></ol><ol type="1" id="e2556bbc-396c-487a-9885-47ad1882992a" class="numbered-list" start="7"><li><code><strong>lastQuestion</strong></code><strong>:</strong> <code>&quot;超音速在今年的HR部门访问次数&quot;</code> 是对话中最后一个提问的内容。</li></ol><ol type="1" id="24bc3236-057b-41df-b746-3798d3af6d7e" class="numbered-list" start="8"><li><code><strong>isDelete</strong></code><strong>:</strong> <code>0</code> 表示该对话未被删除（1表示删除，0表示未删除）。</li></ol><ol type="1" id="7b695fdd-677b-4b75-a563-eca3f135dc09" class="numbered-list" start="9"><li><code><strong>isTop</strong></code><strong>:</strong> <code>0</code> 表示该对话未被置顶（1表示置顶，0表示未置顶）。</li></ol><h3 id="63999ae7-3734-47ab-abf3-c21a3d6c432b" class="">总结</h3><p id="678a108f-8793-4c77-857b-ac4eb6c45808" class="">这个JSON数据包包含了一个对话的详细信息，包括：</p><ul id="ea2e552f-dc92-4a14-b504-bb74218eb2c8" class="bulleted-list"><li style="list-style-type:disc"><code><strong>chatId</strong></code>：对话的唯一标识符。</li></ul><ul id="09d5ed0e-c0c3-4844-bd6a-ac58196ca696" class="bulleted-list"><li style="list-style-type:disc"><code><strong>agentId</strong></code>：关联的代理的唯一标识符。</li></ul><ul id="ecc9b01a-5e61-42d1-8270-a30c9f21e995" class="bulleted-list"><li style="list-style-type:disc"><code><strong>chatName</strong></code>：对话的名称。</li></ul><ul id="b8dc418c-e398-4ecf-b2c3-96204ba9f66f" class="bulleted-list"><li style="list-style-type:disc"><code><strong>createTime</strong></code> 和 <code><strong>lastTime</strong></code>：对话的创建时间和最后一次活动时间。</li></ul><ul id="654249f7-51f1-4cac-8a33-2c1146650b44" class="bulleted-list"><li style="list-style-type:disc"><code><strong>creator</strong></code>：创建对话的用户或系统。</li></ul><ul id="fa15813e-d570-424d-bd86-f1266d6f1aa4" class="bulleted-list"><li style="list-style-type:disc"><code><strong>lastQuestion</strong></code>：对话中的最后一个提问。</li></ul><ul id="8c0b78b4-f250-4784-8283-97ef6c4ebe2a" class="bulleted-list"><li style="list-style-type:disc"><code><strong>isDelete</strong></code> 和 <code><strong>isTop</strong></code>：对话是否被删除或置顶的标识。</li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

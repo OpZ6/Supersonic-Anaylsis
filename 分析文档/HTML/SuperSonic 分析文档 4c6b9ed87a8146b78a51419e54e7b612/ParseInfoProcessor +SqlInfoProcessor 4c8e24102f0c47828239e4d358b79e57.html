@@ -1,0 +1,685 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>ParseInfoProcessor +SqlInfoProcessor </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4c8e2410-2f0c-4782-8239-e4d358b79e57" class="page sans"><header><h1 class="page-title"><code>ParseInfoProcessor</code> +Sql<code>InfoProcessor</code> </h1><p class="page-description"></p></header><div class="page-body"><h1 id="bdf4e966-f5d1-4c50-9652-d21a31037242" class=""><code>ParseInfoProcessor</code></h1><p id="49415dfd-bdd5-4b33-87b7-b20fbb9ee75d" class=""><code>ParseInfoProcessor</code> 类是一个用于处理查询结果并提取结构化信息的处理器类。它实现了 <code>ResultProcessor</code> 接口，并在查询执行后更新查询的解析信息 (<code>SemanticParseInfo</code>)。</p><h3 id="96d8211b-aede-4494-a8d6-078dd67a74c3" class="">主要功能</h3><ol type="1" id="985f4e72-f11f-4f51-8b8a-647713cfd46c" class="numbered-list" start="1"><li><strong>处理解析响应</strong> (<code>process</code> 方法):<ul id="b56569c8-c5bc-4b77-89eb-5ec69279546c" class="bulleted-list"><li style="list-style-type:disc">该方法从 <code>QueryContext</code> 获取候选查询 (<code>candidateQueries</code>)，然后对每个候选查询的 <code>SemanticParseInfo</code> 调用 <code>updateParseInfo</code> 方法进行解析信息的更新。</li></ul></li></ol><ol type="1" id="f13f4a8e-92a3-464a-acf2-ffa03692280d" class="numbered-list" start="2"><li><strong>更新解析信息</strong> (<code>updateParseInfo</code> 方法):<ul id="48e82be0-0516-4c26-a672-5bdc88d1842b" class="bulleted-list"><li style="list-style-type:disc">此方法是核心功能，用于解析 SQL 语句并更新 <code>SemanticParseInfo</code> 对象。它解析 SQL 中的字段表达式（主要是过滤器和分组条件），然后提取时间信息、维度过滤器、度量和维度信息等。</li></ul><ul id="11133f89-64a1-4e1a-876a-aef3d256f657" class="bulleted-list"><li style="list-style-type:disc">主要包括以下步骤：<ol type="1" id="8c8138de-9c0f-4273-9efd-ceae24a52bfe" class="numbered-list" start="1"><li><strong>检查 SQL 是否已经被修正</strong> (<code>correctS2SQL</code>):<ul id="25ebcda9-c330-4e1f-9d95-72fb1f868349" class="bulleted-list"><li style="list-style-type:disc">如果 <code>correctS2SQL</code> 与 <code>S2SQL</code> 不同，才会进行更新操作。</li></ul></li></ol><ol type="1" id="1cf8fd00-f15f-434c-adc8-79945167ab67" class="numbered-list" start="2"><li><strong>提取过滤器表达式</strong>:<ul id="6d378ee1-adcc-4572-a3f1-491b0067d801" class="bulleted-list"><li style="list-style-type:disc">从 <code>correctS2SQL</code> 中提取出所有的过滤器表达式，并用于后续的时间信息和维度过滤器的提取。</li></ul></li></ol><ol type="1" id="ce94d797-6845-4a98-9b53-b823349efa13" class="numbered-list" start="3"><li><strong>设置时间信息</strong> (<code>DateConf</code>):<ul id="028dc82a-5c48-4e1c-b7fa-91f9a060ef43" class="bulleted-list"><li style="list-style-type:disc">从过滤器表达式中提取出时间相关的信息，更新到 <code>parseInfo</code> 的 <code>dateInfo</code> 字段。</li></ul></li></ol><ol type="1" id="520b2e0b-d25c-47d5-8f5e-6270c4cb1d8c" class="numbered-list" start="4"><li><strong>设置维度过滤器</strong> (<code>QueryFilter</code>):<ul id="49221123-33e8-4e82-98a2-dc06c97a87d9" class="bulleted-list"><li style="list-style-type:disc">根据提取出的过滤器表达式，匹配相应的 <code>SchemaElement</code>（维度），并生成 <code>QueryFilter</code>，添加到 <code>parseInfo</code> 的 <code>dimensionFilters</code> 中。</li></ul></li></ol><ol type="1" id="1641196d-ec08-4995-b3e6-e4308b65777d" class="numbered-list" start="5"><li><strong>获取 SQL 中的所有字段</strong>:<ul id="22d68a92-c117-4b6d-96b2-a42341391bbe" class="bulleted-list"><li style="list-style-type:disc">提取 <code>correctS2SQL</code> 中涉及的所有字段，区分度量和维度，并更新 <code>parseInfo</code> 的 <code>metrics</code> 和 <code>dimensions</code> 字段。</li></ul></li></ol></li></ul></li></ol><h3 id="8e86879c-ebdc-416e-9f34-8d577c792949" class="">主要辅助方法</h3><ol type="1" id="634aae9f-4d7f-4060-95d1-4fe2cf5645ef" class="numbered-list" start="1"><li><code><strong>getElements</strong></code>:<ul id="5aad254b-ca24-4081-862d-4196411382f1" class="bulleted-list"><li style="list-style-type:disc">该方法用于根据字段名从维度或度量集合中提取匹配的 <code>SchemaElement</code>。</li></ul></li></ol><ol type="1" id="6f5e90ec-43d8-4e24-b5f1-7565ff5e67f2" class="numbered-list" start="2"><li><code><strong>getFieldsExceptDate</strong></code>:<ul id="8a57d056-a29c-4361-8000-82a6a69558ab" class="bulleted-list"><li style="list-style-type:disc">过滤掉时间维度字段，返回其他字段列表。</li></ul></li></ol><ol type="1" id="bd2602c2-4c66-4f1b-97dc-02f5a5260e98" class="numbered-list" start="3"><li><code><strong>getDimensionFilter</strong></code>:<ul id="1c8476ab-21ae-4083-9e20-5219ecb35c62" class="bulleted-list"><li style="list-style-type:disc">根据字段名和过滤器表达式，生成维度过滤器列表。</li></ul></li></ol><ol type="1" id="5ec5e0dd-2ae5-40c6-90f7-8244387e3310" class="numbered-list" start="4"><li><code><strong>getDateInfo</strong></code>:<ul id="b6336f85-d67e-4f53-8d36-e6020f540c92" class="bulleted-list"><li style="list-style-type:disc">从过滤器表达式中提取出时间信息（如日期范围）。</li></ul></li></ol><ol type="1" id="b75dc653-a54e-49cd-afe1-18b1707e2836" class="numbered-list" start="5"><li><code><strong>getNameToElement</strong></code>:<ul id="46b32a20-bebd-45ff-836c-8c178260467d" class="bulleted-list"><li style="list-style-type:disc">生成一个映射表，将字段名映射到对应的 <code>SchemaElement</code>，支持别名。</li></ul></li></ol><h3 id="bb7af667-d1d3-4f29-a9e5-f4eebd4d7d47" class="">类的关联关系</h3><ol type="1" id="60ed28af-7a5d-4ef6-94af-817cf3f0a3f7" class="numbered-list" start="1"><li><strong>与 </strong><code><strong>SchemaService</strong></code><strong> 的关联</strong>:<ul id="60d63c0d-7024-466c-96e3-a8b47def6f2b" class="bulleted-list"><li style="list-style-type:disc"><code>ParseInfoProcessor</code> 使用 <code>SchemaService</code> 来获取语义架构 (<code>SemanticSchema</code>)，以便在 SQL 解析时匹配和识别维度与度量。</li></ul></li></ol><ol type="1" id="62b131a7-f150-4fec-8bbc-544788385959" class="numbered-list" start="2"><li><strong>与 </strong><code><strong>SemanticParseInfo</strong></code><strong> 的关联</strong>:<ul id="97ac73b3-b7aa-45b7-96fe-21849d9c88f4" class="bulleted-list"><li style="list-style-type:disc">该类的主要工作就是更新 <code>SemanticParseInfo</code> 对象，这是语义解析过程中存储结构化信息的核心数据结构。</li></ul></li></ol><ol type="1" id="353cd75a-4628-418d-b6bd-b5b60bbd6968" class="numbered-list" start="3"><li><strong>与 </strong><code><strong>SqlSelectHelper</strong></code><strong> 的关联</strong>:<ul id="8910af8c-ae40-479d-bafd-81f1a947334f" class="bulleted-list"><li style="list-style-type:disc">通过 <code>SqlSelectHelper</code> 提取 SQL 中的字段信息、过滤器和分组条件，辅助解析 SQL。</li></ul></li></ol><h3 id="19d4ff3e-a1ba-4237-bcc6-47b77058e23e" class="">总结</h3><p id="07d146c0-e66b-485f-b4cb-92c2968717c4" class=""><code>ParseInfoProcessor</code> 是语义查询系统中的一个关键组件，它负责在查询解析之后对 SQL 进行深入分析，提取并更新结构化的语义信息。这些信息包括时间范围、维度过滤器、度量与维度等，都是进一步处理和展示查询结果的基础。通过与 <code>SchemaService</code> 和 <code>SqlSelectHelper</code> 的协作，<code>ParseInfoProcessor</code> 能够准确地解析和识别 SQL 语句中的关键元素。</p><p id="5c1135aa-d2ff-447f-828f-f55b4d5142aa" class="">
+</p><h1 id="d08375bc-b8cd-47cb-a789-839d66ee7202" class=""><code>SqlInfoProcessor</code></h1><p id="f0e1df74-5f7d-4df8-a8d3-da0c80f5eb5a" class=""><code>SqlInfoProcessor</code> 类是一个用于处理 SQL 相关信息的处理器。它的主要职责是在查询解析的结果中添加 S2SQL（Semantic to SQL）信息，便于技术用户验证生成的 SQL 查询。</p><h3 id="c0a59925-54ba-4a54-bbfe-d223e05c4da9" class="">主要功能</h3><ol type="1" id="dc8ef111-3779-46d6-ac0a-47f0cf65a087" class="numbered-list" start="1"><li><strong>处理解析响应</strong> (<code>process</code> 方法):<ul id="c7c69a6b-221a-4eff-8c26-cdcd6779d3df" class="bulleted-list"><li style="list-style-type:disc">该方法从 <code>QueryContext</code> 中获取候选查询 (<code>semanticQueries</code>)，然后对每个查询的 <code>SemanticParseInfo</code> 调用 <code>addSqlInfo</code> 方法，以填充 SQL 信息。</li></ul></li></ol><ol type="1" id="e3441320-bcb1-419e-8423-54b15ace5143" class="numbered-list" start="2"><li><strong>添加 SQL 信息</strong> (<code>addSqlInfo</code> 方法):<ul id="18a29876-5bf5-48ef-885c-62ca62201c29" class="bulleted-list"><li style="list-style-type:disc">此方法是核心功能，用于生成 SQL 查询并将其添加到 <code>SemanticParseInfo</code> 中。</li></ul><ul id="25a15b60-d800-4fb3-b85a-2211df98e773" class="bulleted-list"><li style="list-style-type:disc">主要步骤包括：<ol type="1" id="33ca9fe6-6234-4cbd-aa13-9ef2da6ab955" class="numbered-list" start="1"><li><strong>创建查询对象</strong>: 通过 <code>QueryManager</code> 根据 <code>QueryMode</code> 创建对应的 <code>SemanticQuery</code> 对象。</li></ol><ol type="1" id="1c515144-bd71-4aff-bb02-3157cc11b685" class="numbered-list" start="2"><li><strong>构建查询请求</strong>: 调用 <code>SemanticQuery</code> 的 <code>buildSemanticQueryReq</code> 方法，构建 <code>SemanticQueryReq</code> 对象。</li></ol><ol type="1" id="3ddb8a99-7bbc-4311-8c90-272034a24486" class="numbered-list" start="3"><li><strong>调用解释服务</strong>: 使用 <code>SemanticLayerService</code> 的 <code>explain</code> 方法生成 SQL 查询，并将结果存储在 <code>ExplainResp</code> 对象中。</li></ol><ol type="1" id="abefd9d1-7f8b-497e-920d-84197ab2910c" class="numbered-list" start="4"><li><strong>记录日志</strong>: 如果查询是通过 <code>LLMSqlQuery</code> 生成的，会将结果记录到 <code>keyPipelineLog</code> 日志中。</li></ol><ol type="1" id="0b2ab38e-4702-43b7-bb62-15cd50de421e" class="numbered-list" start="5"><li><strong>更新 </strong><code><strong>SqlInfo</strong></code><strong> 对象</strong>: 将生成的 SQL 查询 (<code>querySql</code>) 和数据源 ID (<code>sourceId</code>) 更新到 <code>SqlInfo</code> 对象中。</li></ol></li></ul></li></ol><h3 id="5048f8e3-4a7b-4029-84b5-9898e34b77f5" class="">主要方法解析</h3><ol type="1" id="31b6c1c3-c5a8-468b-9d93-aaf63f20e09a" class="numbered-list" start="1"><li><code><strong>process</strong></code>:<ul id="5b8943d9-9506-42e3-97ad-60edcfb79c3f" class="bulleted-list"><li style="list-style-type:disc"><code>process</code> 方法是该类的入口，用于处理整个查询流程。它调用 <code>addSqlInfo</code> 为每个候选查询添加 SQL 信息。</li></ul></li></ol><ol type="1" id="8d7a4529-c62c-4d70-8e86-a16bcd97a49b" class="numbered-list" start="2"><li><code><strong>addSqlInfo(QueryContext queryContext, List&lt;SemanticParseInfo&gt; semanticParseInfos)</strong></code>:<ul id="22dca6fa-9d32-4419-b9c0-703740be6495" class="bulleted-list"><li style="list-style-type:disc">该方法遍历 <code>SemanticParseInfo</code> 列表，并为每个解析信息调用 <code>addSqlInfo(QueryContext queryContext, SemanticParseInfo parseInfo)</code> 方法。</li></ul><ul id="50519d2e-30c9-448d-a621-7de937777483" class="bulleted-list"><li style="list-style-type:disc">其主要作用是处理多个候选查询的情况。</li></ul></li></ol><ol type="1" id="ae294ccc-b495-4072-baac-e260e5b515ee" class="numbered-list" start="3"><li><code><strong>addSqlInfo(QueryContext queryContext, SemanticParseInfo parseInfo)</strong></code>:<ul id="3293200d-6b40-47bb-94af-1445cd76cca3" class="bulleted-list"><li style="list-style-type:disc">这是最核心的方法，用于实际生成并添加 SQL 信息。具体步骤包括：<ul id="dd04e3b4-b5f4-4f09-bcda-1d7812236592" class="bulleted-list"><li style="list-style-type:circle">通过 <code>QueryManager.createQuery</code> 方法创建 <code>SemanticQuery</code> 对象。</li></ul><ul id="650c0d7b-65ea-4f8a-942d-eca56d1ccea2" class="bulleted-list"><li style="list-style-type:circle">调用生成 SQL 的服务 (<code>SemanticLayerService.explain</code>) 并获取 SQL 语句。</li></ul><ul id="2f39bebb-e5c6-4aa4-83e8-792a2d010a26" class="bulleted-list"><li style="list-style-type:circle">将生成的 SQL 信息更新到 <code>SemanticParseInfo</code> 的 <code>SqlInfo</code> 中。</li></ul></li></ul></li></ol><h3 id="2c54e28c-b68f-4ea3-9f1d-8e990dcf5264" class="">类的关联关系</h3><ol type="1" id="1391dad1-a7d0-431a-b7f5-1ac8519118ae" class="numbered-list" start="1"><li><strong>与 </strong><code><strong>QueryContext</strong></code><strong> 和 </strong><code><strong>ChatContext</strong></code><strong> 的关联</strong>:<ul id="665f8b38-37b3-4b7b-803f-6a8da5eb381f" class="bulleted-list"><li style="list-style-type:disc"><code>SqlInfoProcessor</code> 通过 <code>QueryContext</code> 获取候选查询，并使用 <code>ChatContext</code> 来跟踪查询的上下文信息。</li></ul></li></ol><ol type="1" id="2db395fb-e8cc-4e44-a390-315f49cf3edd" class="numbered-list" start="2"><li><strong>与 </strong><code><strong>SemanticLayerService</strong></code><strong> 的关联</strong>:<ul id="f603ea1c-3970-4cb9-be21-10061a111507" class="bulleted-list"><li style="list-style-type:disc"><code>SemanticLayerService</code> 是关键服务，用于生成 SQL 语句。<code>SqlInfoProcessor</code> 调用其 <code>explain</code> 方法来获取最终的 SQL 查询。</li></ul></li></ol><ol type="1" id="8efacb39-04ef-4970-b636-651bb9a16de7" class="numbered-list" start="3"><li><strong>与 </strong><code><strong>LLMSqlQuery</strong></code><strong> 的关联</strong>:<ul id="1f6300e3-5e4f-44ce-9994-529c55b486f1" class="bulleted-list"><li style="list-style-type:disc">如果候选查询是通过 <code>LLMSqlQuery</code> 生成的，<code>SqlInfoProcessor</code> 会额外记录日志，输出 SQL 信息的细节。</li></ul></li></ol><ol type="1" id="238e7b15-4dd6-4e3f-8a7f-d86e3169deb3" class="numbered-list" start="4"><li><strong>与 </strong><code><strong>QueryManager</strong></code><strong> 的关联</strong>:<ul id="a8e268b0-5e14-4443-9aa1-6fa6f0a06405" class="bulleted-list"><li style="list-style-type:disc"><code>QueryManager</code> 用于根据查询模式创建适当的 <code>SemanticQuery</code> 对象，这是生成 SQL 查询的关键步骤。</li></ul></li></ol><h3 id="7339abde-5b99-410d-bbcd-1b71f73c764d" class="">总结</h3><p id="b7dcc5c8-cc6d-41ed-a82b-f4cd1d4603b8" class=""><code>SqlInfoProcessor</code> 在语义解析工作流中扮演着将高级查询转换为 SQL 的角色。它确保生成的 SQL 查询能够准确地反映用户的意图，并且为技术用户提供了验证 SQL 的途径。</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
